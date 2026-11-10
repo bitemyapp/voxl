@@ -20,7 +20,10 @@ pub struct Settings {
     pub socket: Option<String>,
     pub cursor: bool,
     pub video_backend: String,
+    // Parse and validate the same options in CPU-only builds as GPU builds.
+    #[cfg_attr(not(feature = "gpu"), allow(dead_code))]
     pub gpu_preset: u32,
+    #[cfg_attr(not(feature = "gpu"), allow(dead_code))]
     pub gpu_quality: f32,
 }
 static SETTINGS: Mutex<Settings> = Mutex::new(Settings {
