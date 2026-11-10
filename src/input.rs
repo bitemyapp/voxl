@@ -490,6 +490,9 @@ pub fn spawn(
     clipboard: Option<crate::desktop::ClipboardHandle>,
     px_per_notch: f64,
 ) -> Result<mpsc::Sender<InputEvent>, String> {
+    if crate::wayland::enabled() {
+        return crate::wayland::input::spawn(clipboard, px_per_notch);
+    }
     let mut inj = Injector::new(display.as_deref())?;
     inj.clipboard = clipboard;
     inj.px_per_notch = px_per_notch.max(1.0);

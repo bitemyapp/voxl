@@ -92,6 +92,12 @@ pub fn spawn(
                     log::info!("capture geometry changed: {e}");
                 } else {
                     log::error!("capture loop ended: {e}");
+                    // A compositor may revoke a Wayland share while the viewer
+                    // is holding keys/buttons. Release them before terminating.
+                    if let Some(tx) = hub.input.lock().as_ref() {
+                        let _ = tx.send(crate::input::InputEvent::Shutdown);
+                    }
+                    std::thread::sleep(Duration::from_millis(200));
                     std::process::exit(1);
                 }
             }

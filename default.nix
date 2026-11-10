@@ -6,6 +6,7 @@
   libyuv,
   libopus,
   libpulseaudio,
+  libxkbcommon,
   xorg,
   esbuild,
   typescript,
@@ -46,11 +47,12 @@ rustPlatform.buildRustPackage {
     libyuv
     libopus
     libpulseaudio
+    libxkbcommon
     xorg.libxcb
   ];
 
   meta = {
-    description = "Low-latency X11 desktop streaming server (H.264 over WebSocket) for the Computer preview";
+    description = "Low-latency Aizome Wayland and X11 desktop streaming server (H.264 over WebSocket)";
     license = lib.licenses.mit;
     mainProgram = "voxl";
     platforms = ["x86_64-linux"];

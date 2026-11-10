@@ -30,12 +30,27 @@ const MAX_IMAGE: usize = 15 << 20;
 /// Sets the remote CLIPBOARD and returns once the X server has registered us as owner,
 /// so a paste shortcut injected right afterwards sees the new contents.
 #[derive(Clone)]
-pub struct ClipboardHandle {
+pub struct X11ClipboardHandle {
     tx: mpsc::Sender<(ClipContent, mpsc::SyncSender<()>)>,
     wake_w: Arc<OwnedFd>,
 }
 
+#[derive(Clone)]
+pub enum ClipboardHandle {
+    X11(X11ClipboardHandle),
+    Wayland(crate::wayland::clipboard::Handle),
+}
+
 impl ClipboardHandle {
+    pub fn set_blocking(&self, content: ClipContent) {
+        match self {
+            Self::X11(h) => h.set_blocking(content),
+            Self::Wayland(h) => h.set_blocking(content),
+        }
+    }
+}
+
+impl X11ClipboardHandle {
     pub fn set_blocking(&self, content: ClipContent) {
         let (done_tx, done_rx) = mpsc::sync_channel(1);
         if self.tx.send((content, done_tx)).is_ok() {
@@ -74,6 +89,9 @@ pub fn spawn(
     hub: Arc<Hub>,
     mode: ClipboardMode,
 ) -> Result<ClipboardHandle, String> {
+    if crate::wayland::enabled() {
+        return crate::wayland::clipboard::spawn(hub, mode).map(ClipboardHandle::Wayland);
+    }
     let (conn, n) = RustConnection::connect(display.as_deref()).map_err(|e| e.to_string())?;
     let root = conn.setup().roots[n].root;
     conn.xfixes_query_version(5, 0)
@@ -319,7 +337,7 @@ pub fn spawn(
             }
         })
         .unwrap();
-    Ok(ClipboardHandle { tx, wake_w })
+    Ok(ClipboardHandle::X11(X11ClipboardHandle { tx, wake_w }))
 }
 
 fn hash(data: &[u8]) -> u64 {

@@ -1,5 +1,5 @@
 //! voxl: low-latency desktop streaming (H.264 over WebSocket) for the browser, from an
-//! X11 display on Linux or the screen of a Mac or a Windows machine.
+//! Wayland (Aizome) or X11 display on Linux, or the screen of a Mac or Windows machine.
 //!
 //! The `voxl` binary calls [`run`] with its command line; other programs (the Tembo CLI's
 //! `tembo voxl`) embed the server the same way.
@@ -32,8 +32,12 @@ mod server;
 mod tls;
 mod video;
 mod wait;
+#[cfg(target_os = "linux")]
+mod wayland;
 #[cfg(windows)]
 mod win;
+#[cfg(target_os = "linux")]
+mod x11_capture;
 
 // The macOS and Windows backends provide the same modules with the same interfaces.
 #[cfg(target_os = "macos")]
@@ -116,11 +120,19 @@ pub fn run(args: impl IntoIterator<Item = String>) {
 }
 
 async fn serve(a: HashMap<String, String>) {
+    #[cfg(target_os = "linux")]
+    let native_wayland = wayland::init(&a).unwrap_or_else(|e| {
+        log::error!("{e}");
+        std::process::exit(1);
+    });
+    #[cfg(not(target_os = "linux"))]
+    let native_wayland = false;
     // macOS: --display picks a screen (index or display ID); DISPLAY there belongs to XQuartz.
     #[cfg(target_os = "linux")]
-    let display = std::env::var("DISPLAY")
-        .ok()
-        .or_else(|| a.get("display").cloned());
+    let display = a
+        .get("display")
+        .cloned()
+        .or_else(|| std::env::var("DISPLAY").ok());
     #[cfg(not(target_os = "linux"))]
     let display = a.get("display").cloned();
     #[cfg(target_os = "macos")]
@@ -129,7 +141,7 @@ async fn serve(a: HashMap<String, String>) {
     win::init(&a);
     // A Mac's or a PC's own screen is only served locally unless --addr says otherwise;
     // a VM's X11 display sits behind the platform's proxy.
-    let default_addr = if cfg!(not(target_os = "linux")) {
+    let default_addr = if cfg!(not(target_os = "linux")) || native_wayland {
         "127.0.0.1"
     } else {
         "0.0.0.0"
@@ -194,7 +206,10 @@ async fn serve(a: HashMap<String, String>) {
     if enable_resize && read_only {
         log::warn!("--enable-resize is ignored with --read-only: viewers can't resize the desktop");
     }
-    let screen = (enable_resize && !read_only)
+    if native_wayland && enable_resize {
+        log::warn!("viewer-driven resizing is unavailable for a shared Wayland output; resize it in Aizome");
+    }
+    let screen = (enable_resize && !read_only && !native_wayland)
         .then(|| match screen::Screen::open(display.as_deref()) {
             Ok(s) => {
                 log::info!("dynamic resolution on, up to {}x{}", s.max().0, s.max().1);
@@ -222,6 +237,13 @@ async fn serve(a: HashMap<String, String>) {
         log::error!("video init failed: {e}");
         std::process::exit(1);
     }
+    #[cfg(target_os = "linux")]
+    if native_wayland && wayland::settings().cursor {
+        // The actual cursor is in the video. Suppress the browser's local one.
+        *hub.cursor.lock() = Some(bytes::Bytes::from_static(&[
+            3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        ]));
+    }
     let radius = range_max(a.get("round-corners"), 0.0) as u16;
     // --round-windows=title:radius,...: round specific windows (docks included) by title.
     let named: Vec<(String, u16)> = a
@@ -237,8 +259,10 @@ async fn serve(a: HashMap<String, String>) {
         .unwrap_or_default();
     if radius > 0 || !named.is_empty() {
         #[cfg(target_os = "linux")]
-        if let Err(e) = corners::spawn(display.clone(), radius, named) {
-            log::warn!("rounded corners unavailable: {e}");
+        if !native_wayland {
+            if let Err(e) = corners::spawn(display.clone(), radius, named) {
+                log::warn!("rounded corners unavailable: {e}");
+            }
         }
         #[cfg(not(target_os = "linux"))]
         log::info!("--round-corners/--round-windows only apply to X11 desktops");
@@ -251,9 +275,16 @@ async fn serve(a: HashMap<String, String>) {
         }
     };
     let px_per_notch = range_max(a.get("scroll-px-per-notch"), 180.0);
-    match input::spawn(display.clone(), clipboard, px_per_notch) {
-        Ok(tx) => *hub.input.lock() = Some(tx),
-        Err(e) => log::error!("input init failed: {e}"),
+    if !read_only {
+        match input::spawn(display.clone(), clipboard, px_per_notch) {
+            Ok(tx) => *hub.input.lock() = Some(tx),
+            Err(e) => {
+                log::error!("input init failed: {e}");
+                if native_wayland {
+                    std::process::exit(1);
+                }
+            }
+        }
     }
     if audio_on {
         let dev = a
@@ -315,6 +346,11 @@ async fn serve(a: HashMap<String, String>) {
     {
         let mut extra = hub.hello_extra.lock();
         extra.insert("os".into(), std::env::consts::OS.into());
+        #[cfg(target_os = "linux")]
+        extra.insert(
+            "captureBackend".into(),
+            if native_wayland { "wayland" } else { "x11" }.into(),
+        );
         extra.insert("audio".into(), audio_on.into());
         extra.insert("mic".into(), mic.is_some().into());
         if read_only {
