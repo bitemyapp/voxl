@@ -3,8 +3,10 @@
 This repository is a fork of tembo/voxl, based initially on
 `b00f3b8b8c156b14e0c75abdfcf5cae9a14a865f`. Keep the server's H.264, WebSocket,
 WebCodecs, authentication, recording and flow-control paths shared across capture
-backends. The native Remote Desks viewer is future work; no frontend latency
-advantage has been measured by this change.
+backends. The separate `native/` package implements the native Remote Desks viewer;
+`media/` provides a small FFmpeg/CUDA ownership boundary. CPU and browser paths
+remain comparison baselines and fallbacks. Measurements in the work log are
+preliminary component results, not claims about physical-display latency.
 
 The fork's release workflow is inhibited by an upstream-repository guard. Do not
 publish the upstream `voxl-server` crate from this fork.
@@ -71,7 +73,7 @@ they do not change emitted JavaScript or media behavior.
   transfers have a size limit and deadline and run away from Wayland dispatch.
 - Linux PulseAudio/PipeWire-Pulse audio, microphone, file transfer and recording
   retain their existing implementations. Native cursor shape capture, window
-  selection, DMA-BUF/hardware encoding, and viewer-driven output configuration
+  selection and viewer-driven output configuration
   are separate work.
 
 The web protocol's hello includes `captureBackend` (`x11` or `wayland`) for
@@ -132,3 +134,63 @@ includes the browser/native presentation path we eventually want to compare.
 
 Audio/microphone, file transfer, recording, and macOS/Windows behavior have not
 been exercised by this native integration suite. No latency comparison is claimed.
+
+## Native viewer and optional GPU build
+
+```sh
+nix-shell --arg withRust true --arg withGpu true
+cargo build --release --features gpu --locked
+cargo test --features gpu --locked
+nix-shell native/shell.nix
+cargo build --release --manifest-path native/Cargo.toml --locked
+cargo test --manifest-path native/Cargo.toml --locked
+```
+
+Use the same root-flake Nixpkgs override described above. `default.nix` accepts
+`withGpu = true`; `native/default.nix` builds the viewer and deterministic scene.
+The source filters include only these packages' own sources and the shared media
+shim. NVIDIA driver libraries are found through Nix's `addDriverRunpath` after
+RPATH shrinking. The GPU server does not depend on FFmpeg; the native viewer does.
+
+`--video-backend=cpu|auto|gpu` selects capture/encoding (default CPU). Auto falls
+back on initialization/capability failure; revocation is terminal and never creates
+a replacement share. A runtime GPU/capture failure currently terminates the server;
+restart with `cpu` if the hardware has become unavailable. Strict GPU mode reports
+unsupported hardware. GPU capture currently requires Aizome's GLES renderer,
+DMA-BUF output capture and NVIDIA NVENC API 12.1 or newer. AMD/Intel use the CPU path.
+
+`--gpu-preset=P1..P7` selects NVENC's preset (default P1).
+`--gpu-quality=1..51` sets its VBR target quality (default 24; lower is better).
+This is not x264 CRF: match image quality and bitrate when comparing encoders.
+`--paintover-crf` supplies the idle NVENC target quality too; paintover delay/burst
+and adaptive bitrate/flow control remain shared. H.264 has no B frames or lookahead.
+
+The server allocates two compositor-compatible GBM DMA-BUFs. A capture becomes
+readable only after the compositor's `ready` fence. Imported XRGB GL textures are
+not NVENC-registerable on the tested driver, so a GPU blit into persistent RGBA8
+textures precedes NVENC. Encoding finishes before that capture buffer is reused.
+Only compressed video crosses to the CPU; explicit `/screenshot` requests read back
+pixels. The GPU worker releases driver resources before process shutdown.
+
+The viewer's CPU decoder uploads I420/NV12 planes to persistent GL textures. CUDA
+decode uses CUDA/GL interop copies, keeping source AVFrames alive until their copy
+event completes; it does not download decoded frames. Textures unregister before
+decoder teardown or geometry changes. Auto decode can reset to CPU and request a
+fresh keyframe after a device/presentation error. Decoder queues, incomplete-frame
+sets and packet dimensions are bounded; stripe groups present atomically.
+
+`bench/native-smoke.py` verifies actual pixels on a second isolated Aizome, then
+injects input through that compositor and verifies it returned to the source.
+`VOXL_EXTENDED=1` adds held printable keys, focus-loss release, resize/rotation and
+server restart. Select `VOXL_VIDEO=cpu|gpu`, `VOXL_DECODE=cpu|auto|cuda`,
+`VOXL_STRIPES=N`, `VOXL_BIN` and `VOXL_VIEWER` explicitly.
+
+`bench/native-perf.py` uses the same receiving-compositor marker observer for
+native and Chrome Wayland viewers. It retains raw frame ages, original screenshots,
+server counters, process-tree CPU/RSS, binary hashes and compositor provenance.
+Use `--viewer=local|browser|cpu|cuda --encoder=cpu|gpu --size=1920x1080
+--workload=scroll|animation|drag|idle`. No fixture connects to the login compositor.
+The local control uses the same observer on the source; capture requests can affect
+compositor scheduling, so do not subtract that control as a pure observer overhead.
+No physical scanout, network-clock synchronization or ISO qualification is implied.
+See [the ongoing work log](docs/REMOTE-DESKS-WORK.md) for evidence and remaining work.

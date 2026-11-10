@@ -1,0 +1,10 @@
+[package]
+name = "voxl-media"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+links = "voxl_media"
+
+[build-dependencies]
+cc = "1"
+pkg-config = "0.3"

@@ -1742,6 +1742,7 @@ dependencies = [
  "bindgen",
  "block2",
  "bytes",
+ "cc",
  "dispatch2",
  "env_logger",
  "futures-util",

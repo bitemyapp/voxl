@@ -1,4 +1,7 @@
 /target
+/native/target
+/media/target
+__pycache__/
 bench/loadgen
 bench/rootlat
 result

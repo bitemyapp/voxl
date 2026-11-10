@@ -3,6 +3,8 @@
 
 pub mod capture;
 pub mod clipboard;
+#[cfg(feature = "gpu")]
+pub mod gpu_capture;
 pub mod input;
 mod ipc;
 
@@ -17,15 +19,45 @@ pub struct Settings {
     pub output: Option<String>,
     pub socket: Option<String>,
     pub cursor: bool,
+    pub video_backend: String,
+    pub gpu_preset: u32,
+    pub gpu_quality: f32,
 }
 static SETTINGS: Mutex<Settings> = Mutex::new(Settings {
     enabled: false,
     output: None,
     socket: None,
     cursor: false,
+    video_backend: String::new(),
+    gpu_preset: 1,
+    gpu_quality: 24.0,
 });
 
 pub fn init(args: &HashMap<String, String>) -> Result<bool, String> {
+    let video_backend = args
+        .get("video-backend")
+        .map(String::as_str)
+        .unwrap_or("cpu");
+    if !matches!(video_backend, "cpu" | "gpu" | "auto") {
+        return Err("--video-backend must be cpu, gpu or auto".into());
+    }
+    let gpu_preset = args
+        .get("gpu-preset")
+        .map(String::as_str)
+        .unwrap_or("1")
+        .trim_start_matches(['P', 'p'])
+        .parse::<u32>()
+        .ok()
+        .filter(|p| (1..=7).contains(p))
+        .ok_or("--gpu-preset must be P1 through P7")?;
+    let gpu_quality = args
+        .get("gpu-quality")
+        .map(String::as_str)
+        .unwrap_or("24")
+        .parse::<f32>()
+        .ok()
+        .filter(|q| q.is_finite() && (1.0..=51.0).contains(q))
+        .ok_or("--gpu-quality must be between 1 and 51 (lower is higher quality)")?;
     let enabled = select_backend(
         args.get("capture-backend")
             .map(String::as_str)
@@ -35,6 +67,9 @@ pub fn init(args: &HashMap<String, String>) -> Result<bool, String> {
     )?;
     *SETTINGS.lock() = Settings {
         enabled,
+        video_backend: video_backend.into(),
+        gpu_preset,
+        gpu_quality,
         output: args.get("wayland-output").cloned(),
         socket: args.get("aizome-socket").cloned(),
         cursor: crate::truthy(

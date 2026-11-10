@@ -260,6 +260,9 @@ pub struct Hub {
     pub snapshots: Mutex<Vec<tokio::sync::oneshot::Sender<Arc<crate::record::Snapshot>>>>,
     /// When each part of the screen last changed (`/wait`).
     pub activity: crate::wait::Activity,
+    /// Cooperatively release GPU/driver resources before process shutdown.
+    pub stopping: AtomicBool,
+    pub video_worker: Mutex<Option<std::thread::JoinHandle<()>>>,
 }
 
 impl Hub {
@@ -281,6 +284,8 @@ impl Hub {
             hello_extra: Mutex::new(serde_json::Map::new()),
             snapshots: Mutex::new(Vec::new()),
             activity: Default::default(),
+            stopping: AtomicBool::new(false),
+            video_worker: Mutex::new(None),
         })
     }
 

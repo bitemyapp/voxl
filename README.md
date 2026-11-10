@@ -3,8 +3,8 @@
 This fork adds native Wayland support for **Aizome** to
 [Tembo's Voxl](https://github.com/tembo/voxl). Share an Aizome display, control its
 native applications, and exchange clipboard text and images from the existing web
-viewer. It uses the same H.264 encoder and browser transport as the X11 backend,
-providing a starting point for Aizome's future Remote Desks and a native viewer.
+viewer. A standalone native Wayland viewer and optional GPU streaming provide the
+foundation for Aizome's Remote Desks. The browser and CPU paths remain available.
 
 Run it inside the Aizome session:
 
@@ -23,9 +23,25 @@ Pointer input follows the selected display's scale and position. Capture follows
 display size changes, and Aizome's Stop Sharing ends the server rather than
 silently starting another share. `--read-only` allows watching without input.
 
-This first backend shares one whole display using CPU-accessible buffers and
-software H.264. It does not yet provide window selection, GPU encoding, remote
-display creation, or viewer-controlled display resizing. The browser uses a
+The server shares one whole display. The default CPU backend uses software H.264;
+GPU-enabled builds can use Aizome's DMA-BUF capture and NVIDIA NVENC:
+
+```sh
+voxl --capture-backend=wayland --video-backend=auto
+voxl-viewer http://localhost:6901/ --decoder=auto
+# Set VOXL_TOKEN to the server password, or use its sign-in URL.
+```
+
+The native viewer renders through OpenGL, supports striped video, reconnects,
+follows display size/rotation, and forwards keyboard, pointer and text clipboard
+input. F11 toggles fullscreen. `--decoder=cpu` preserves software decoding;
+`--decoder=cuda` requires NVIDIA decoding and device-memory presentation.
+Auto mode falls back to CPU if the GPU path is unavailable. Native audio,
+microphone, image clipboard and file-transfer controls are still being developed;
+the browser continues to provide those features.
+
+Window selection, remote display creation, and viewer-controlled display resizing
+are not yet available on Wayland. The browser uses a
 local default pointer; `--show-cursor` includes the actual host pointer in the
 video instead (the default for read-only viewing). Input requires Aizome's local
 IPC socket. This is not a general GNOME/KDE portal backend.

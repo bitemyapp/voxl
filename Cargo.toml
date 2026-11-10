@@ -23,6 +23,9 @@ include = [
 	"/LICENSE",
 ]
 
+[features]
+gpu = ["dep:cc"]
+
 # The server, as a library for programs that embed it (the Tembo CLI's `tembo voxl`).
 [lib]
 name = "voxl"
@@ -137,6 +140,7 @@ windows = { version = "0.61", features = [
 windows-core = "0.61"
 
 [build-dependencies]
+cc = { version = "1", optional = true }
 bindgen = "0.72"
 pkg-config = "0.3"
 vcpkg = "0.2"

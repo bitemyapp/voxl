@@ -10,6 +10,12 @@
   xorg,
   esbuild,
   typescript,
+  withGpu ? false,
+  libGL,
+  libgbm,
+  libdrm,
+  nv-codec-headers-12,
+  addDriverRunpath,
 }:
 rustPlatform.buildRustPackage {
   pname = "voxl";
@@ -27,13 +33,17 @@ rustPlatform.buildRustPackage {
   };
 
   cargoLock.lockFile = ./Cargo.lock;
+  buildFeatures = lib.optional withGpu "gpu";
 
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
     esbuild
     typescript
-  ];
+  ] ++ lib.optional withGpu addDriverRunpath;
+  postFixup = lib.optionalString withGpu ''
+    addDriverRunpath "$out/bin/voxl"
+  '';
 
   # build.rs bundles web/src with esbuild; type-check it first.
   preBuild = ''
@@ -49,7 +59,7 @@ rustPlatform.buildRustPackage {
     libpulseaudio
     libxkbcommon
     xorg.libxcb
-  ];
+  ] ++ lib.optionals withGpu [ libGL libgbm libdrm nv-codec-headers-12 ];
 
   meta = {
     description = "Low-latency Aizome Wayland and X11 desktop streaming server (H.264 over WebSocket)";

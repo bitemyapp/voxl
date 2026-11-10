@@ -60,6 +60,46 @@ jobs:
       - name: Package
         run: nix-shell --arg withRust true --run 'cargo package --locked'
 
+  native:
+    name: Native viewer and GPU build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: cachix/install-nix-action@v31
+        with:
+          # Same Nixpkgs revision as Sekka's root flake for this implementation.
+          nix_path: nixpkgs=https://github.com/NixOS/nixpkgs/archive/885ba4d038f10c3d17d7a92e8c3cc185b99c9158.tar.gz
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            native/target
+            media/target
+            target
+          key: native-${{ runner.os }}-${{ hashFiles('Cargo.lock', 'native/Cargo.lock', 'media/Cargo.lock') }}
+          restore-keys: native-${{ runner.os }}-
+      - name: Viewer and media checks
+        run: |
+          nix-shell native/shell.nix --run '
+            set -eu
+            cargo fmt --manifest-path native/Cargo.toml --check
+            cargo fmt --manifest-path media/Cargo.toml --check
+            cargo clippy --manifest-path native/Cargo.toml --all-targets --locked -- -D warnings
+            cargo clippy --manifest-path media/Cargo.toml --all-targets --locked -- -D warnings
+            cargo test --manifest-path native/Cargo.toml --locked
+          '
+      - name: Optional GPU server build and CPU tests
+        run: |
+          nix-shell --arg withRust true --arg withGpu true --run '
+            set -eu
+            cargo clippy --features gpu --all-targets --locked -- -D warnings -A clippy::manual-is-multiple-of -A clippy::manual-checked-ops -A clippy::chunks-exact-to-as-chunks
+            cargo test --features gpu --locked
+            cargo package --features gpu --locked
+          '
+      # Hardware/Wayland smoke and performance fixtures run separately on a GPU
+      # host. A successful build here does not certify hardware behavior.
+
   macos:
     name: macOS (rustfmt, clippy)
     runs-on: macos-latest

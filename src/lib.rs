@@ -16,6 +16,11 @@ mod corners;
 mod desktop;
 mod encoder;
 mod files;
+#[cfg(all(target_os = "linux", feature = "gpu"))]
+mod gpu;
+#[cfg(all(target_os = "linux", feature = "gpu"))]
+#[path = "gpu/media.rs"]
+mod gpu_media;
 mod help;
 mod hub;
 #[cfg(target_os = "linux")]
@@ -477,6 +482,14 @@ async fn serve(a: HashMap<String, String>) {
         log::info!("shutting down");
         if let Some(tx) = shutdown_hub.input.lock().as_ref() {
             let _ = tx.send(input::InputEvent::Shutdown);
+        }
+        shutdown_hub
+            .stopping
+            .store(true, std::sync::atomic::Ordering::Release);
+        shutdown_hub.wake();
+        let worker = shutdown_hub.video_worker.lock().take();
+        if let Some(worker) = worker {
+            let _ = tokio::task::spawn_blocking(move || worker.join()).await;
         }
         tokio::time::sleep(std::time::Duration::from_millis(200)).await;
         std::process::exit(0);

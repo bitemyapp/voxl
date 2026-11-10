@@ -52,6 +52,10 @@ Desktop (Linux: Wayland when WAYLAND_DISPLAY is set, otherwise X11):
                                 explicitly selects X11 in auto mode)
   --display                     X11 display (overrides DISPLAY)
   --wayland-output              output name to stream (default first advertised)
+  --video-backend               cpu, auto or gpu (default cpu; GPU-enabled builds)
+  --gpu-preset                  NVENC preset P1 through P7 (default P1)
+  --gpu-quality                 NVENC target quality 1..51 (default 24; lower is
+                                higher quality; independent of x264 --crf)
   --aizome-socket               Aizome IPC path for input (default AIZOME_SOCKET,
                                 else the socket beside WAYLAND_DISPLAY)
   --show-cursor                 paint the host cursor in Wayland video
