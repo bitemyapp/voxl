@@ -54,7 +54,7 @@ pub fn spawn(cfg: VideoConfig, hub: Arc<Hub>) -> Result<(), InitError> {
             if tx.send(Ok(())).is_err() || start.recv().is_err() {
                 return;
             }
-            configure(&cap, &hub);
+            configure(&mut cap, &hub);
             if tx.send(Ok(())).is_err() {
                 return;
             }
@@ -68,7 +68,7 @@ pub fn spawn(cfg: VideoConfig, hub: Arc<Hub>) -> Result<(), InitError> {
                         match Capturer::new(options) {
                             Ok(c) => {
                                 cap = c;
-                                configure(&cap, &hub);
+                                configure(&mut cap, &hub);
                             }
                             Err(e) => {
                                 terminate(&hub, &e.to_string());
@@ -93,7 +93,8 @@ pub fn spawn(cfg: VideoConfig, hub: Arc<Hub>) -> Result<(), InitError> {
     rx.recv()
         .map_err(|e| InitError::Unavailable(e.to_string()))?
 }
-fn configure(cap: &Capturer, hub: &Hub) {
+fn configure(cap: &mut Capturer, hub: &Hub) {
+    cap.register_remote();
     crate::wayland::input::set_output(cap.output_name.clone(), cap.width, cap.height);
     hub.width.store(cap.width, Ordering::Relaxed);
     hub.height.store(cap.height, Ordering::Relaxed);

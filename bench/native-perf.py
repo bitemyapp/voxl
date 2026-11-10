@@ -20,6 +20,9 @@ import urllib.request
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
 parser.add_argument("--viewer", choices=["local", "browser", "cpu", "cuda", "auto"], default="cpu")
+parser.add_argument("--source", choices=["gl", "sukumo"], default="gl")
+parser.add_argument("--native-widgets", action="store_true")
+parser.add_argument("--scene-compression",choices=["none","zlib"],default="zlib")
 parser.add_argument("--encoder", choices=["cpu", "gpu"], default="cpu")
 parser.add_argument("--size", default="1920x1080")
 parser.add_argument("--workload", choices=["scroll", "animation", "drag", "idle"], default="scroll")
@@ -32,7 +35,9 @@ parser.add_argument("--crf", type=float, default=24)
 parser.add_argument("--gpu-preset", default="P1")
 parser.add_argument("--quality", action="store_true",help="separate image-quality run; does not collect timing/CPU scores")
 args = parser.parse_args()
-if args.quality and (args.viewer=="local" or args.stripes!=1):
+if args.native_widgets and (args.source!="sukumo" or args.viewer in ("local","browser")):
+    parser.error("native widgets require the Sukumo source and a native viewer")
+if args.quality and (args.source!="gl" or args.viewer=="local" or args.stripes!=1):
     parser.error("quality runs require a streamed viewer and one stripe")
 width, height = map(int, args.size.split("x"))
 EVIDENCE = Path(tempfile.mkdtemp(prefix="voxl-perf-"))
@@ -108,10 +113,13 @@ async def main():
     for name,path in {
         "server":os.environ.get("VOXL_BIN",str(ROOT/"target/release/voxl")),
         "viewer":os.environ.get("VOXL_VIEWER",str(ROOT/"native/target/release/voxl-viewer")),
-        "scene":os.environ.get("VOXL_SCENE",str(ROOT/"native/target/release/voxl-scene")),
+        "scene":os.environ["AIZOME_SCENE_FIXTURE"] if args.source=="sukumo" else os.environ.get("VOXL_SCENE",str(ROOT/"native/target/release/voxl-scene")),
         "observer":str(ROOT/"target/release/examples/wayland-observe"),
     }.items():
         binaries[name]={"path":path,"sha256":hashlib.sha256(Path(path).read_bytes()).hexdigest()}
+    if args.native_widgets:
+        renderer=os.environ["AIZOME_REMOTE_RENDERER"]
+        binaries["retained_renderer"]={"path":renderer,"sha256":hashlib.sha256(Path(renderer).read_bytes()).hexdigest()}
     compositor = Path(shutil.which(os.environ.get("AIZOME_BIN", "aizome"))).resolve()
     for path in [compositor, compositor.parent/"libaizome_comp_core.so", compositor.parent/"libaizome_comp_logic.so"]:
         if path.is_file():
@@ -123,9 +131,12 @@ async def main():
             "--renderer", "gles", "--socket", name, "--no-session", "--no-shell", "--no-xwayland",
             "--headless-output", f"TEST={args.size}@1"], environment_).pid
         await until(lambda: ipc(environment_, {"request":"version"}), f"{name} unavailable")
-    roots["scene"] = start("scene", [os.environ.get("VOXL_SCENE",str(ROOT/"native/target/release/voxl-scene")),
-        str(width),str(height),str(args.fps),str(args.warmup+args.seconds+60),args.workload]
-        + ([f"--freeze-after={args.fps*(args.warmup+1)}"] if args.quality else []), source).pid
+    if args.source=="sukumo":
+        roots["scene"]=start("scene",[os.environ["AIZOME_SCENE_FIXTURE"]],dict(source,AIZOME_SCENE_BENCH="1")).pid
+    else:
+        roots["scene"] = start("scene", [os.environ.get("VOXL_SCENE",str(ROOT/"native/target/release/voxl-scene")),
+            str(width),str(height),str(args.fps),str(args.warmup+args.seconds+60),args.workload]
+            + ([f"--freeze-after={args.fps*(args.warmup+1)}"] if args.quality else []), source).pid
     await until(lambda: ipc(source,{"request":"windows"})["windows"], "scene unavailable")
     base = None
     if args.viewer != "local":
@@ -147,7 +158,7 @@ async def main():
                 "--remote-debugging-port=0","--autoplay-policy=no-user-gesture-required"],receiver).pid
         else:
             roots["viewer"]=start("viewer",[os.environ.get("VOXL_VIEWER",str(ROOT/"native/target/release/voxl-viewer")),
-                address,f"--decoder={args.viewer}","--fullscreen",f"--seconds={args.seconds+args.warmup+40}"],receiver).pid
+                address,f"--decoder={args.viewer}","--fullscreen",f"--seconds={args.seconds+args.warmup+40}"] + (["--native-widgets",f"--scene-compression={args.scene_compression}"] if args.native_widgets else []),receiver).pid
         window=await until(lambda:next(iter(ipc(receiver,{"request":"windows"})["windows"]),None),"viewer unavailable")
         ipc(receiver,{"request":"fullscreen","id":window["id"],"state":True})
     def stats():
@@ -161,6 +172,8 @@ async def main():
         (EVIDENCE/"result.json").write_text(json.dumps(report,indent=2)+"\n")
         print(json.dumps(report,indent=2),flush=True)
         return
+    if args.native_widgets:
+        await until(lambda:"Aizome native widgets active" in (EVIDENCE/"viewer.log").read_text(),"retained replay not active")
     await asyncio.sleep(args.warmup)
     before_stats=stats()
     before={name:resources(pid) for name,pid in roots.items()}

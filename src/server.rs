@@ -175,11 +175,14 @@ async fn stats(State(s): State<AppState>) -> Response {
         .iter()
         .map(|c| {
             let (n, age) = c.backlog();
-            serde_json::json!({"id": c.id, "video": c.video.load(Ordering::Relaxed), "inflight": n, "oldest_ms": age,
+            serde_json::json!({"id": c.id, "video": c.video.load(Ordering::Relaxed), "inflight": n, "oldest_ms": age, "retained_queued_bytes": c.scene_bytes.load(Ordering::Acquire),
                 "min_rtt_ms": c.min_rtt_ms.load(Ordering::Relaxed), "queue_ms": c.delay.lock().queue_ms as u64, "delivered_kbps": (c.delivered.lock().rate_bps / 1000.0) as u64})
         })
         .collect();
     let body = serde_json::json!({
+        "retained_frames": st.retained_frames.load(Ordering::Relaxed),
+        "retained_bytes": st.retained_bytes.load(Ordering::Relaxed),
+        "retained_raw_bytes": st.retained_raw_bytes.load(Ordering::Relaxed),
         "captured": st.captured.load(Ordering::Relaxed),
         "encoded": st.encoded.load(Ordering::Relaxed),
         "bytes": st.bytes.load(Ordering::Relaxed),
@@ -218,17 +221,31 @@ async fn handle_socket(socket: WebSocket, s: AppState) {
     if let Some(c) = s.hub.cursor.lock().clone() {
         client.send(Out::Bin(c));
     }
+    let delivery = client.clone();
     let writer = tokio::spawn(async move {
         let dbg = std::env::var("VOXL_DEBUG_MARKER").is_ok();
         while let Some(m) = rx.recv().await {
             let t = Instant::now();
             let big = matches!(&m, Out::Bin(b) if b.len() > 2000);
-            let msg = match m {
-                Out::Bin(b) => Message::Binary(b),
-                Out::Text(t) => Message::Text(t.into()),
+            let scene = match &m {
+                Out::Scene { nonce, serial, .. } => {
+                    Some((u64::from(*nonce) << 32) | u64::from(*serial))
+                }
+                _ => None,
+            };
+            let (msg, reservation) = match m {
+                Out::Bin(b) => (Message::Binary(b), None),
+                Out::Scene {
+                    data, reservation, ..
+                } => (Message::Binary(data), Some(reservation)),
+                Out::Text(t) => (Message::Text(t.into()), None),
             };
             if sink.send(msg).await.is_err() {
                 break;
+            }
+            drop(reservation);
+            if let Some(written) = scene {
+                delivery.scene_written.store(written, Ordering::Release);
             }
             if dbg && big {
                 log::info!(
@@ -300,7 +317,7 @@ fn num<T: std::str::FromStr>(it: &mut std::str::Split<'_, char>) -> Option<T> {
 /// Commands a --read-only viewer may send: acks, video and audio on/off, keyframe
 /// requests and ping replies. Everything else acts on the desktop (input, clipboard,
 /// microphone, resizing) and is dropped. The web client keeps the same list.
-const READ_ONLY_COMMANDS: &[&str] = &["a", "v", "au", "kf", "po"];
+const READ_ONLY_COMMANDS: &[&str] = &["a", "v", "au", "kf", "po", "scene", "sa"];
 
 fn handle_text(s: &AppState, c: &Arc<Client>, t: &str, rtts: &mut std::collections::VecDeque<u32>) {
     let (cmd, rest) = t.split_once(',').unwrap_or((t, ""));
@@ -317,6 +334,30 @@ fn handle_text(s: &AppState, c: &Arc<Client>, t: &str, rtts: &mut std::collectio
     };
     let mut it = rest.split(',');
     match cmd {
+        "scene" => {
+            if let (Some(on), Some(nonce)) = (num::<u32>(&mut it), num::<u32>(&mut it)) {
+                #[cfg(target_os = "linux")]
+                crate::wayland::scene::command(
+                    &s.hub,
+                    c,
+                    on == 1,
+                    nonce,
+                    it.next() == Some("zlib"),
+                );
+                #[cfg(not(target_os = "linux"))]
+                {
+                    let _ = on;
+                    c.send(Out::Text(serde_json::json!({"t":"scene","nonce":nonce,"reason":"Aizome replay unavailable"}).to_string()));
+                }
+            }
+        }
+        "sa" => {
+            if let (Some(nonce), Some(serial)) = (num::<u32>(&mut it), num::<u32>(&mut it)) {
+                if c.scene_nonce.load(Ordering::Acquire) == nonce {
+                    c.scene_ack.store(serial, Ordering::Release);
+                }
+            }
+        }
         "a" => {
             if let Some(id) = num::<u32>(&mut it) {
                 c.on_ack(id);

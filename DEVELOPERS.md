@@ -60,7 +60,7 @@ they do not change emitted JavaScript or media behavior.
   be upright as Aizome delivers them; unsupported sizes/formats/transforms fail
   explicitly rather than being misinterpreted. Buffers are capped at 256 MiB.
 - `src/wayland/ipc.rs` implements only the small public Aizome IPC wire boundary
-  used for output geometry and input. It uses `--aizome-socket`, `AIZOME_SOCKET`,
+  used for output geometry, input, and optional retained-paint subscriptions. It uses `--aizome-socket`, `AIZOME_SOCKET`,
   or `$XDG_RUNTIME_DIR/aizome.$WAYLAND_DISPLAY.sock`. Input stays unprivileged;
   no root helper, uinput device or compositor privilege policy change is needed.
 - `src/wayland/input.rs` maps stream coordinates to the selected output's logical
@@ -204,4 +204,84 @@ Use `--viewer=local|browser|cpu|cuda --encoder=cpu|gpu --size=1920x1080
 The local control uses the same observer on the source; capture requests can affect
 compositor scheduling, so do not subtract that control as a pure observer overhead.
 No physical scanout, network-clock synchronization or ISO qualification is implied.
-See [the ongoing work log](docs/REMOTE-DESKS-WORK.md) for evidence and remaining work.
+See [the measurement report](docs/NATIVE-PERFORMANCE.md) for controlled comparisons
+and their limits, and [the ongoing work log](docs/REMOTE-DESKS-WORK.md) for evidence
+and remaining work.
+
+## Optional Aizome retained drawing
+
+The companion Sekka branch supplies `aizome_remote_paint_v1`, a data-only producer
+protocol, and the separate Sukumo package `aizome-remote-renderer`. Build them
+through Sekka's root flake and its existing development shell:
+
+```sh
+# In the Sekka checkout:
+nix build .#aizome-remote-renderer
+nix develop .#aizome -c cargo build --release \
+  --manifest-path desktop/aizome/Cargo.toml -p aizome-comp -p aizome-comp-logic
+nix develop .#aizome -c cargo build --release \
+  --manifest-path desktop/aizome/sukumo/Cargo.toml -p sidestep-ui --example remote_scene
+# In the Voxl checkout, with the matching compositor running:
+AIZOME_REMOTE_RENDERER=/path/to/renderer/lib/libaizome_remote_renderer.so \
+  voxl-viewer http://localhost:6901/ --native-widgets
+```
+
+`--renderer=PATH` also selects this **local** library; no path, executable code,
+resource URL, or event handler comes from the peer. `native/default.nix` accepts
+`aizomeRenderer` and wraps the viewer with its library path when supplied. The
+renderer builds from Sukumo's own workspace, with a narrow first-party source
+filter; it does not link the compositor or privileged helpers.
+
+Sukumo records paint batches with their individual damage clips and ordering.
+Fonts and decoded premultiplied images are cached assets. The compositor asks for
+a full repaint with a fresh dictionary when a scene becomes eligible or a viewer
+joins. A sealed memfd accompanies the ordinary surface commit; Smithay applies it
+with the same synchronized-subsurface/fence rules as the buffer. Ordinary buffers
+remain authoritative and continue to be painted for local display and fallback.
+
+An IPC connection first subscribes, then requests `remote-scene` with `capture`
+(the ext-image-copy-capture Wayland object ID), `output`, and `enabled`. Aizome
+compares Unix peer credentials with the owner of that live capture resource. It
+only exports the first visible, opaque surface covering the output, at native
+scale without a transform or crop. The share must exclude the host cursor.
+Other toolkits, extra surfaces in front, tiles, Core Animation trees, image-shaped
+clips, and incompatible state use pixels. A revoked capture immediately loses its
+retained subscription. Window selection and mixed pixel/native scene graphs are
+not implemented; this is drawing replay, not a serialized widget tree.
+
+The websocket commands are `scene,enabled,nonce,codec` and `sa,nonce,sequence`.
+Native viewers request `zlib` by default; `--scene-compression=none` keeps the raw
+transport for comparisons. Binary `0x20` messages carry a little-endian nonce and
+transport sequence (four bytes each), followed by the versioned paint frame.
+Binary `0x21` adds the expanded byte length (four bytes), then a sync-flushed zlib
+message. A small dictionary persists across messages in one viewer epoch, so
+repeated drawing attributes need not cross the network again. Declared and actual
+expansion, message boundaries and transport sequences are bounded and checked;
+errors discard that epoch and return to video. New connections/toggles reset the
+dictionary. The shared framing implementation is `src/retained.rs`. The sequence inside that paint
+frame is independent and guards the retained dictionary. A new viewer epoch
+invalidates queued messages from an earlier toggle, geometry, or connection.
+After a valid full native image the viewer sends `v,0`; pixel fallback clears the
+old image and requests a complete video keyframe. A simultaneous browser viewer
+continues to receive normal video. Video encoding can sleep when all viewers use
+native replay.
+
+The limits are 16 MiB per paint frame, 16 million pixels, 8,192 operations,
+64 paint batches, bounded group nesting, and 64 MiB of cached assets. Remote font
+registrations share a content-deduplicated process budget rather than growing on
+each reconnect. The transport allows eight unacknowledged frames and 32 MiB of
+retained websocket data across dictionary/worker restarts; dequeueing a message
+does not release its budget before the socket write completes. ACKs cannot free
+unwritten messages. One IPC worker per client coalesces rapid toggle changes;
+a stalled replay returns to video.
+
+`bench/native-scene.py` runs the real Sukumo fixture between two private Aizomes.
+Set `AIZOME_BIN`, `AIZOME_SCENE_FIXTURE`, and `AIZOME_REMOTE_RENDERER` to matching
+builds; `VOXL_SCENE_SCALE=1.25` checks fractional scaling, and `VOXL_VIDEO=cpu`
+keeps the software server baseline. It checks exact whole-window and damaged
+pixels, input, F9, independent mixed clients, popup fallback/recovery, stalled
+clients, rapid toggles, capture ownership and revocation. `bench/native-faults.py`
+adds malformed/stale/gapped retained states when the renderer variable is set.
+`bench/native-perf.py --source=sukumo --native-widgets --viewer=cuda --encoder=gpu`
+uses the same independent marker observer as the video/browser measurements.
+Omit `--native-widgets` for the same application over ordinary video.

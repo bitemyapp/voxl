@@ -131,3 +131,84 @@ tied to the server's existing ext-image-copy-capture session, including revocati
 Use the actual Sukumo rasterizer through an optional bounded native renderer ABI
 so text/path semantics stay identical, rather than guessing widgets from pixels.
 This section records the implementation direction, not completed functionality.
+
+## Retained drawing implementation and first integration evidence
+
+The optional path is implemented across both topic branches (currently being
+hardened, not yet a finalized supported release): Sukumo exports data-only paint
+batches and cached fonts/images using a new double-buffered Wayland protocol.
+Aizome applies them with Smithay's committed surface state and exposes them only
+to a Unix peer whose PID owns the existing live ext-image-copy-capture output
+session. The first visible surface must cover the output opaquely at native
+scale; popups, tiles, overlays, transformed/cropped surfaces and unsupported ops
+select ordinary pixels. Revocation ends both streams. A full repaint must replace
+the entire canvas before it can establish a new retained dictionary.
+
+The viewer loads the optional local `libaizome_remote_renderer.so` C ABI, using
+Sukumo's actual rasterizer. F9 toggles replay live, default off; `--native-widgets`
+enables it initially, `--renderer=PATH` or `AIZOME_REMOTE_RENDERER` selects the
+local library. Only after a valid full image does it send `v,0`; fallback requests
+a fresh video keyframe and clears the old image. Partial paints upload only their
+damage to a persistent RGBA GL texture. Audio and input stay shared.
+
+The renderer now belongs to the **Sukumo workspace** at
+`desktop/aizome/sukumo/crates/aizome-remote-renderer`, separate from the compositor.
+Root-flake package `.#aizome-remote-renderer` builds from a narrow local source
+filter. First package succeeded at
+`/nix/store/lcq6wjcngj5v879flvgg84301aw8q5n7-aizome-remote-renderer-0.1.0`.
+Voxl's native Nix package accepts optional `aizomeRenderer` to wrap the viewer
+with that library. This has not changed the running login desktop.
+
+`bench/native-scene.py` passed at `/tmp/voxl-native-awu8uwp2` (1x) and
+`/tmp/voxl-native-qjz_zzd4` (1.25x), with **zero differing RGB pixels** for the
+whole text/path window and its partial button damage. It also verified F9 off/on,
+video continuing for a simultaneous ordinary subscriber, a real popup forcing
+video and restoring native replay on close, 200 rapid toggles using one IPC
+worker, stalled replay falling back, denial of an unrelated PID using the actual
+capture object ID, and share revocation. A sole retained viewer animated while
+the server's encoded-frame count stayed unchanged.
+
+The transport limits messages/assets/state and now also reserves actual queued
+WebSocket bytes across worker/dictionary restarts. ACKs cannot release unwritten
+messages. One worker per client coalesces toggle changes. Protocol and ABI tests
+pass; exact raster tests cover ordered overlapping batches, fractional scales,
+groups, image assets and missing-asset rejection. Native Clippy and five native
+tests pass; server tests are 28 passed, one ignored. More fault cases, package
+checks, retained-path measurements and broader quality/network tests remain.
+
+## Compressed replay and measured checkpoint
+
+Completed the identical Sukumo source comparison at 1080p/4K across local,
+CPU/native, GPU/native, CPU/browser, GPU/browser and retained paths. Retained
+replay is 2/3 ms median/p95 at both sizes; GPU/native video is 3/5 and 7/8 ms;
+browser cells are 35–42 ms median. The raw drawing stream was inefficient
+(~390 KB/s), so the transport now offers a bounded streaming zlib dictionary.
+The native default requests zlib; `--scene-compression=none` preserves raw frames.
+Shared framing checks expanded sizes, sync boundaries, contiguous sequences and
+epoch resets. Malformed data cancels the dictionary and restores video.
+
+Twelve serial comparison runs (three repeats per codec/resolution) measured
+2/3 ms median/p95 throughout. Compression uses ~0.37 MB versus 4.68 MB per
+12 seconds, ~92% fewer bytes. CPU is ~1% server and ~2% viewer. Warmup excludes
+the initial asset dictionary. CPU H.264 still uses fewer bytes on this very small
+animated UI, so native replay does not universally win bandwidth.
+Reports and methodology: `docs/NATIVE-PERFORMANCE.md` and
+`docs/benchmarks/2026-11-10-{retained-uncompressed,retained-compression}.json`.
+Capture scheduling and optimized animation reports are now checked into the same
+directory, preserving hashes and settings. Raw logs/screenshots remain under
+`target/perf-baseline/`.
+
+Compressed live integration passed all eleven checks, exact pixels included:
+`/tmp/voxl-native-vgf5rzdj`. The expanded fault fixture passed 22 cases at
+`/tmp/voxl-native-faults-83rff21j`, including independently compressed Python zlib
+streams, malformed lengths/truncation and a fresh reconnect epoch. Native tests
+are now seven passing; server tests 30 passed, one ignored; CPU/GPU Clippy and
+web checks pass. A compositor review also prevented repeated producer rebinding
+from accumulating permanent surface commit hooks. Package verification and
+broader quality/network work continue before the next checkpoint.
+
+The wrapped native Nix package built and passed the eleven live retained checks
+at 1.25x with the rebuilt compositor: `/tmp/voxl-native-7hg3tkqd`.
+Package: `/nix/store/53hs2lqk4xvcpkyb8wnqr0zdhn1q7y0d-voxl-viewer-0.1.0`.
+The renderer library was selected by the package wrapper, without an explicit
+test override. Release compositor Clippy/build and final web checks pass.

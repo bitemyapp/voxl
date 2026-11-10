@@ -1,0 +1,1463 @@
+{
+	"method": "Capture-visible scene age, not physical scanout. Private source/receiver Aizome on one RTX 5090 host; independent Wayland marker observer, no concurrent build/test load. CPU percentages use one core = 100%; process-tree RSS double counts shared pages. See NATIVE-PERFORMANCE.md for controls and limitations.",
+	"results": [
+		{
+			"name": "1920x1080-gpu-local-video",
+			"configuration": {
+				"viewer": "local",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.74185046980128,
+			"age_ms": {
+				"p50": 1,
+				"p95": 2,
+				"p99": 3
+			},
+			"observation": {
+				"captures": 5409,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 7.486866940432383,
+					"rss_bytes": 257286144
+				},
+				"receiver": {
+					"core_percent": 0.0,
+					"rss_bytes": 228454400
+				},
+				"scene": {
+					"core_percent": 0.7486866940432382,
+					"rss_bytes": 26099712
+				}
+			},
+			"server_delta": {},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 905330,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-7ccrtw_j"
+		},
+		{
+			"name": "1920x1080-gpu-cuda-video",
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32360092088612,
+			"age_ms": {
+				"p50": 3,
+				"p95": 5,
+				"p99": 5
+			},
+			"observation": {
+				"captures": 5442,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4974302310306433,
+					"rss_bytes": 252968960
+				},
+				"receiver": {
+					"core_percent": 7.07119831320026,
+					"rss_bytes": 236154880
+				},
+				"scene": {
+					"core_percent": 0.6655245471247304,
+					"rss_bytes": 25956352
+				},
+				"server": {
+					"core_percent": 2.0797642097647824,
+					"rss_bytes": 330690560
+				},
+				"viewer": {
+					"core_percent": 2.9948604620612866,
+					"rss_bytes": 403640320
+				}
+			},
+			"server_delta": {
+				"bytes": 517376,
+				"captured": 716,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 3060,
+				"encode_us_total": 848015,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 851401,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 906042,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-3l8zxzjw"
+		},
+		{
+			"name": "1920x1080-cpu-cpu-video",
+			"configuration": {
+				"viewer": "cpu",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32659810824718,
+			"age_ms": {
+				"p50": 3,
+				"p95": 5,
+				"p99": 5
+			},
+			"observation": {
+				"captures": 5440,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.49077559066602,
+					"rss_bytes": 280621056
+				},
+				"receiver": {
+					"core_percent": 7.068813429752068,
+					"rss_bytes": 236003328
+				},
+				"scene": {
+					"core_percent": 0.8316251093825963,
+					"rss_bytes": 26103808
+				},
+				"server": {
+					"core_percent": 10.478476378220712,
+					"rss_bytes": 73474048
+				},
+				"viewer": {
+					"core_percent": 4.241288057851241,
+					"rss_bytes": 220909568
+				}
+			},
+			"server_delta": {
+				"bytes": 78470,
+				"captured": 717,
+				"convert_us_total": 60289,
+				"damage_events": 1434,
+				"damage_wait_us_total": 5390,
+				"encode_us_total": 444282,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 1400,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 519387,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 906128,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-thaxviym"
+		},
+		{
+			"name": "1920x1080-cpu-browser-video",
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.48920135657445,
+			"age_ms": {
+				"p50": 37,
+				"p95": 52,
+				"p99": 53
+			},
+			"observation": {
+				"captures": 5378,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.905389964087086,
+					"rss_bytes": 281161728
+				},
+				"receiver": {
+					"core_percent": 8.064793669770294,
+					"rss_bytes": 236130304
+				},
+				"scene": {
+					"core_percent": 0.7482798250302335,
+					"rss_bytes": 26312704
+				},
+				"server": {
+					"core_percent": 10.891628564328954,
+					"rss_bytes": 73252864
+				},
+				"viewer": {
+					"core_percent": 16.212729542321725,
+					"rss_bytes": 1907466240
+				}
+			},
+			"server_delta": {
+				"bytes": 78430,
+				"captured": 716,
+				"convert_us_total": 61131,
+				"damage_events": 1432,
+				"damage_wait_us_total": 5967,
+				"encode_us_total": 458061,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 1473,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 534729,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 51.32,
+					"decodeMs": 0.26271186339653146,
+					"pipeMs": 0.686440677966102,
+					"codec": "avc1.42c02a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 909031,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-tbzmlg6z"
+		},
+		{
+			"name": "1920x1080-gpu-browser-video",
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.49204615635475,
+			"age_ms": {
+				"p50": 35,
+				"p95": 46,
+				"p99": 48
+			},
+			"observation": {
+				"captures": 5405,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.580572758036689,
+					"rss_bytes": 252952576
+				},
+				"receiver": {
+					"core_percent": 7.486923590700106,
+					"rss_bytes": 236888064
+				},
+				"scene": {
+					"core_percent": 0.8318803989666784,
+					"rss_bytes": 26112000
+				},
+				"server": {
+					"core_percent": 2.162889037313364,
+					"rss_bytes": 330330112
+				},
+				"viewer": {
+					"core_percent": 15.38978738088355,
+					"rss_bytes": 1915408384
+				}
+			},
+			"server_delta": {
+				"bytes": 518402,
+				"captured": 716,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 3121,
+				"encode_us_total": 854749,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 858190,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 350.2,
+					"decodeMs": 0.5305084750308828,
+					"pipeMs": 1.1288135593220345,
+					"codec": "avc1.64002a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 912615,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-erch53ni"
+		},
+		{
+			"name": "1920x1080-gpu-cuda-retained",
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": true,
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32599772809642,
+			"age_ms": {
+				"p50": 2,
+				"p95": 3,
+				"p99": 3
+			},
+			"observation": {
+				"captures": 5461,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.830213587095459,
+					"rss_bytes": 265703424
+				},
+				"receiver": {
+					"core_percent": 6.738513661578735,
+					"rss_bytes": 236507136
+				},
+				"scene": {
+					"core_percent": 0.9151067935477295,
+					"rss_bytes": 26185728
+				},
+				"server": {
+					"core_percent": 0.9151067935477295,
+					"rss_bytes": 335265792
+				},
+				"viewer": {
+					"core_percent": 1.7470220604093019,
+					"rss_bytes": 436219904
+				}
+			},
+			"server_delta": {
+				"bytes": 0,
+				"captured": 0,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 0,
+				"encode_us_total": 0,
+				"encoded": 0,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 4679692,
+				"retained_frames": 716,
+				"send_lat_us_total": 0,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"retained_renderer": {
+					"path": "/nix/store/lcq6wjcngj5v879flvgg84301aw8q5n7-aizome-remote-renderer-0.1.0/lib/libaizome_remote_renderer.so",
+					"sha256": "81ccb93b585a1820d5079af8b2af942a53e20af8e87424d90affa15862373216"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 913314,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-1_51noag"
+		},
+		{
+			"name": "3840x2160-gpu-local-video",
+			"configuration": {
+				"viewer": "local",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.747421923638754,
+			"age_ms": {
+				"p50": 1,
+				"p95": 2,
+				"p99": 3
+			},
+			"observation": {
+				"captures": 5449,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 6.904631938081136,
+					"rss_bytes": 348917760
+				},
+				"receiver": {
+					"core_percent": 0.0,
+					"rss_bytes": 303403008
+				},
+				"scene": {
+					"core_percent": 0.6655066928270974,
+					"rss_bytes": 51208192
+				}
+			},
+			"server_delta": {},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 913426,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-71p_g18j"
+		},
+		{
+			"name": "3840x2160-gpu-cuda-video",
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32722721690223,
+			"age_ms": {
+				"p50": 7,
+				"p95": 8,
+				"p99": 9
+			},
+			"observation": {
+				"captures": 5417,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4974475884809706,
+					"rss_bytes": 344543232
+				},
+				"receiver": {
+					"core_percent": 7.404046409711466,
+					"rss_bytes": 286031872
+				},
+				"scene": {
+					"core_percent": 0.8319153269338726,
+					"rss_bytes": 51511296
+				},
+				"server": {
+					"core_percent": 2.246171382721456,
+					"rss_bytes": 351211520
+				},
+				"viewer": {
+					"core_percent": 3.3276613077354904,
+					"rss_bytes": 515522560
+				}
+			},
+			"server_delta": {
+				"bytes": 753831,
+				"captured": 716,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 3086,
+				"encode_us_total": 2629528,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 2632958,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 913509,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-6rpad772"
+		},
+		{
+			"name": "3840x2160-cpu-cpu-video",
+			"configuration": {
+				"viewer": "cpu",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32896684003184,
+			"age_ms": {
+				"p50": 10,
+				"p95": 12,
+				"p99": 12
+			},
+			"observation": {
+				"captures": 5369,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 17.105146043258433,
+					"rss_bytes": 446525440
+				},
+				"receiver": {
+					"core_percent": 8.137399573977312,
+					"rss_bytes": 285728768
+				},
+				"scene": {
+					"core_percent": 1.0794509638949497,
+					"rss_bytes": 51216384
+				},
+				"server": {
+					"core_percent": 50.90026468212339,
+					"rss_bytes": 200585216
+				},
+				"viewer": {
+					"core_percent": 15.69355632124196,
+					"rss_bytes": 265138176
+				}
+			},
+			"server_delta": {
+				"bytes": 81438,
+				"captured": 718,
+				"convert_us_total": 182258,
+				"damage_events": 1436,
+				"damage_wait_us_total": 9845,
+				"encode_us_total": 2109019,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 5607,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 2320899,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 913653,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-au_jlffg"
+		},
+		{
+			"name": "3840x2160-cpu-browser-video",
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.329204658478055,
+			"age_ms": {
+				"p50": 42,
+				"p95": 48,
+				"p99": 51
+			},
+			"observation": {
+				"captures": 5303,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 16.684449155937397,
+					"rss_bytes": 446918656
+				},
+				"receiver": {
+					"core_percent": 8.964778650951438,
+					"rss_bytes": 286404608
+				},
+				"scene": {
+					"core_percent": 1.1621009362344457,
+					"rss_bytes": 51404800
+				},
+				"server": {
+					"core_percent": 49.638311419157034,
+					"rss_bytes": 201134080
+				},
+				"viewer": {
+					"core_percent": 63.83254428316348,
+					"rss_bytes": 1935699968
+				}
+			},
+			"server_delta": {
+				"bytes": 82466,
+				"captured": 717,
+				"convert_us_total": 169836,
+				"damage_events": 1434,
+				"damage_wait_us_total": 9637,
+				"encode_us_total": 2068512,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 5488,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 2268120,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 54.312,
+					"decodeMs": 1.1271186435626726,
+					"pipeMs": 3.11186440677966,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 1
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 916478,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-vc5_huo2"
+		},
+		{
+			"name": "3840x2160-gpu-browser-video",
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.40529537433228,
+			"age_ms": {
+				"p50": 42,
+				"p95": 47,
+				"p99": 48
+			},
+			"observation": {
+				"captures": 5341,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4964076507188253,
+					"rss_bytes": 344502272
+				},
+				"receiver": {
+					"core_percent": 8.313375837326808,
+					"rss_bytes": 286363648
+				},
+				"scene": {
+					"core_percent": 0.8313375837326807,
+					"rss_bytes": 51404800
+				},
+				"server": {
+					"core_percent": 2.4108789928247742,
+					"rss_bytes": 351019008
+				},
+				"viewer": {
+					"core_percent": 60.10570730387281,
+					"rss_bytes": 1970970624
+				}
+			},
+			"server_delta": {
+				"bytes": 648841,
+				"captured": 717,
+				"convert_us_total": 0,
+				"damage_events": 717,
+				"damage_wait_us_total": 3277,
+				"encode_us_total": 2633441,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"send_lat_us_total": 2637050,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59.00590058970727,
+					"kbps": 434.2834283402455,
+					"decodeMs": 2.0152542378942844,
+					"pipeMs": 3.618644067796608,
+					"codec": "avc1.640034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 920041,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-9ibca6_p"
+		},
+		{
+			"name": "3840x2160-gpu-cuda-retained",
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": true,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32678241069276,
+			"age_ms": {
+				"p50": 2,
+				"p95": 3,
+				"p99": 3
+			},
+			"observation": {
+				"captures": 5447,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.9133687511218898,
+					"rss_bytes": 356990976
+				},
+				"receiver": {
+					"core_percent": 6.987955438879945,
+					"rss_bytes": 286081024
+				},
+				"scene": {
+					"core_percent": 0.915089402710469,
+					"rss_bytes": 51687424
+				},
+				"server": {
+					"core_percent": 0.915089402710469,
+					"rss_bytes": 356151296
+				},
+				"viewer": {
+					"core_percent": 1.9965586968228415,
+					"rss_bytes": 579366912
+				}
+			},
+			"server_delta": {
+				"bytes": 0,
+				"captured": 0,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 0,
+				"encode_us_total": 0,
+				"encoded": 0,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 4679694,
+				"retained_frames": 716,
+				"send_lat_us_total": 0,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "0f0f99866031a49c1384f6e270584e473855c1861cbf9940450c50152dc0fd2d"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "d2bbde5d8993f96d4558d63278ed1384a717377bf76eca52938f8eb06bc02d23"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "24ed8590bbb3237a0b167423f815b4fb28fcb945b0362a0662e8317c619fd94b"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				},
+				"retained_renderer": {
+					"path": "/nix/store/lcq6wjcngj5v879flvgg84301aw8q5n7-aizome-remote-renderer-0.1.0/lib/libaizome_remote_renderer.so",
+					"sha256": "81ccb93b585a1820d5079af8b2af942a53e20af8e87424d90affa15862373216"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "19859679e8317378ed514e8d2f736db6c6b7f3782e59580a842cb81d98cfaf01"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "268fe60a7041bcfde12da1fc0a9c9d195bbb8b4e21f33d659d16b9269a472339"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 920696,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "d331bc0ceba0c5bf087669aa675e1738e118bb31a766bda9b335c309a4e489cb",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=30ff6ca628cc toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e7940ed711b6 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=c37700ada741 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-obbyw_cm"
+		}
+	]
+}

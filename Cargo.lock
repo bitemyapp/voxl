@@ -1745,6 +1745,7 @@ dependencies = [
  "cc",
  "dispatch2",
  "env_logger",
+ "flate2",
  "futures-util",
  "getrandom 0.3.4",
  "hyper-util",

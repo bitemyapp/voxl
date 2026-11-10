@@ -7,6 +7,7 @@ pub mod clipboard;
 pub mod gpu_capture;
 pub mod input;
 mod ipc;
+pub mod scene;
 
 use parking_lot::Mutex;
 use std::collections::HashMap;

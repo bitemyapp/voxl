@@ -47,6 +47,13 @@ impl Stream {
             frames: 0,
         })
     }
+    pub fn wait_key(&mut self) {
+        self.pending.clear();
+        for stripe in &mut self.stripes {
+            stripe.waiting_key = true;
+            stripe.visible = false;
+        }
+    }
     pub fn hardware(&self) -> bool {
         self.stripes.iter().all(|s| s.decoder.hardware())
     }

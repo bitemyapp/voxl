@@ -35,6 +35,7 @@ struct Heard {
     damage: Vec<(i32, i32, i32, i32)>,
 }
 pub struct Capturer {
+    remote_registration: Option<super::scene::Registration>,
     pub output_name: String,
     conn: Connection,
     queue: EventQueue<Heard>,
@@ -166,6 +167,7 @@ impl Capturer {
             .map_err(|e| format!("DMA-BUF import: {e}"))?;
         let constraints = heard.constraints;
         let mut me = Self {
+            remote_registration: None,
             output_name: name,
             conn,
             queue,
@@ -208,6 +210,12 @@ impl Capturer {
         self.frame = Some(f);
         self.pending = index;
         self.conn.flush().map_err(|e| e.to_string())
+    }
+    pub fn register_remote(&mut self) {
+        self.remote_registration = Some(super::scene::register(
+            self.session.id().protocol_id(),
+            self.output_name.clone(),
+        ));
     }
     pub fn fd(&self) -> BorrowedFd<'_> {
         self.conn.as_fd()

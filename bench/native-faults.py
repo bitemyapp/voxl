@@ -10,6 +10,7 @@ from pathlib import Path
 import socket
 import subprocess
 import tempfile
+import zlib
 
 from websockets.asyncio.server import serve
 
@@ -77,7 +78,7 @@ async def main():
     hello = {"t": "hello", "w": 320, "h": 240, "stripes": [[0, 240]], "audio": False}
     results = []
 
-    async def run_case(name, messages, *, mode="cpu", expected=None, environment=None, audio=False, deny=False):
+    async def run_case(name, messages, *, mode="cpu", expected=None, environment=None, audio=False, deny=False, widgets=False, scene_frames=None, fallback=False):
         received = []
         sent = asyncio.Event()
         async def handle(ws):
@@ -94,7 +95,7 @@ async def main():
         async with serve(handle, "127.0.0.1", 0, process_request=reject) as server:
             port = server.sockets[0].getsockname()[1]
             viewer = start(name, [os.environ.get("VOXL_VIEWER", str(ROOT / "native/target/release/voxl-viewer")),
-                f"http://127.0.0.1:{port}/", f"--decoder={mode}", "--fullscreen", "--seconds=3"],
+                f"http://127.0.0.1:{port}/", f"--decoder={mode}", "--fullscreen", "--seconds=3"] + (["--native-widgets"] if widgets else []),
                 dict(env, **(environment or {})))
             await until(lambda: viewer.poll() is not None, f"{name}: viewer hung", 12)
         log = (EVIDENCE / (name + ".log")).read_text()
@@ -113,6 +114,10 @@ async def main():
                 assert "au,1" in received, received
                 assert metrics["audio_packets"] == 400, metrics
                 assert metrics["audio_discarded_queues"] > 0, metrics
+        if scene_frames is not None:
+            assert metrics["scene_frames"]==scene_frames,(name,metrics,log)
+        if fallback:
+            assert "scene,0,2" in received and "v,1" in received,(name,received,log)
         results.append({"case": name, "exit": viewer.returncode, "metrics": metrics})
         print(name, "passed", flush=True)
 
@@ -130,6 +135,33 @@ async def main():
     await run_case("bounded-incomplete-frames", [striped] +
         [packet(encoded, i, parts=2, stripes=2, key=False) for i in range(1, 10)], expected="too many incomplete video frames")
     await run_case("bounded-audio", [dict(hello, audio=True), packet(encoded)] + [b"\x02\xf8\xff\xfe"] * 400, audio=True)
+    if os.environ.get("AIZOME_REMOTE_RENDERER"):
+        frame={"version":1,"serial":1,"width":320,"height":240,"scale":1.0,"full":True,"fonts":[],"images":[],
+            "batches":[{"damage":[[0,0,320,240]],"ops":[{"Fill":{"rect":[0,0,320,240],"color":[0.2,0.4,0.7,1],"blend":1}}]}]}
+        def scene_packet(frame, serial=1, nonce=1):
+            return bytes([0x20])+nonce.to_bytes(4,"little")+serial.to_bytes(4,"little")+json.dumps(frame).encode()
+        def compressed_frames(frames,nonce=1):
+            codec=zlib.compressobj(1)
+            messages=[]
+            for sequence,frame in enumerate(frames,1):
+                raw=json.dumps(frame).encode()
+                compressed=codec.compress(raw)+codec.flush(zlib.Z_SYNC_FLUSH)
+                messages.append(bytes([0x21])+nonce.to_bytes(4,"little")+sequence.to_bytes(4,"little")+len(raw).to_bytes(4,"little")+compressed)
+            return messages
+        await run_case("scene-valid",[hello,packet(encoded),scene_packet(frame)],widgets=True,scene_frames=1)
+        await run_case("scene-truncated",[hello,b"\x20"],widgets=True,expected="truncated retained packet")
+        await run_case("scene-invalid-version",[hello,packet(encoded),scene_packet(dict(frame,version=99))],widgets=True,scene_frames=0,fallback=True)
+        await run_case("scene-delta-without-full",[hello,packet(encoded),scene_packet(dict(frame,full=False))],widgets=True,scene_frames=0,fallback=True)
+        await run_case("scene-dimensions",[hello,packet(encoded),scene_packet(dict(frame,width=0xffffffff))],widgets=True,scene_frames=0,fallback=True)
+        await run_case("scene-stale-epoch",[hello,packet(encoded),scene_packet(frame,nonce=99)],widgets=True,scene_frames=0)
+        await run_case("scene-gap-then-stale-full",[hello,packet(encoded),scene_packet(frame),
+            scene_packet(dict(frame,serial=3,full=False),2),scene_packet(dict(frame,serial=4),3)],widgets=True,scene_frames=1,fallback=True)
+        compressed=compressed_frames([frame,dict(frame,serial=2,full=False)])
+        await run_case("scene-zlib-dictionary",[hello,packet(encoded)]+compressed,widgets=True,scene_frames=2)
+        await run_case("scene-zlib-truncated",[hello,packet(encoded),compressed[0][:-1]],widgets=True,scene_frames=0,fallback=True)
+        forged=bytearray(compressed[0]);forged[9:13]=(0xffffffff).to_bytes(4,"little")
+        await run_case("scene-zlib-expansion-limit",[hello,packet(encoded),bytes(forged)],widgets=True,scene_frames=0,fallback=True)
+        await run_case("scene-zlib-reconnect-epoch",[hello,packet(encoded),compressed[0],hello,packet(encoded)]+compressed_frames([frame],nonce=2),widgets=True,scene_frames=2)
     (EVIDENCE / "result.json").write_text(json.dumps(results, indent=2) + "\n")
 
 

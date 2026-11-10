@@ -7,6 +7,8 @@
   ffmpeg_8-full,
   nv-codec-headers-12,
   addDriverRunpath,
+  makeWrapper,
+  aizomeRenderer ? null,
 }:
 rustPlatform.buildRustPackage {
   pname = "voxl-viewer";
@@ -18,6 +20,7 @@ rustPlatform.buildRustPackage {
       ./Cargo.lock
       ./build.rs
       ./src
+      ../src/retained.rs
       ../media/Cargo.toml
       ../media/build.rs
       ../media/src
@@ -27,10 +30,12 @@ rustPlatform.buildRustPackage {
   cargoRoot = "native";
   buildAndTestSubdir = "native";
   cargoLock.lockFile = ./Cargo.lock;
-  nativeBuildInputs = [ pkg-config addDriverRunpath ];
+  nativeBuildInputs = [ pkg-config addDriverRunpath ] ++ lib.optional (aizomeRenderer != null) makeWrapper;
   buildInputs = [ SDL2 libopus ffmpeg_8-full nv-codec-headers-12 ];
   postFixup = ''
     addDriverRunpath "$out/bin/voxl-viewer"
+  '' + lib.optionalString (aizomeRenderer != null) ''
+    wrapProgram "$out/bin/voxl-viewer" --set-default AIZOME_REMOTE_RENDERER ${aizomeRenderer}/lib/libaizome_remote_renderer.so
   '';
   # Keep the deterministic scene available to the component benchmark suite.
   meta = {

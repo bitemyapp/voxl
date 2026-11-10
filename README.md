@@ -41,6 +41,14 @@ Desktop audio plays natively; F8 mutes it and `--no-audio` starts muted. Native
 microphone, image clipboard and file-transfer controls are still being developed;
 the browser continues to provide those features.
 
+With the optional Aizome renderer installed, F9 switches supported fullscreen
+Sukumo windows to native drawing replay. Text and paths retain their original
+pixels, and the viewer updates only damaged areas. Popups, other toolkits, and
+unsupported scenes automatically use video. Replay starts off; `--native-widgets`
+enables it when connecting. The title bar shows whether it is active or using
+video. This currently requires the matching Aizome/Sukumo changes in this fork's
+companion Sekka branch and a cursor-free share.
+
 Window selection, remote display creation, and viewer-controlled display resizing
 are not yet available on Wayland. The browser uses a
 local default pointer; `--show-cursor` includes the actual host pointer in the
@@ -400,9 +408,12 @@ Phones and tablets get touch input and an on-screen keyboard.
 Xvfb remain available. Other compositors need the same capture protocols for
 viewing; interactive input currently requires Aizome.
 
-**Does it use the GPU?** Not yet. voxl encodes H.264 on the CPU with x264: 1.3–1.7 cores
-for a busy 2560x1600 desktop, X server included (see the CPU table above). Hardware
-encoding on macOS is in progress.
+**Does it use the GPU?** This fork optionally captures Aizome DMA-BUFs and encodes
+with NVIDIA NVENC. The native viewer can decode with CUDA and present directly
+from device memory through OpenGL. Software encoding and decoding remain
+available for comparisons and fallback. The upstream CPU figures above describe
+its original X11 implementation; current fork measurements are in
+[DEVELOPERS.md](DEVELOPERS.md).
 
 **What's the license?** voxl's code is MIT. It links x264, which is GPL-2.0, so a voxl
 binary, and anything that bundles one, is distributed under the GPL.

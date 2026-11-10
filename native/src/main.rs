@@ -3,6 +3,9 @@ mod input;
 mod net;
 mod protocol;
 mod render;
+#[path = "../../src/retained.rs"]
+pub mod retained;
+mod scene;
 mod stream;
 use net::{Incoming, Network};
 use sdl2::{
@@ -22,17 +25,31 @@ fn main() {
 fn run() -> Result<(), String> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.iter().any(|s| s == "--help") || args.is_empty() {
-        println!("Usage: voxl-viewer URL [--decoder=cpu|auto|cuda] [--fullscreen] [--vsync] [--no-audio] [--seconds=N]\nVOXL_TOKEN supplies authentication without putting it in the URL. F11 toggles fullscreen; F8 toggles audio.");
+        println!("Usage: voxl-viewer URL [--decoder=cpu|auto|cuda] [--fullscreen] [--vsync] [--no-audio] [--native-widgets] [--renderer=PATH] [--scene-compression=zlib|none] [--seconds=N]\nVOXL_TOKEN supplies authentication without putting it in the URL. F11 toggles fullscreen; F8 toggles audio; F9 toggles optional Aizome native widgets.");
         return Ok(());
     }
     for arg in &args[1..] {
-        if !matches!(arg.as_str(), "--vsync" | "--fullscreen" | "--no-audio")
-            && !arg.starts_with("--decoder=")
+        if !matches!(
+            arg.as_str(),
+            "--vsync" | "--fullscreen" | "--no-audio" | "--native-widgets"
+        ) && !arg.starts_with("--decoder=")
             && !arg.starts_with("--seconds=")
+            && !arg.starts_with("--renderer=")
+            && !arg.starts_with("--scene-compression=")
         {
             return Err(format!("unknown option: {arg}"));
         }
     }
+    let scene_codec = match args
+        .iter()
+        .find_map(|s| s.strip_prefix("--scene-compression="))
+        .unwrap_or("zlib")
+    {
+        "zlib" => "zlib",
+        "none" => "raw",
+        _ => return Err("--scene-compression must be zlib or none".into()),
+    };
+    let mut scene_transport = retained::Decoder::default();
     let mode = match args
         .iter()
         .find_map(|s| s.strip_prefix("--decoder="))
@@ -81,6 +98,21 @@ fn run() -> Result<(), String> {
     let mut net = Network::connect(&args[0], event_system.event_sender(), wake_type)?;
     video.text_input().start();
     let mut stream: Option<stream::Stream> = None;
+    let renderer_path = args
+        .iter()
+        .find_map(|s| s.strip_prefix("--renderer=").map(str::to_string))
+        .or_else(|| std::env::var("AIZOME_REMOTE_RENDERER").ok())
+        .unwrap_or_else(|| "libaizome_remote_renderer.so".into());
+    let mut scene = match scene::Scene::new(&video, &renderer_path) {
+        Ok(scene) => Some(scene),
+        Err(error) => {
+            log::info!("Optional Aizome renderer unavailable: {error}");
+            None
+        }
+    };
+    let mut want_scene = args.iter().any(|s| s == "--native-widgets") && scene.is_some();
+    let mut scene_nonce = 0u32;
+    let mut scene_reason = String::from("off");
     let mut source = (1280, 800);
     let mut read_only = false;
     let mut connected = false;
@@ -119,6 +151,31 @@ fn run() -> Result<(), String> {
                     ..
                 } => redraw = true,
                 Event::KeyDown {
+                    keycode: Some(Keycode::F9),
+                    repeat: false,
+                    ..
+                } => {
+                    want_scene = !want_scene && scene.is_some();
+                    scene_nonce = scene_nonce.wrapping_add(1);
+                    if let Some(s) = scene.as_mut() {
+                        s.reset();
+                    }
+                    if let Some(s) = stream.as_mut() {
+                        s.wait_key();
+                    }
+                    scene_reason = if want_scene { "waiting" } else { "off" }.into();
+                    if connected {
+                        net.command(format!(
+                            "scene,{},{},{}",
+                            u8::from(want_scene),
+                            scene_nonce,
+                            scene_codec
+                        ))?;
+                        net.command("v,1")?;
+                    }
+                    redraw = true;
+                }
+                Event::KeyDown {
                     keycode: Some(Keycode::F8),
                     repeat: false,
                     ..
@@ -148,11 +205,11 @@ fn run() -> Result<(), String> {
                     })?;
                 }
                 Event::KeyDown {
-                    keycode: Some(Keycode::F8 | Keycode::F11),
+                    keycode: Some(Keycode::F8 | Keycode::F9 | Keycode::F11),
                     ..
                 }
                 | Event::KeyUp {
-                    keycode: Some(Keycode::F8 | Keycode::F11),
+                    keycode: Some(Keycode::F8 | Keycode::F9 | Keycode::F11),
                     ..
                 } => {}
                 Event::MouseMotion { x, y, .. } if connected && !read_only => {
@@ -217,6 +274,13 @@ fn run() -> Result<(), String> {
                 }
                 Ok(Incoming::Disconnected(reason)) => {
                     connected = false;
+                    if let Some(s) = scene.as_mut() {
+                        s.reset();
+                    }
+                    if let Some(s) = stream.as_mut() {
+                        s.wait_key();
+                    }
+                    redraw = true;
                     keyboard.clear();
                     if let Some(player) = audio.as_mut() {
                         player.reset()?;
@@ -255,6 +319,28 @@ fn run() -> Result<(), String> {
                             );
                             stream = Some(next);
                             net.command("v,1")?;
+                            scene_nonce = scene_nonce.wrapping_add(1);
+                            if let Some(s) = scene.as_mut() {
+                                s.reset();
+                            }
+                            if want_scene {
+                                net.command(format!("scene,1,{scene_nonce},{scene_codec}"))?;
+                            }
+                        }
+                        Some("scene")
+                            if m["nonce"].as_u64() == Some(u64::from(scene_nonce))
+                                && want_scene =>
+                        {
+                            scene_reason = m["reason"].as_str().unwrap_or("pixel fallback").into();
+                            log::info!("Aizome native widgets: {scene_reason}");
+                            if let Some(s) = scene.as_mut() {
+                                s.reset();
+                            }
+                            if let Some(s) = stream.as_mut() {
+                                s.wait_key();
+                            }
+                            net.command("v,1")?;
+                            redraw = true;
                         }
                         Some("clip") => {
                             if let Some(t) = m["d"].as_str() {
@@ -263,6 +349,45 @@ fn run() -> Result<(), String> {
                         }
                         Some("close") => return Err("server closed the stream".into()),
                         _ => {}
+                    }
+                }
+                Ok(Incoming::Binary(bytes)) if matches!(bytes.first(), Some(0x20 | 0x21)) => {
+                    if bytes.len() < 9 {
+                        return Err("truncated retained packet".into());
+                    }
+                    let nonce = u32::from_le_bytes(bytes[1..5].try_into().unwrap());
+                    let serial = u32::from_le_bytes(bytes[5..9].try_into().unwrap());
+                    if want_scene && nonce == scene_nonce {
+                        if let Some(player) = scene.as_mut() {
+                            let was_active = player.active;
+                            match scene_transport
+                                .packet(&bytes)
+                                .and_then(|packet| player.frame(&packet.payload, source))
+                            {
+                                Ok(()) => {
+                                    if !was_active {
+                                        net.command("v,0")?;
+                                        log::info!("Aizome native widgets active");
+                                    }
+                                    net.command(format!("sa,{scene_nonce},{serial}"))?;
+                                    scene_reason = "native".into();
+                                    redraw = true;
+                                }
+                                Err(error) => {
+                                    log::warn!("Aizome replay failed: {error}; using video");
+                                    player.reset();
+                                    scene_reason = "pixel fallback".into();
+                                    // Cancel this failed dictionary. F9 can request a fresh one.
+                                    scene_nonce = scene_nonce.wrapping_add(1);
+                                    net.command(format!("scene,0,{scene_nonce}"))?;
+                                    if let Some(s) = stream.as_mut() {
+                                        s.wait_key();
+                                    }
+                                    net.command("v,1")?;
+                                    redraw = true;
+                                }
+                            }
+                        }
                     }
                 }
                 Ok(Incoming::Binary(bytes)) if bytes.first() == Some(&1) => {
@@ -317,21 +442,32 @@ fn run() -> Result<(), String> {
             }
         }
         if redraw {
-            if let Some(current) = stream.as_ref().filter(|s| s.visible()) {
-                let before = Instant::now();
+            let before = Instant::now();
+            if let Some(player) = scene.as_ref().filter(|s| s.active) {
+                player.draw(window.drawable_size());
+            } else if let Some(current) = stream.as_ref().filter(|s| s.visible()) {
                 current.draw(window.drawable_size());
-                draw_us += before.elapsed().as_micros();
-                let before = Instant::now();
-                window.gl_swap_window();
-                let took = before.elapsed().as_micros();
-                swap_us += took;
-                swap_max_us = swap_max_us.max(took);
-                redraw = false;
+            } else {
+                use glow::HasContext;
+                unsafe {
+                    let gl = glow::Context::from_loader_function(|s| {
+                        video.gl_get_proc_address(s) as *const _
+                    });
+                    gl.clear_color(0.0, 0.0, 0.0, 1.0);
+                    gl.clear(glow::COLOR_BUFFER_BIT);
+                }
             }
+            draw_us += before.elapsed().as_micros();
+            let before = Instant::now();
+            window.gl_swap_window();
+            let took = before.elapsed().as_micros();
+            swap_us += took;
+            swap_max_us = swap_max_us.max(took);
+            redraw = false;
         }
         if connected && reported.elapsed() >= Duration::from_secs(1) {
             let _ = window.set_title(&format!(
-                "Voxl — {}x{} · {} decode · {:.0} fps · F8 audio {}",
+                "Voxl — {}x{} · {} decode · {:.0} fps · F8 audio {} · F9 widgets {}",
                 source.0,
                 source.1,
                 if stream.as_ref().is_some_and(|s| s.hardware()) {
@@ -342,6 +478,13 @@ fn run() -> Result<(), String> {
                 frames as f64 / start.elapsed().as_secs_f64(),
                 if want_audio && server_audio && audio.is_some() {
                     "on"
+                } else {
+                    "off"
+                },
+                if scene.is_none() {
+                    "unavailable"
+                } else if want_scene {
+                    &scene_reason
                 } else {
                     "off"
                 }
@@ -356,6 +499,10 @@ fn run() -> Result<(), String> {
         serde_json::json!({"frames":frames,"elapsed_ms":start.elapsed().as_millis(),"decode_upload_us":decode_us,
             "draw_us":draw_us,"swap_us":swap_us,"swap_max_us":swap_max_us,
             "hardware_decode":stream.as_ref().is_some_and(|s|s.hardware()),
+            "scene_frames":scene.as_ref().map_or(0,|s|s.frames),
+            "scene_bytes":scene.as_ref().map_or(0,|s|s.bytes),
+            "scene_paint_upload_us":scene.as_ref().map_or(0,|s|s.paint_us),
+            "scene_uploaded_bytes":scene.as_ref().map_or(0,|s|s.uploaded_bytes),
             "audio_packets":audio.as_ref().map_or(0, |a|a.packets),
             "audio_discarded_queues":audio.as_ref().map_or(0, |a|a.discarded_queues)})
     );
