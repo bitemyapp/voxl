@@ -77,3 +77,57 @@ Package verification caught Cargo excluding encoder sources nested under the
 separate `media` package. Server-only GPU allocation/encoding now lives in
 `src/gpu/`; `media/` owns viewer decoding/interoperability. GPU-feature
 `cargo package --locked` verification passes with this layout.
+
+## Controlled repeats and capture scheduling
+
+Checkpoint `54ca815` is in draft PR #2; CPU-only Clippy warning repaired in
+`42d7349`, all five CI jobs green (including Windows smoke). Three serial repeats
+per cell at 1080p and 4K are recorded in
+`docs/benchmarks/2026-11-10-scroll-baseline.json`, with raw evidence preserved
+under `target/perf-baseline/scroll-matrix/evidence/`. Chrome 157.0.8103.38 uses
+NVIDIA ANGLE/OpenGL compositing; its reported hardware video profile list is
+empty. Actual WebCodecs decoder selection is still being investigated.
+
+At 1080p the three median scene ages were CPU/browser 48/42/51 ms,
+CPU/native 13/13/13 ms, GPU/native 12/12/12 ms, GPU/browser 53/50/47 ms.
+At 4K: CPU/browser 38/55/64 ms, CPU/native 24/24/24 ms, GPU/native 16/15/16 ms,
+GPU/browser 40/56/57 ms. Median server/viewer one-core CPU percentages at 4K:
+CPU/browser 110.88/75.27%, GPU/native 2.41/3.58%.
+
+Aizome's output capture used display redraws to gate possible damage, although
+each capture renders the current scene independently. A separate capture scene
+revision removes that wait while preserving actual damage tracking and fences.
+Sekka commit `ca94cbe8`, draft PR #382, contains the change and headless refresh
+configuration support. Both new 1 Hz regression tests pass and fail against the
+former gating; 26 component tests pass, with linear GPU readback explicitly
+skipped where unsupported. Release Clippy passed. Protected comparator builds
+live in the managed Sekka worktree's `desktop/aizome/target/capture-{optimized,vblank}`.
+Two serial repeats with otherwise identical builds and streaming binaries:
+1080p GPU/native median 12 -> 4 ms, p95 19–20 -> 5 ms; 4K median 15–16 -> 7 ms,
+p95 23 -> 8 ms. Index: `target/perf-baseline/capture-comparison/index.json`.
+This remains capture-visible scene age, not physical scanout latency.
+
+An additional direct-import experiment with ARGB8888 also failed NVENC texture
+registration (23). Registering fresh fallback textures after that failed probe
+also failed on this EGL driver. The experiment was removed; the established GPU
+blit path remains. Evidence: `/tmp/voxl-native-0j_thjzv`. Restored GPU path plus
+optimized compositor passed extended native integration: `/tmp/voxl-native-r1u6leos`.
+
+Native audio playback and default-auto decoding are now implemented. The real
+viewer passed 11 fault/fallback/audio cases at `/tmp/voxl-native-faults-p7xn05wn`.
+An eight-second audio burst decoded 400 packets while discarding 99 stale queues,
+keeping playback bounded. No host audio device was used.
+
+## Next: optional retained Aizome drawing
+
+Implement a conservative first negotiation boundary: a supported fullscreen
+Sukumo root surface can send retained drawing/damage updates to the native viewer.
+Other toolkits, extra visible surfaces/popups, unsupported layer operations, or
+inconsistent state retain/re-enter the existing pixel stream. The native viewer
+will expose a live toggle. Once replay is ready it can stop its own pixel-video
+subscription, avoiding encode/decode work when all viewers use native replay;
+browser and mixed-viewer sessions retain normal video. Keep scene authorization
+tied to the server's existing ext-image-copy-capture session, including revocation.
+Use the actual Sukumo rasterizer through an optional bounded native renderer ABI
+so text/path semantics stay identical, rather than guessing widgets from pixels.
+This section records the implementation direction, not completed functionality.

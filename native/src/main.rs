@@ -1,3 +1,4 @@
+mod audio;
 mod input;
 mod net;
 mod protocol;
@@ -21,11 +22,11 @@ fn main() {
 fn run() -> Result<(), String> {
     let args: Vec<_> = std::env::args().skip(1).collect();
     if args.iter().any(|s| s == "--help") || args.is_empty() {
-        println!("Usage: voxl-viewer URL [--decoder=cpu|auto|cuda] [--fullscreen] [--vsync] [--seconds=N]\nVOXL_TOKEN supplies authentication without putting it in the URL. F11 toggles fullscreen.");
+        println!("Usage: voxl-viewer URL [--decoder=cpu|auto|cuda] [--fullscreen] [--vsync] [--no-audio] [--seconds=N]\nVOXL_TOKEN supplies authentication without putting it in the URL. F11 toggles fullscreen; F8 toggles audio.");
         return Ok(());
     }
     for arg in &args[1..] {
-        if !matches!(arg.as_str(), "--vsync" | "--fullscreen")
+        if !matches!(arg.as_str(), "--vsync" | "--fullscreen" | "--no-audio")
             && !arg.starts_with("--decoder=")
             && !arg.starts_with("--seconds=")
         {
@@ -35,7 +36,7 @@ fn run() -> Result<(), String> {
     let mode = match args
         .iter()
         .find_map(|s| s.strip_prefix("--decoder="))
-        .unwrap_or("cpu")
+        .unwrap_or("auto")
     {
         "cpu" => Decode::Cpu,
         "auto" => Decode::Auto,
@@ -95,6 +96,9 @@ fn run() -> Result<(), String> {
     let mut keyboard = input::Keyboard::default();
     let mut last_key_request = Instant::now() - Duration::from_secs(1);
     let mut decode_mode = mode;
+    let mut want_audio = !args.iter().any(|s| s == "--no-audio");
+    let mut server_audio = false;
+    let mut audio: Option<audio::Playback> = None;
     'running: loop {
         if seconds.is_some_and(|s| start.elapsed() >= Duration::from_secs(s)) {
             break;
@@ -115,6 +119,23 @@ fn run() -> Result<(), String> {
                     ..
                 } => redraw = true,
                 Event::KeyDown {
+                    keycode: Some(Keycode::F8),
+                    repeat: false,
+                    ..
+                } => {
+                    want_audio = !want_audio;
+                    if let Some(player) = audio.as_mut() {
+                        player.reset()?;
+                    }
+                    if connected {
+                        net.command(format!(
+                            "au,{}",
+                            u8::from(want_audio && server_audio && audio.is_some())
+                        ))?;
+                    }
+                    reported = Instant::now() - Duration::from_secs(1);
+                }
+                Event::KeyDown {
                     keycode: Some(Keycode::F11),
                     repeat: false,
                     ..
@@ -126,6 +147,14 @@ fn run() -> Result<(), String> {
                         sdl2::video::FullscreenType::Off
                     })?;
                 }
+                Event::KeyDown {
+                    keycode: Some(Keycode::F8 | Keycode::F11),
+                    ..
+                }
+                | Event::KeyUp {
+                    keycode: Some(Keycode::F8 | Keycode::F11),
+                    ..
+                } => {}
                 Event::MouseMotion { x, y, .. } if connected && !read_only => {
                     let r = render::viewport(window.size(), source);
                     if r[2] > 0 && r[3] > 0 {
@@ -189,6 +218,9 @@ fn run() -> Result<(), String> {
                 Ok(Incoming::Disconnected(reason)) => {
                     connected = false;
                     keyboard.clear();
+                    if let Some(player) = audio.as_mut() {
+                        player.reset()?;
+                    }
                     log::warn!("Disconnected: {reason}; reconnecting");
                     let _ = window.set_title("Voxl — disconnected, reconnecting");
                 }
@@ -197,6 +229,17 @@ fn run() -> Result<(), String> {
                         serde_json::from_str(&text).map_err(|e| e.to_string())?;
                     match m["t"].as_str() {
                         Some("hello") => {
+                            server_audio = m["audio"].as_bool().unwrap_or(false);
+                            if server_audio && audio.is_none() {
+                                match audio::Playback::new(&sdl) {
+                                    Ok(player) => audio = Some(player),
+                                    Err(error) => log::warn!("Audio unavailable: {error}"),
+                                }
+                            }
+                            net.command(format!(
+                                "au,{}",
+                                u8::from(want_audio && server_audio && audio.is_some())
+                            ))?;
                             let hello: protocol::Hello =
                                 serde_json::from_value(m).map_err(|e| e.to_string())?;
                             let hello = hello.validate()?;
@@ -254,6 +297,17 @@ fn run() -> Result<(), String> {
                     }
                     decode_us += before.elapsed().as_micros();
                 }
+                Ok(Incoming::Binary(bytes)) if bytes.first() == Some(&2) => {
+                    if want_audio {
+                        if let Some(player) = audio.as_mut() {
+                            if let Err(error) = player.packet(&bytes[1..]) {
+                                log::warn!("Audio stopped: {error}");
+                                audio = None;
+                                net.command("au,0")?;
+                            }
+                        }
+                    }
+                }
                 Ok(Incoming::Binary(_)) => {}
                 Ok(Incoming::Closed(reason)) => return Err(reason),
                 Err(tokio::sync::mpsc::error::TryRecvError::Empty) => break,
@@ -277,7 +331,7 @@ fn run() -> Result<(), String> {
         }
         if connected && reported.elapsed() >= Duration::from_secs(1) {
             let _ = window.set_title(&format!(
-                "Voxl — {}x{} · {} decode · {:.0} fps",
+                "Voxl — {}x{} · {} decode · {:.0} fps · F8 audio {}",
                 source.0,
                 source.1,
                 if stream.as_ref().is_some_and(|s| s.hardware()) {
@@ -285,7 +339,12 @@ fn run() -> Result<(), String> {
                 } else {
                     "CPU"
                 },
-                frames as f64 / start.elapsed().as_secs_f64()
+                frames as f64 / start.elapsed().as_secs_f64(),
+                if want_audio && server_audio && audio.is_some() {
+                    "on"
+                } else {
+                    "off"
+                }
             ));
             reported = Instant::now();
         }
@@ -296,7 +355,9 @@ fn run() -> Result<(), String> {
         "{}",
         serde_json::json!({"frames":frames,"elapsed_ms":start.elapsed().as_millis(),"decode_upload_us":decode_us,
             "draw_us":draw_us,"swap_us":swap_us,"swap_max_us":swap_max_us,
-            "hardware_decode":stream.as_ref().is_some_and(|s|s.hardware())})
+            "hardware_decode":stream.as_ref().is_some_and(|s|s.hardware()),
+            "audio_packets":audio.as_ref().map_or(0, |a|a.packets),
+            "audio_discarded_queues":audio.as_ref().map_or(0, |a|a.discarded_queues)})
     );
     Ok(())
 }

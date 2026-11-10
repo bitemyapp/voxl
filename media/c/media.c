@@ -135,12 +135,14 @@ void voxl_cuda_gl_free(VoxCudaGl *p) {
     if (!p) return;
     if (p->cuda && p->context && p->cuda->cuCtxPushCurrent(p->context) == CUDA_SUCCESS) {
         if (p->pending) p->cuda->cuEventSynchronize(p->copied);
-        av_frame_free(&p->pending);
         for (int i=0;i<2;i++) if (p->resources[i]) p->cuda->cuGraphicsUnregisterResource(p->resources[i]);
         if (p->copied) p->cuda->cuEventDestroy(p->copied);
         CUcontext previous;
         p->cuda->cuCtxPopCurrent(&previous);
     }
+    /* A lost context cannot execute the pending copy, but the AVFrame still
+     * owns host references that must be released on the fallback path. */
+    av_frame_free(&p->pending);
     av_buffer_unref(&p->device);
     cuda_free_functions(&p->cuda);
     free(p);

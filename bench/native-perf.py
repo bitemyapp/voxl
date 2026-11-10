@@ -11,6 +11,7 @@ import json
 import os
 from pathlib import Path
 import socket
+import shutil
 import subprocess
 import tempfile
 import time
@@ -111,6 +112,10 @@ async def main():
         "observer":str(ROOT/"target/release/examples/wayland-observe"),
     }.items():
         binaries[name]={"path":path,"sha256":hashlib.sha256(Path(path).read_bytes()).hexdigest()}
+    compositor = Path(shutil.which(os.environ.get("AIZOME_BIN", "aizome"))).resolve()
+    for path in [compositor, compositor.parent/"libaizome_comp_core.so", compositor.parent/"libaizome_comp_logic.so"]:
+        if path.is_file():
+            binaries["compositor_"+path.name]={"path":str(path),"sha256":hashlib.sha256(path.read_bytes()).hexdigest()}
     source, receiver = environment("source"), environment("receiver")
     roots = {}
     for name, environment_ in [("source", source), ("receiver", receiver)]:
@@ -176,21 +181,34 @@ async def main():
     delta={key:after_stats[key]-value for key,value in before_stats.items()
            if isinstance(value,(int,float)) and isinstance(after_stats.get(key),(int,float))}
     browser_stats=None
+    browser_system=None
+    # Preserve the viewer image before opening any diagnostic browser pages.
+    subprocess.run(["grim","-o","TEST",str(EVIDENCE/"presented.png")],
+                   env=source if args.viewer=="local" else receiver,check=True,timeout=5,capture_output=True)
     if args.viewer=="browser":
         from playwright.async_api import async_playwright
         port=int((profile/"DevToolsActivePort").read_text().splitlines()[0])
         async with async_playwright() as playwright:
             browser=await playwright.chromium.connect_over_cdp(f"http://127.0.0.1:{port}")
+            cdp=await browser.new_browser_cdp_session()
+            browser_system={"version":await cdp.send("Browser.getVersion"),"system":await cdp.send("SystemInfo.getInfo")}
             for page in browser.contexts[0].pages:
                 if page.url.startswith(base):
                     browser_stats=await page.evaluate("({stats:window.voxlStats,width:innerWidth,height:innerHeight,dpr:devicePixelRatio})")
+            media=await browser.contexts[0].new_page()
+            await media.goto("chrome://media-internals")
+            await media.wait_for_timeout(500)
+            players=media.locator("#player-list .tree-item-header")
+            for index in range(await players.count()):
+                await players.nth(index).click()
+                (EVIDENCE/f"browser-media-player-{index}.txt").write_text(await media.locator("body").inner_text())
+            (EVIDENCE/"browser-media.html").write_text(await media.content())
+            (EVIDENCE/"browser-media.txt").write_text(await media.locator("body").inner_text())
             await browser.close()
-    subprocess.run(["grim","-o","TEST",str(EVIDENCE/"presented.png")],
-                   env=source if args.viewer=="local" else receiver,check=True,timeout=5,capture_output=True)
     report={"configuration":vars(args),"visible_fps":len(age)/observation["seconds"],
         "age_ms":{"p50":quantile(.5),"p95":quantile(.95),"p99":quantile(.99)},
         "observation":{"captures":observation["captures"],"invalid":observation["invalid"]},
-        "cpu":cpu,"server_delta":delta,"browser":browser_stats,
+        "cpu":cpu,"server_delta":delta,"browser":browser_stats,"browser_system":browser_system,
         "binaries":binaries,"aizome":ipc(source,{"request":"version"}),"evidence":str(EVIDENCE)}
     (EVIDENCE/"result.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2),flush=True)

@@ -3,6 +3,7 @@
   rustPlatform,
   pkg-config,
   SDL2,
+  libopus,
   ffmpeg_8-full,
   nv-codec-headers-12,
   addDriverRunpath,
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage {
   buildAndTestSubdir = "native";
   cargoLock.lockFile = ./Cargo.lock;
   nativeBuildInputs = [ pkg-config addDriverRunpath ];
-  buildInputs = [ SDL2 ffmpeg_8-full nv-codec-headers-12 ];
+  buildInputs = [ SDL2 libopus ffmpeg_8-full nv-codec-headers-12 ];
   postFixup = ''
     addDriverRunpath "$out/bin/voxl-viewer"
   '';

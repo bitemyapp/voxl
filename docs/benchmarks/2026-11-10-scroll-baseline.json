@@ -1,0 +1,2993 @@
+{
+	"method": "Capture-visible scene age measured by independent Wayland observer, not physical scanout latency; three serial 12-second measurements per cell, four-second warmup, reversed cell ordering on second repeat. Same machine, separate private source and receiver Aizome instances. Nominal x264 CRF 24 and NVENC CQ 24 are not quality-equivalent settings. Process-tree sum RSS includes shared pages more than once.",
+	"results": [
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.413247954112826,
+			"age_ms": {
+				"p50": 48,
+				"p95": 60,
+				"p99": 65
+			},
+			"observation": {
+				"captures": 5368,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.8211137296363615,
+					"rss_bytes": 262119424
+				},
+				"receiver": {
+					"core_percent": 8.229142400586202,
+					"rss_bytes": 229900288
+				},
+				"scene": {
+					"core_percent": 1.1637171071536043,
+					"rss_bytes": 163434496
+				},
+				"server": {
+					"core_percent": 21.611889132852653,
+					"rss_bytes": 73678848
+				},
+				"viewer": {
+					"core_percent": 16.042671548617548,
+					"rss_bytes": 1921900544
+				}
+			},
+			"server_delta": {
+				"bytes": 4206263,
+				"captured": 722,
+				"convert_us_total": 86836,
+				"damage_events": 722,
+				"damage_wait_us_total": 658821,
+				"encode_us_total": 835670,
+				"encoded": 722,
+				"flow_blocked": 0,
+				"grab_us_total": 2381,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1593028,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 58.994100589853105,
+					"kbps": 2962.007799215665,
+					"decodeMs": 0.3762711864911904,
+					"pipeMs": 1.2542372881355937,
+					"codec": "avc1.42c02a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 726767,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-0-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.572026741373904,
+			"age_ms": {
+				"p50": 12,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5421,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4141426264214494,
+					"rss_bytes": 225701888
+				},
+				"receiver": {
+					"core_percent": 7.237082852862711,
+					"rss_bytes": 229761024
+				},
+				"scene": {
+					"core_percent": 0.9150334641550555,
+					"rss_bytes": 163438592
+				},
+				"server": {
+					"core_percent": 2.079621509443308,
+					"rss_bytes": 331558912
+				},
+				"viewer": {
+					"core_percent": 3.161024694353828,
+					"rss_bytes": 401809408
+				}
+			},
+			"server_delta": {
+				"bytes": 5228171,
+				"captured": 718,
+				"convert_us_total": 0,
+				"damage_events": 718,
+				"damage_wait_us_total": 283522,
+				"encode_us_total": 880417,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1164307,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 730449,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-0-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.656358376049255,
+			"age_ms": {
+				"p50": 13,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5419,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.5733472706438345,
+					"rss_bytes": 262328320
+				},
+				"receiver": {
+					"core_percent": 7.317355633030135,
+					"rss_bytes": 230244352
+				},
+				"scene": {
+					"core_percent": 0.9978212226859275,
+					"rss_bytes": 163532800
+				},
+				"server": {
+					"core_percent": 19.623817379489907,
+					"rss_bytes": 73756672
+				},
+				"viewer": {
+					"core_percent": 4.822802576315317,
+					"rss_bytes": 219824128
+				}
+			},
+			"server_delta": {
+				"bytes": 4213843,
+				"captured": 719,
+				"convert_us_total": 84731,
+				"damage_events": 719,
+				"damage_wait_us_total": 506734,
+				"encode_us_total": 766651,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 2285,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1370051,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 730558,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-0-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.41407283144024,
+			"age_ms": {
+				"p50": 53,
+				"p95": 66,
+				"p99": 68
+			},
+			"observation": {
+				"captures": 5390,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.497338432895516,
+					"rss_bytes": 225316864
+				},
+				"receiver": {
+					"core_percent": 7.736248569960166,
+					"rss_bytes": 229847040
+				},
+				"scene": {
+					"core_percent": 0.9150401534361486,
+					"rss_bytes": 163278848
+				},
+				"server": {
+					"core_percent": 2.1628221808490786,
+					"rss_bytes": 332001280
+				},
+				"viewer": {
+					"core_percent": 20.46362524957205,
+					"rss_bytes": 1932259328
+				}
+			},
+			"server_delta": {
+				"bytes": 5212727,
+				"captured": 720,
+				"convert_us_total": 0,
+				"damage_events": 720,
+				"damage_wait_us_total": 375244,
+				"encode_us_total": 890933,
+				"encoded": 720,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1266549,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60,
+					"kbps": 3842.136,
+					"decodeMs": 0.9600000001490117,
+					"pipeMs": 1.9516666666666675,
+					"codec": "avc1.64002a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 733590,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-0-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.498096938494896,
+			"age_ms": {
+				"p50": 50,
+				"p95": 63,
+				"p99": 68
+			},
+			"observation": {
+				"captures": 5392,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4973469077877324,
+					"rss_bytes": 225800192
+				},
+				"receiver": {
+					"core_percent": 7.819478296224825,
+					"rss_bytes": 229912576
+				},
+				"scene": {
+					"core_percent": 0.9982312718584883,
+					"rss_bytes": 163897344
+				},
+				"server": {
+					"core_percent": 2.1628344223600577,
+					"rss_bytes": 331833344
+				},
+				"viewer": {
+					"core_percent": 19.299137922597442,
+					"rss_bytes": 1930280960
+				}
+			},
+			"server_delta": {
+				"bytes": 5232486,
+				"captured": 720,
+				"convert_us_total": 0,
+				"damage_events": 720,
+				"damage_wait_us_total": 372685,
+				"encode_us_total": 881191,
+				"encoded": 720,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1254269,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60.006000600149434,
+					"kbps": 3835.3195319589113,
+					"decodeMs": 0.9000000001241764,
+					"pipeMs": 1.4133333333333338,
+					"codec": "avc1.64002a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 734263,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-1-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.489620969766115,
+			"age_ms": {
+				"p50": 13,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5415,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.4899916555658645,
+					"rss_bytes": 262361088
+				},
+				"receiver": {
+					"core_percent": 7.400171432321517,
+					"rss_bytes": 229834752
+				},
+				"scene": {
+					"core_percent": 0.997775923459081,
+					"rss_bytes": 163729408
+				},
+				"server": {
+					"core_percent": 19.45663050745208,
+					"rss_bytes": 73506816
+				},
+				"viewer": {
+					"core_percent": 4.988879617295405,
+					"rss_bytes": 220246016
+				}
+			},
+			"server_delta": {
+				"bytes": 4220121,
+				"captured": 719,
+				"convert_us_total": 84924,
+				"damage_events": 719,
+				"damage_wait_us_total": 472454,
+				"encode_us_total": 761728,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 2280,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1331165,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 734874,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-1-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.49675327704786,
+			"age_ms": {
+				"p50": 12,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5423,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.497476183838819,
+					"rss_bytes": 225697792
+				},
+				"receiver": {
+					"core_percent": 7.320994676545338,
+					"rss_bytes": 229654528
+				},
+				"scene": {
+					"core_percent": 0.9151243345681672,
+					"rss_bytes": 163352576
+				},
+				"server": {
+					"core_percent": 1.9966349117850921,
+					"rss_bytes": 331567104
+				},
+				"viewer": {
+					"core_percent": 3.244531731650775,
+					"rss_bytes": 401797120
+				}
+			},
+			"server_delta": {
+				"bytes": 5205640,
+				"captured": 718,
+				"convert_us_total": 0,
+				"damage_events": 718,
+				"damage_wait_us_total": 262824,
+				"encode_us_total": 871655,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1134858,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 737897,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-1-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.49001574108316,
+			"age_ms": {
+				"p50": 42,
+				"p95": 58,
+				"p99": 62
+			},
+			"observation": {
+				"captures": 5391,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.655954137195321,
+					"rss_bytes": 261853184
+				},
+				"receiver": {
+					"core_percent": 7.815351587435004,
+					"rss_bytes": 229892096
+				},
+				"scene": {
+					"core_percent": 1.0808464961346282,
+					"rss_bytes": 163569664
+				},
+				"server": {
+					"core_percent": 19.95408915940852,
+					"rss_bytes": 73576448
+				},
+				"viewer": {
+					"core_percent": 17.376685976318253,
+					"rss_bytes": 1917997056
+				}
+			},
+			"server_delta": {
+				"bytes": 4241116,
+				"captured": 718,
+				"convert_us_total": 86257,
+				"damage_events": 718,
+				"damage_wait_us_total": 392205,
+				"encode_us_total": 755647,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 2237,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1245596,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 3096.92,
+					"decodeMs": 0.36101694948087304,
+					"pipeMs": 1.661016949152542,
+					"codec": "avc1.42c02a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 738007,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-1-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.322616544460935,
+			"age_ms": {
+				"p50": 51,
+				"p95": 66,
+				"p99": 69
+			},
+			"observation": {
+				"captures": 5366,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.82196006624555,
+					"rss_bytes": 262164480
+				},
+				"receiver": {
+					"core_percent": 8.064312524583075,
+					"rss_bytes": 229552128
+				},
+				"scene": {
+					"core_percent": 1.080784152779175,
+					"rss_bytes": 163745792
+				},
+				"server": {
+					"core_percent": 19.869800962632524,
+					"rss_bytes": 73768960
+				},
+				"viewer": {
+					"core_percent": 18.12391886968155,
+					"rss_bytes": 1921925120
+				}
+			},
+			"server_delta": {
+				"bytes": 4252494,
+				"captured": 721,
+				"convert_us_total": 83037,
+				"damage_events": 721,
+				"damage_wait_us_total": 618259,
+				"encode_us_total": 766897,
+				"encoded": 721,
+				"flow_blocked": 0,
+				"grab_us_total": 2359,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1479974,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 3300.456,
+					"decodeMs": 0.35762711854304297,
+					"pipeMs": 1.6559322033898307,
+					"codec": "avc1.42c02a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 741569,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-2-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.404730538514684,
+			"age_ms": {
+				"p50": 12,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5428,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4974341667707638,
+					"rss_bytes": 225067008
+				},
+				"receiver": {
+					"core_percent": 7.237598472725358,
+					"rss_bytes": 229715968
+				},
+				"scene": {
+					"core_percent": 0.9150986574710223,
+					"rss_bytes": 163344384
+				},
+				"server": {
+					"core_percent": 2.079769676070505,
+					"rss_bytes": 331849728
+				},
+				"viewer": {
+					"core_percent": 3.0780591205843475,
+					"rss_bytes": 403009536
+				}
+			},
+			"server_delta": {
+				"bytes": 5159475,
+				"captured": 717,
+				"convert_us_total": 0,
+				"damage_events": 717,
+				"damage_wait_us_total": 213121,
+				"encode_us_total": 872257,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1085735,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 745145,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-2-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.65804557695891,
+			"age_ms": {
+				"p50": 13,
+				"p95": 20,
+				"p99": 21
+			},
+			"observation": {
+				"captures": 5414,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 4.490104552305133,
+					"rss_bytes": 262217728
+				},
+				"receiver": {
+					"core_percent": 7.483507587175222,
+					"rss_bytes": 230133760
+				},
+				"scene": {
+					"core_percent": 0.9978010116233629,
+					"rss_bytes": 163807232
+				},
+				"server": {
+					"core_percent": 19.29081955805168,
+					"rss_bytes": 73318400
+				},
+				"viewer": {
+					"core_percent": 4.989005058116814,
+					"rss_bytes": 219676672
+				}
+			},
+			"server_delta": {
+				"bytes": 4160198,
+				"captured": 719,
+				"convert_us_total": 83818,
+				"damage_events": 719,
+				"damage_wait_us_total": 506353,
+				"encode_us_total": 750327,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 2425,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1352670,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 745308,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-2-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.575644867989816,
+			"age_ms": {
+				"p50": 47,
+				"p95": 58,
+				"p99": 60
+			},
+			"observation": {
+				"captures": 5400,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4973102746204674,
+					"rss_bytes": 225841152
+				},
+				"receiver": {
+					"core_percent": 7.5697352772479185,
+					"rss_bytes": 229728256
+				},
+				"scene": {
+					"core_percent": 1.1645746580381413,
+					"rss_bytes": 163729408
+				},
+				"server": {
+					"core_percent": 2.1627815077851196,
+					"rss_bytes": 331702272
+				},
+				"viewer": {
+					"core_percent": 19.71458528250282,
+					"rss_bytes": 1930338304
+				}
+			},
+			"server_delta": {
+				"bytes": 5165109,
+				"captured": 721,
+				"convert_us_total": 0,
+				"damage_events": 721,
+				"damage_wait_us_total": 394434,
+				"encode_us_total": 885113,
+				"encoded": 721,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 1279922,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59.994000599850615,
+					"kbps": 3826.7373262616716,
+					"decodeMs": 0.9699999998013179,
+					"pipeMs": 2.123333333333334,
+					"codec": "avc1.64002a",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 1920,
+				"height": 1080,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 748335,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/1920x1080-2-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.16334641473559,
+			"age_ms": {
+				"p50": 38,
+				"p95": 56,
+				"p99": 61
+			},
+			"observation": {
+				"captures": 5286,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 18.84003467333741,
+					"rss_bytes": 411295744
+				},
+				"receiver": {
+					"core_percent": 9.29552371547925,
+					"rss_bytes": 279506944
+				},
+				"scene": {
+					"core_percent": 1.6599149491927232,
+					"rss_bytes": 163696640
+				},
+				"server": {
+					"core_percent": 110.21835262639682,
+					"rss_bytes": 200949760
+				},
+				"viewer": {
+					"core_percent": 74.19819822891473,
+					"rss_bytes": 1956306944
+				}
+			},
+			"server_delta": {
+				"bytes": 4836253,
+				"captured": 717,
+				"convert_us_total": 642505,
+				"damage_events": 720,
+				"damage_wait_us_total": 1036462,
+				"encode_us_total": 3389044,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 9726,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5098455,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60,
+					"kbps": 2543.96,
+					"decodeMs": 1.443333333109816,
+					"pipeMs": 7.603333333333334,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 748928,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-0-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32694230386627,
+			"age_ms": {
+				"p50": 16,
+				"p95": 23,
+				"p99": 24
+			},
+			"observation": {
+				"captures": 5417,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.414215780396588,
+					"rss_bytes": 275345408
+				},
+				"receiver": {
+					"core_percent": 7.487024719746642,
+					"rss_bytes": 280051712
+				},
+				"scene": {
+					"core_percent": 1.0814591261856261,
+					"rss_bytes": 163528704
+				},
+				"server": {
+					"core_percent": 2.329296579476733,
+					"rss_bytes": 352468992
+				},
+				"viewer": {
+					"core_percent": 3.57713403276784,
+					"rss_bytes": 515276800
+				}
+			},
+			"server_delta": {
+				"bytes": 5615516,
+				"captured": 717,
+				"convert_us_total": 0,
+				"damage_events": 717,
+				"damage_wait_us_total": 210361,
+				"encode_us_total": 2671758,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 2882444,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 752597,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-0-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.41022134086873,
+			"age_ms": {
+				"p50": 24,
+				"p95": 33,
+				"p99": 35
+			},
+			"observation": {
+				"captures": 5342,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 19.589596528335704,
+					"rss_bytes": 411455488
+				},
+				"receiver": {
+					"core_percent": 8.632703554859802,
+					"rss_bytes": 279916544
+				},
+				"scene": {
+					"core_percent": 1.4111150041597753,
+					"rss_bytes": 163602432
+				},
+				"server": {
+					"core_percent": 113.13822062763376,
+					"rss_bytes": 201371648
+				},
+				"viewer": {
+					"core_percent": 22.411826536655255,
+					"rss_bytes": 255070208
+				}
+			},
+			"server_delta": {
+				"bytes": 4883331,
+				"captured": 719,
+				"convert_us_total": 664388,
+				"damage_events": 724,
+				"damage_wait_us_total": 1138925,
+				"encode_us_total": 3480914,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 10210,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5315363,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 752722,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-0-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32743861341619,
+			"age_ms": {
+				"p50": 40,
+				"p95": 54,
+				"p99": 58
+			},
+			"observation": {
+				"captures": 5347,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.5796712415214746,
+					"rss_bytes": 275451904
+				},
+				"receiver": {
+					"core_percent": 8.314059165902497,
+					"rss_bytes": 279564288
+				},
+				"scene": {
+					"core_percent": 1.0808276915673247,
+					"rss_bytes": 163172352
+				},
+				"server": {
+					"core_percent": 2.4110771581117243,
+					"rss_bytes": 351870976
+				},
+				"viewer": {
+					"core_percent": 64.51709912740338,
+					"rss_bytes": 1992335360
+				}
+			},
+			"server_delta": {
+				"bytes": 6741161,
+				"captured": 716,
+				"convert_us_total": 0,
+				"damage_events": 716,
+				"damage_wait_us_total": 170911,
+				"encode_us_total": 2661774,
+				"encoded": 716,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 2833045,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 58.9941005902926,
+					"kbps": 5294.782521779381,
+					"decodeMs": 2.6237288131299668,
+					"pipeMs": 3.6491525423728777,
+					"codec": "avc1.640034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 755865,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-0-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.24769168524541,
+			"age_ms": {
+				"p50": 56,
+				"p95": 68,
+				"p99": 70
+			},
+			"observation": {
+				"captures": 5337,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.6626300999195924,
+					"rss_bytes": 275476480
+				},
+				"receiver": {
+					"core_percent": 8.479413509589921,
+					"rss_bytes": 279568384
+				},
+				"scene": {
+					"core_percent": 1.3301040799356738,
+					"rss_bytes": 163766272
+				},
+				"server": {
+					"core_percent": 2.577076654875368,
+					"rss_bytes": 352247808
+				},
+				"viewer": {
+					"core_percent": 65.6738889468239,
+					"rss_bytes": 1991421952
+				}
+			},
+			"server_delta": {
+				"bytes": 7920048,
+				"captured": 721,
+				"convert_us_total": 0,
+				"damage_events": 721,
+				"damage_wait_us_total": 394408,
+				"encode_us_total": 2700380,
+				"encoded": 722,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 3095150,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60,
+					"kbps": 5175.352,
+					"decodeMs": 2.585000000024835,
+					"pipeMs": 4.576666666666668,
+					"codec": "avc1.640034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 756605,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-1-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.41349506042448,
+			"age_ms": {
+				"p50": 24,
+				"p95": 32,
+				"p99": 35
+			},
+			"observation": {
+				"captures": 5337,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 19.342784807850837,
+					"rss_bytes": 411549696
+				},
+				"receiver": {
+					"core_percent": 8.882738087725492,
+					"rss_bytes": 279937024
+				},
+				"scene": {
+					"core_percent": 1.494292388589335,
+					"rss_bytes": 163803136
+				},
+				"server": {
+					"core_percent": 112.98510782611584,
+					"rss_bytes": 201580544
+				},
+				"viewer": {
+					"core_percent": 21.750255878355876,
+					"rss_bytes": 263159808
+				}
+			},
+			"server_delta": {
+				"bytes": 4971065,
+				"captured": 719,
+				"convert_us_total": 664396,
+				"damage_events": 719,
+				"damage_wait_us_total": 1029218,
+				"encode_us_total": 3479989,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 9808,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5203858,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 757288,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-1-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.49467938586463,
+			"age_ms": {
+				"p50": 15,
+				"p95": 23,
+				"p99": 24
+			},
+			"observation": {
+				"captures": 5403,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4141339535806703,
+					"rss_bytes": 274862080
+				},
+				"receiver": {
+					"core_percent": 7.652960219377745,
+					"rss_bytes": 280137728
+				},
+				"scene": {
+					"core_percent": 1.0813965527381595,
+					"rss_bytes": 163987456
+				},
+				"server": {
+					"core_percent": 2.4123461561082022,
+					"rss_bytes": 352346112
+				},
+				"viewer": {
+					"core_percent": 3.4937427088463617,
+					"rss_bytes": 515084288
+				}
+			},
+			"server_delta": {
+				"bytes": 7269336,
+				"captured": 719,
+				"convert_us_total": 0,
+				"damage_events": 718,
+				"damage_wait_us_total": 294259,
+				"encode_us_total": 2669953,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 2964557,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 760491,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-1-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.16226957888589,
+			"age_ms": {
+				"p50": 55,
+				"p95": 67,
+				"p99": 70
+			},
+			"observation": {
+				"captures": 5277,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 19.170913072459346,
+					"rss_bytes": 411320320
+				},
+				"receiver": {
+					"core_percent": 9.377979122025568,
+					"rss_bytes": 279584768
+				},
+				"scene": {
+					"core_percent": 1.7428102793144862,
+					"rss_bytes": 163561472
+				},
+				"server": {
+					"core_percent": 110.87593015067398,
+					"rss_bytes": 201310208
+				},
+				"viewer": {
+					"core_percent": 75.27280587324947,
+					"rss_bytes": 1952837632
+				}
+			},
+			"server_delta": {
+				"bytes": 4547078,
+				"captured": 718,
+				"convert_us_total": 651488,
+				"damage_events": 721,
+				"damage_wait_us_total": 1082118,
+				"encode_us_total": 3420272,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 9857,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5185853,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60,
+					"kbps": 3374.616,
+					"decodeMs": 1.5866666670888663,
+					"pipeMs": 7.713333333333335,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 760696,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-1-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.15387602616261,
+			"age_ms": {
+				"p50": 64,
+				"p95": 72,
+				"p99": 74
+			},
+			"observation": {
+				"captures": 5252,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 19.752880912731218,
+					"rss_bytes": 377769984
+				},
+				"receiver": {
+					"core_percent": 9.793445158412958,
+					"rss_bytes": 279580672
+				},
+				"scene": {
+					"core_percent": 1.6599059590530436,
+					"rss_bytes": 163475456
+				},
+				"server": {
+					"core_percent": 114.28452528080206,
+					"rss_bytes": 201334784
+				},
+				"viewer": {
+					"core_percent": 75.60871643486614,
+					"rss_bytes": 1957801984
+				}
+			},
+			"server_delta": {
+				"bytes": 4809281,
+				"captured": 718,
+				"convert_us_total": 680688,
+				"damage_events": 722,
+				"damage_wait_us_total": 1117313,
+				"encode_us_total": 3497388,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 9911,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5327298,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59.00590058970727,
+					"kbps": 3575.717571735861,
+					"decodeMs": 1.5050847459647616,
+					"pipeMs": 6.918644067796611,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 764445,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-2-cpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.32748701489251,
+			"age_ms": {
+				"p50": 16,
+				"p95": 23,
+				"p99": 24
+			},
+			"observation": {
+				"captures": 5389,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.4141901183114782,
+					"rss_bytes": 275030016
+				},
+				"receiver": {
+					"core_percent": 7.902827131740614,
+					"rss_bytes": 279887872
+				},
+				"scene": {
+					"core_percent": 0.998251848219867,
+					"rss_bytes": 163692544
+				},
+				"server": {
+					"core_percent": 2.4124419665313455,
+					"rss_bytes": 352579584
+				},
+				"viewer": {
+					"core_percent": 3.6602567768061793,
+					"rss_bytes": 515432448
+				}
+			},
+			"server_delta": {
+				"bytes": 7045034,
+				"captured": 715,
+				"convert_us_total": 0,
+				"damage_events": 715,
+				"damage_wait_us_total": 176322,
+				"encode_us_total": 2662740,
+				"encoded": 715,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 2839403,
+				"target_kbps": 2897
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 768180,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-2-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.412333195446756,
+			"age_ms": {
+				"p50": 24,
+				"p95": 32,
+				"p99": 35
+			},
+			"observation": {
+				"captures": 5332,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 19.50827005882918,
+					"rss_bytes": 377868288
+				},
+				"receiver": {
+					"core_percent": 8.882488920403073,
+					"rss_bytes": 279781376
+				},
+				"scene": {
+					"core_percent": 1.5772643877351251,
+					"rss_bytes": 163274752
+				},
+				"server": {
+					"core_percent": 113.64604983207296,
+					"rss_bytes": 201150464
+				},
+				"viewer": {
+					"core_percent": 22.24772925857966,
+					"rss_bytes": 254619648
+				}
+			},
+			"server_delta": {
+				"bytes": 4827737,
+				"captured": 720,
+				"convert_us_total": 666825,
+				"damage_events": 722,
+				"damage_wait_us_total": 1084395,
+				"encode_us_total": 3477464,
+				"encoded": 719,
+				"flow_blocked": 0,
+				"grab_us_total": 10002,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 5258956,
+				"target_kbps": 0
+			},
+			"browser": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 768326,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-2-cpu-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"seconds": 12,
+				"warmup": 4,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"visible_fps": 59.407146290277794,
+			"age_ms": {
+				"p50": 57,
+				"p95": 68,
+				"p99": 70
+			},
+			"observation": {
+				"captures": 5328,
+				"invalid": 0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.5795787966872097,
+					"rss_bytes": 275218432
+				},
+				"receiver": {
+					"core_percent": 8.562979792567505,
+					"rss_bytes": 279756800
+				},
+				"scene": {
+					"core_percent": 1.1639001659800492,
+					"rss_bytes": 163409920
+				},
+				"server": {
+					"core_percent": 2.5772075103843948,
+					"rss_bytes": 352669696
+				},
+				"viewer": {
+					"core_percent": 65.42781647330705,
+					"rss_bytes": 1995206656
+				}
+			},
+			"server_delta": {
+				"bytes": 7681230,
+				"captured": 721,
+				"convert_us_total": 0,
+				"damage_events": 721,
+				"damage_wait_us_total": 381774,
+				"encode_us_total": 2690644,
+				"encoded": 721,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"send_lat_us_total": 3072786,
+				"target_kbps": 0
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60,
+					"kbps": 5307.968,
+					"decodeMs": 2.5683333331098157,
+					"pipeMs": 4.653333333333334,
+					"codec": "avc1.640034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl",
+					"sha256": "9b69b084d0bfb81345cf71f4a89877f5519b85c0ed9c211e5ee18c5cc091ce7e"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-viewer",
+					"sha256": "714ecbc7d0e55269d170439a6edfad6555f0f68fa259c231315bbf1f33a54475"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/target/perf-baseline/voxl-scene",
+					"sha256": "e0e36926c566d9b7b4db8102e088cbd89d48cb0f3eb389ca1ec7e1e658995e96"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "fecf1917995f72bb45d1c5802021f2a339e520196d84c9e5cf86b94cea8e3703"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 771462,
+				"exe": "/nix/store/lhxl0xwjbm011jhg94p8zabl5aczxp6c-aizome-0.1.0/bin/aizome",
+				"build": {
+					"abi": "654827ffc33cd5a7dcd88c3b30f4eded878f3c64ce0716f43a09404d3c9893b6",
+					"abi_parts": "build=87690d9c6583 lock=b56393442a08 sources=8254bc1b74b9 toolchain=b738388530e6",
+					"explicit_target": true,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.1 (58cf8f9c3 2026-10-13) (built from a source tarball)",
+					"rustflags": "-Cforce-frame-pointers=yes",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=e204c1ca6c97 aizome-config=a0c390fe758d aizome-ipc=c9aae0f80673 aizome-theme=90fed2c20b45 sidestep-engine=546e8d6880a1 sidestep-ui=503d1701ad80 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "target/perf-baseline/scroll-matrix/evidence/3840x2160-2-gpu-browser",
+			"browser_environment": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"renderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+				"featureStatus": {
+					"2d_canvas": "enabled",
+					"direct_rendering_display_compositor": "disabled_off_ok",
+					"gpu_compositing": "enabled",
+					"multiple_raster_threads": "enabled_on",
+					"opengl": "enabled_on",
+					"rasterization": "enabled",
+					"skia_graphite": "disabled_off",
+					"trees_in_viz": "disabled_off",
+					"video_decode": "enabled",
+					"video_encode": "disabled_software",
+					"vulkan": "disabled_off",
+					"webgl": "enabled",
+					"webgpu": "enabled",
+					"webgpu_on_vk_via_gl_interop": "enabled",
+					"webnn": "disabled_off"
+				},
+				"videoDecoding": []
+			}
+		}
+	]
+}

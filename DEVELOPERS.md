@@ -178,6 +178,17 @@ event completes; it does not download decoded frames. Textures unregister before
 decoder teardown or geometry changes. Auto decode can reset to CPU and request a
 fresh keyframe after a device/presentation error. Decoder queues, incomplete-frame
 sets and packet dimensions are bounded; stripe groups present atomically.
+Auto decode is now the default; `--decoder=cpu` remains the explicit baseline.
+
+Native playback decodes the existing stereo 48 kHz Opus stream through libopus
+into SDL. F8 toggles audio and `--no-audio` starts muted. The playback queue is
+capped at 80 ms; stale queued sound is discarded after a network burst, and
+disconnect/mute resets codec and playback state. Audio-device failure leaves
+video usable. `bench/native-faults.py` uses a private compositor and SDL dummy
+audio to test real CPU fallback with CUDA devices hidden, strict GPU refusal,
+authentication errors, invalid geometry/JSON/packets, duplicate stripes,
+incomplete-frame bounds, and an eight-second audio burst without an eight-second
+playback backlog. This is not physical audio-device validation.
 
 `bench/native-smoke.py` verifies actual pixels on a second isolated Aizome, then
 injects input through that compositor and verifies it returned to the source.

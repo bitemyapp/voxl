@@ -36,7 +36,8 @@ The native viewer renders through OpenGL, supports striped video, reconnects,
 follows display size/rotation, and forwards keyboard, pointer and text clipboard
 input. F11 toggles fullscreen. `--decoder=cpu` preserves software decoding;
 `--decoder=cuda` requires NVIDIA decoding and device-memory presentation.
-Auto mode falls back to CPU if the GPU path is unavailable. Native audio,
+Auto mode is the default and falls back to CPU if the GPU path is unavailable.
+Desktop audio plays natively; F8 mutes it and `--no-audio` starts muted. Native
 microphone, image clipboard and file-transfer controls are still being developed;
 the browser continues to provide those features.
 
