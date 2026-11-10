@@ -319,3 +319,26 @@ renderer `/nix/store/aw568pg3q39rrq3341wiza7mpvxr5pac-aizome-remote-renderer-0.1
 The renderer comes from the local Sekka root flake. Remaining closure checks use
 only the graphics-driver library directory, without the development library path;
 final timing confirmation will use these exact packaged binaries.
+
+## Final package confirmation
+
+Source-owner checkpoint `4fc7eeb` passes all five GitHub CI jobs, including GPU/
+native builds, Linux package verification, macOS and Windows smoke. Sekka head
+`686e42c5` contains glyph caching plus source-authorization documentation; its
+trust check passes and repository policy skips the build jobs.
+
+The locally built compositor needs its development EGL search path. The fixture
+now supports `VOXL_PACKAGE_LIBRARY_PATH` to isolate just the packaged server and
+viewer while leaving that fixture dependency explicit. With only
+`/run/opengl-driver/lib` for those two packages, all 13 retained checks pass at
+`/tmp/voxl-native-16h59hpn`, and extended GPU/CUDA video checks pass at
+`/tmp/voxl-native-diqgxc23`, including held keys, focus-loss release, resizing,
+rotation, server restart/reconnect and capture revocation.
+
+Four serial final-package timing cells are saved in `target/perf-baseline/
+final-packaged/` and `docs/benchmarks/2026-11-10-final-packaged.json`. Same 4K
+animation: CPU/browser 63/71 ms median/p95, GPU/native 8/9 ms; server/viewer CPU
+208.09/98.69% versus 2.08/3.49%. Packaged retained replay remains 2/3 ms on LAN
+and 56/61 ms on the 1 Mbit/s/100 ms link, with zero video bytes after warmup.
+All markers are valid. Exact package paths and hashes are recorded. No release,
+ISO or physical-display qualification is implied.

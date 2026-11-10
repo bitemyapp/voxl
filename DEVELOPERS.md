@@ -195,6 +195,9 @@ injects input through that compositor and verifies it returned to the source.
 `VOXL_EXTENDED=1` adds held printable keys, focus-loss release, resize/rotation and
 server restart. Select `VOXL_VIDEO=cpu|gpu`, `VOXL_DECODE=cpu|auto|cuda`,
 `VOXL_STRIPES=N`, `VOXL_BIN` and `VOXL_VIEWER` explicitly.
+For package closure checks, set `VOXL_PACKAGE_LIBRARY_PATH=/run/opengl-driver/lib`.
+The fixtures apply it only to the explicitly selected server/viewer executables;
+a locally built compositor can still use its development EGL library path.
 
 `bench/native-perf.py` uses the same receiving-compositor marker observer for
 native and Chrome Wayland viewers. It retains raw frame ages, original screenshots,

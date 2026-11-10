@@ -23,6 +23,14 @@ CPU percentages use one core = 100%; summed process RSS can count shared pages
 more than once. Chrome 157 reports NVIDIA ANGLE compositing; its actual WebCodecs
 decoder implementation has not been established.
 
+Final immutable Nix packages confirm the main results: at 4K, CPU/Chrome
+animation is 63 ms median / 71 ms p95 versus GPU/native 8 / 9 ms; server/viewer
+CPU is 208.09% / 98.69% versus 2.08% / 3.49%. Retained replay is 2 / 3 ms on LAN
+and 56 / 61 ms on the 1 Mbit/s / 100 ms link. Those four confirmation cells use
+only the driver directory in the packaged server/viewer library search path and
+explicit source-side opt-in for native drawing. All markers are valid.
+[Final package report](benchmarks/2026-11-10-final-packaged.json).
+
 ## Video: separate the viewer and encoder gains
 
 The deterministic moving scene uses identical content and the updated Aizome

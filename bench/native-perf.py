@@ -69,6 +69,9 @@ def environment(name):
 
 
 def start(name, command, environment):
+    package_libs=os.environ.get("VOXL_PACKAGE_LIBRARY_PATH")
+    if package_libs is not None and command[0] in (os.environ.get("VOXL_BIN"),os.environ.get("VOXL_VIEWER")):
+        environment=dict(environment,LD_LIBRARY_PATH=package_libs)
     with (EVIDENCE / (name + ".log")).open("wb") as output:
         process = subprocess.Popen(command, env=environment, stdout=output, stderr=subprocess.STDOUT)
     children.append(process)
@@ -251,6 +254,7 @@ async def main():
     reliable=observation["invalid"]==0
     quantiles={"p50":quantile(.5),"p95":quantile(.95),"p99":quantile(.99)}
     report={"configuration":vars(args),"measurement_valid":reliable,
+        "package_library_path":os.environ.get("VOXL_PACKAGE_LIBRARY_PATH"),
         "retained_startup_ms":retained_startup_ms,
         "retained_startup_stats":retained_startup_stats,
         "visible_fps":len(age)/observation["seconds"] if reliable and args.workload!="idle" else None,

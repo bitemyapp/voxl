@@ -39,6 +39,9 @@ def environment(name):
 
 
 def start(name, args, env):
+    package_libs=os.environ.get("VOXL_PACKAGE_LIBRARY_PATH")
+    if package_libs is not None and args[0] in (os.environ.get("VOXL_BIN"),os.environ.get("VOXL_VIEWER")):
+        env=dict(env,LD_LIBRARY_PATH=package_libs)
     with open(EVIDENCE / (name + ".log"), "wb") as log:
         p = subprocess.Popen(args, env=env, stdout=log, stderr=subprocess.STDOUT)
     children.append(p)
