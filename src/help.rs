@@ -47,7 +47,15 @@ Video:
 
 #[cfg(not(any(target_os = "macos", windows)))]
 const DESKTOP: &str = "
-Desktop (the X11 display in $DISPLAY):
+Desktop (Linux: Wayland when WAYLAND_DISPLAY is set, otherwise X11):
+  --capture-backend             auto, wayland or x11 (default auto; --display
+                                explicitly selects X11 in auto mode)
+  --display                     X11 display (overrides DISPLAY)
+  --wayland-output              output name to stream (default first advertised)
+  --aizome-socket               Aizome IPC path for input (default AIZOME_SOCKET,
+                                else the socket beside WAYLAND_DISPLAY)
+  --show-cursor                 paint the host cursor in Wayland video
+                                (default false, true with --read-only)
   --enable-clipboard            true, in, out or false (default true)
   --audio-enabled               desktop audio (default true)
   --audio-device-name           PulseAudio source (default output.monitor)
@@ -151,9 +159,9 @@ pub fn print_if_asked(args: &[String]) -> bool {
     let version = env!("CARGO_PKG_VERSION");
     match request(args) {
         Some(Request::Help) => {
-            // A Mac's or a PC's own screen is only served locally by default (see serve()).
+            // Native desktops are served locally by default (see serve()).
             let addr = if cfg!(target_os = "linux") {
-                "0.0.0.0"
+                "127.0.0.1 on Wayland, 0.0.0.0 on X11"
             } else {
                 "127.0.0.1"
             };

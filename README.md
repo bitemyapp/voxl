@@ -1,17 +1,53 @@
 # voxl
 
+This fork adds native Wayland support for **Aizome** to
+[Tembo's Voxl](https://github.com/tembo/voxl). Share an Aizome display, control its
+native applications, and exchange clipboard text and images from the existing web
+viewer. It uses the same H.264 encoder and browser transport as the X11 backend,
+providing a starting point for Aizome's future Remote Desks and a native viewer.
+
+Run it inside the Aizome session:
+
+```sh
+voxl --capture-backend=wayland
+# Choose a particular display (use the name from aizomectl outputs):
+voxl --capture-backend=wayland --wayland-output=DP-1
+```
+
+Wayland sessions listen on localhost by default. Use the printed sign-in link,
+or forward that port over SSH to another machine. To serve the display directly,
+choose a listening address and HTTPS as described below.
+
+Capture is native Wayland, including native windows; Xwayland is not required.
+Pointer input follows the selected display's scale and position. Capture follows
+display size changes, and Aizome's Stop Sharing ends the server rather than
+silently starting another share. `--read-only` allows watching without input.
+
+This first backend shares one whole display using CPU-accessible buffers and
+software H.264. It does not yet provide window selection, GPU encoding, remote
+display creation, or viewer-controlled display resizing. The browser uses a
+local default pointer; `--show-cursor` includes the actual host pointer in the
+video instead (the default for read-only viewing). Input requires Aizome's local
+IPC socket. This is not a general GNOME/KDE portal backend.
+
+`--capture-backend=auto` selects Wayland when `WAYLAND_DISPLAY` is set, otherwise
+X11. `--display=:1` explicitly selects X11 in auto mode; `--capture-backend=x11`
+also keeps the original path available. Build and validation details are in
+[DEVELOPERS.md](DEVELOPERS.md). The benchmarks below are **upstream's X11
+measurements**, not measurements of this fork's Wayland backend.
+
 [![crates.io](https://img.shields.io/crates/v/voxl-server.svg)](https://crates.io/crates/voxl-server)
 
-Low-latency desktop streaming for the browser, written in Rust. voxl streams an X11
-display, a Mac's screen or a Windows desktop as H.264 over a WebSocket to a small web
+Low-latency desktop streaming for the browser, written in Rust. voxl streams an Aizome
+Wayland or X11 display, a Mac's screen or a Windows desktop as H.264 over a WebSocket to a small web
 client that decodes with WebCodecs, with input, clipboard, audio, microphone, file and
 folder transfer and dynamic resolution.
 
 ## Quick start
 
 ```sh
-cargo install voxl-server   # needs x264, libyuv, Opus, PulseAudio and esbuild (see Usage)
-DISPLAY=:1 voxl             # streams display :1 and prints a link that signs you in
+cargo install --path . --locked  # from this fork; see DEVELOPERS.md for dependencies
+voxl --capture-backend=wayland   # run inside Aizome; prints a link that signs you in
 ```
 
 Open the link it prints. On a Mac or a Windows PC, `voxl` streams that machine's own
@@ -84,7 +120,7 @@ frame being decoded. voxl's column is its best run of each test. To reproduce, s
 
 ## Usage
 
-Build (needs Rust, pkg-config, clang, x264, libyuv, libopus, libpulse and esbuild;
+Build (needs Rust, pkg-config, clang, x264, libyuv, libopus, libpulse, libxkbcommon and esbuild;
 `nix-shell` provides them all):
 
 ```sh
@@ -92,11 +128,12 @@ nix-shell
 cargo build --release
 ```
 
-Or install it from [crates.io](https://crates.io/crates/voxl-server) with the same
-libraries on your system (the crate is `voxl-server`, the binary is `voxl`):
+Or install this checkout with the same libraries on your system (the crate is
+`voxl-server`, the binary is `voxl`). The crates.io release is upstream and does
+not contain this fork's Aizome backend:
 
 ```sh
-cargo install voxl-server
+cargo install --path . --locked
 ```
 
 Run it against an X display, then open the link it prints (`?stats` adds an FPS
@@ -112,41 +149,41 @@ Start Xvfb with `-shmem` for zero-copy capture, and use the patched Xvfb
 scrolling. voxl accepts selkies' command-line flags; other selkies flags are ignored.
 `voxl --help` lists every flag with its default, and `voxl --version` prints the version.
 
-| Flag                                                           | Default                            |                                                                                                                   |
-| -------------------------------------------------------------- | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
-| `--addr`, `--port`                                             | `0.0.0.0`, `6901`                  | listen address                                                                                                    |
-| `--title`                                                      | `Voxl Computer Stream`             | the page's title: the browser tab, and the app's name if a viewer installs it                                     |
-| `--favicon`                                                    | voxl's icon                        | the tab's icon: an `.ico`, `.png`, `.gif`, `.webp` or `.svg` file                                                 |
-| `--enable-basic-auth`                                          | `true`                             | ask for a password (see [Login](#login)); `false` serves without one                                              |
-| `--basic-auth-password`                                        | `VOXL_PASSWORD`, else made up      | the password                                                                                                      |
-| `--basic-auth-user`                                            | any                                | the user name a browser's sign-in has to give                                                                     |
-| `--framerate`                                                  | `60`                               | max frames per second (`60-60` style ranges accepted)                                                             |
-| `--preset`                                                     | `ultrafast`                        | x264 preset                                                                                                       |
-| `--encoder-threads`                                            | `min(4, ncpu/4)`                   | x264 sliced threads                                                                                               |
-| `--crf`                                                        | `24`                               | base quality                                                                                                      |
-| `--max-kbps` / `--video-bitrate`                               | `30000`                            | adaptive bitrate ceiling                                                                                          |
-| `--min-kbps`                                                   | `2000`                             | adaptive bitrate floor                                                                                            |
-| `--paintover-crf`, `--paintover-burst`, `--paintover-delay-ms` | `16`, `3`, `150`                   | sharpening when the screen goes still                                                                             |
-| `--enable-clipboard`                                           | `true`                             | `true`, `in`, `out` or `false`                                                                                    |
-| `--audio-enabled`, `--audio-device-name`, `--audio-bitrate`    | `true`, `output.monitor`, `128000` | desktop audio                                                                                                     |
-| `--enable-resize`, `--resize-scale`                            | `false`, `1.5`                     | desktop follows the viewer's window; desktop pixels per CSS pixel                                                 |
-| `--microphone-enabled`, `--microphone-fifo`                    | `false`, `/tmp/voxl-mic.fifo`      | browser microphone into the FIFO a PulseAudio pipe source reads                                                   |
-| `--round-corners`                                              | `0` (off)                          | corner radius in pixels for top-level windows                                                                     |
-| `--round-windows`                                              | none                               | `title:radius,...` rounds windows with that title, docks included                                                 |
-| `--adaptive-threads`                                           | `false`                            | encode on one thread, fanning out only under sustained heavy motion                                               |
-| `--stripes`                                                    | `1`                                | encode the screen as N independent horizontal streams (experimental)                                              |
-| `--scroll-px-per-notch`                                        | `180`                              | desktop pixels one wheel notch scrolls (calibrates smooth scrolling)                                              |
-| `--file-transfers`                                             | `upload,download`                  | `upload`, `download`, both, or `none`                                                                             |
-| `--read-only`                                                  | `false`                            | viewers only watch: input, clipboard writes, the microphone, uploads and resizing (`--enable-resize`) are refused |
-| `--allowed-hosts`                                              | none                               | host names to answer for besides IP addresses and `localhost` (`.example.com` covers subdomains, `*` any)         |
-| `--allowed-origins`                                            | none                               | other sites whose pages may connect, such as a page that embeds voxl's client (`*` any site)                      |
-| `--tls`                                                        | `false`                            | serve HTTPS with a self-signed certificate, made on first start and reused (see [HTTPS](#https))                  |
-| `--tls-cert`, `--tls-key`                                      | none                               | serve HTTPS with this PEM certificate chain and key                                                               |
-| `--files-root`                                                 | `$HOME`                            | folder the Files panel can see; nothing outside it is reachable                                                   |
-| `--upload-dir`                                                 | `Downloads`                        | folder (under the root) the panel opens and uploads into; created on first upload                                 |
-| `--max-upload-mb`                                              | `0` (no limit)                     | largest accepted upload                                                                                           |
-| `--max-record-seconds`                                         | `300`                              | longest recording (`/record`)                                                                                     |
-| `--convert-threads`, `--coalesce-us`                           | `4`, `0`                           | tuning                                                                                                            |
+| Flag                                                           | Default                                           |                                                                                                                   |
+| -------------------------------------------------------------- | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `--addr`, `--port`                                             | Wayland: `127.0.0.1`; X11: `0.0.0.0`; port `6901` | listen address                                                                                                    |
+| `--title`                                                      | `Voxl Computer Stream`                            | the page's title: the browser tab, and the app's name if a viewer installs it                                     |
+| `--favicon`                                                    | voxl's icon                                       | the tab's icon: an `.ico`, `.png`, `.gif`, `.webp` or `.svg` file                                                 |
+| `--enable-basic-auth`                                          | `true`                                            | ask for a password (see [Login](#login)); `false` serves without one                                              |
+| `--basic-auth-password`                                        | `VOXL_PASSWORD`, else made up                     | the password                                                                                                      |
+| `--basic-auth-user`                                            | any                                               | the user name a browser's sign-in has to give                                                                     |
+| `--framerate`                                                  | `60`                                              | max frames per second (`60-60` style ranges accepted)                                                             |
+| `--preset`                                                     | `ultrafast`                                       | x264 preset                                                                                                       |
+| `--encoder-threads`                                            | `min(4, ncpu/4)`                                  | x264 sliced threads                                                                                               |
+| `--crf`                                                        | `24`                                              | base quality                                                                                                      |
+| `--max-kbps` / `--video-bitrate`                               | `30000`                                           | adaptive bitrate ceiling                                                                                          |
+| `--min-kbps`                                                   | `2000`                                            | adaptive bitrate floor                                                                                            |
+| `--paintover-crf`, `--paintover-burst`, `--paintover-delay-ms` | `16`, `3`, `150`                                  | sharpening when the screen goes still                                                                             |
+| `--enable-clipboard`                                           | `true`                                            | `true`, `in`, `out` or `false`                                                                                    |
+| `--audio-enabled`, `--audio-device-name`, `--audio-bitrate`    | `true`, `output.monitor`, `128000`                | desktop audio                                                                                                     |
+| `--enable-resize`, `--resize-scale`                            | `false`, `1.5`                                    | desktop follows the viewer's window; desktop pixels per CSS pixel                                                 |
+| `--microphone-enabled`, `--microphone-fifo`                    | `false`, `/tmp/voxl-mic.fifo`                     | browser microphone into the FIFO a PulseAudio pipe source reads                                                   |
+| `--round-corners`                                              | `0` (off)                                         | corner radius in pixels for top-level windows                                                                     |
+| `--round-windows`                                              | none                                              | `title:radius,...` rounds windows with that title, docks included                                                 |
+| `--adaptive-threads`                                           | `false`                                           | encode on one thread, fanning out only under sustained heavy motion                                               |
+| `--stripes`                                                    | `1`                                               | encode the screen as N independent horizontal streams (experimental)                                              |
+| `--scroll-px-per-notch`                                        | `180`                                             | desktop pixels one wheel notch scrolls (calibrates smooth scrolling)                                              |
+| `--file-transfers`                                             | `upload,download`                                 | `upload`, `download`, both, or `none`                                                                             |
+| `--read-only`                                                  | `false`                                           | viewers only watch: input, clipboard writes, the microphone, uploads and resizing (`--enable-resize`) are refused |
+| `--allowed-hosts`                                              | none                                              | host names to answer for besides IP addresses and `localhost` (`.example.com` covers subdomains, `*` any)         |
+| `--allowed-origins`                                            | none                                              | other sites whose pages may connect, such as a page that embeds voxl's client (`*` any site)                      |
+| `--tls`                                                        | `false`                                           | serve HTTPS with a self-signed certificate, made on first start and reused (see [HTTPS](#https))                  |
+| `--tls-cert`, `--tls-key`                                      | none                                              | serve HTTPS with this PEM certificate chain and key                                                               |
+| `--files-root`                                                 | `$HOME`                                           | folder the Files panel can see; nothing outside it is reachable                                                   |
+| `--upload-dir`                                                 | `Downloads`                                       | folder (under the root) the panel opens and uploads into; created on first upload                                 |
+| `--max-upload-mb`                                              | `0` (no limit)                                    | largest accepted upload                                                                                           |
+| `--max-record-seconds`                                         | `300`                                             | longest recording (`/record`)                                                                                     |
+| `--convert-threads`, `--coalesce-us`                           | `4`, `0`                                          | tuning                                                                                                            |
 
 ### Login
 
@@ -189,8 +226,9 @@ curl -u ":$VOXL_PASSWORD" -o clip.mp4 -X POST "localhost:6901/record/stop?id=$id
 ```
 
 A recording is the H.264 voxl already sends to viewers, saved as MP4 without encoding
-it again, so it costs no extra CPU. It doesn't include the cursor (viewers draw it), and
-a resize ends it.
+it again, so it costs no additional video encoding. It includes the host cursor when
+`--show-cursor` paints it into the video; a pointer drawn locally by the viewer is
+not recorded. A resize ends the recording.
 
 `/wait` returns when the screen settles or changes, so an agent doesn't have to sleep
 after every action and hope it was long enough:
@@ -311,8 +349,8 @@ over one WebSocket and has APIs for agents.
 TeamViewer and AnyDesk, for reaching your own computers or helping someone with theirs:
 you install its app on both ends, desktop or phone, and the two find each other through
 an ID server, then connect directly or through a relay. For that it's the better fit,
-and it also shares Wayland desktops (experimentally) and Android phones, which voxl
-doesn't. voxl is for desktops on servers, VMs and sandboxes: it's one process that
+and it also supports Android phones. This fork adds Aizome Wayland sharing to voxl;
+it does not provide a general Wayland portal backend. voxl is one process that
 serves its own page, so there's nothing to install on the viewing side and no ID or
 relay server to run. The stream goes wherever a URL does, can be embedded in another
 page and comes with the APIs agents use. RustDesk has a web client too, but it still
@@ -341,10 +379,9 @@ localhost:
 
 Phones and tablets get touch input and an on-screen keyboard.
 
-**Wayland?** Not yet; on Linux voxl streams X11 displays, Xvfb included. The virtual
-desktops voxl is built for run on Xvfb (E2B's and Daytona's do too), and X11 lets voxl
-capture them without a permission prompt, with damage events that keep a still screen at
-no CPU and power `/wait`. Wayland support is being worked on.
+**Wayland?** This fork supports native Aizome displays as described above. X11 and
+Xvfb remain available. Other compositors need the same capture protocols for
+viewing; interactive input currently requires Aizome.
 
 **Does it use the GPU?** Not yet. voxl encodes H.264 on the CPU with x264: 1.3–1.7 cores
 for a busy 2560x1600 desktop, X server included (see the CPU table above). Hardware

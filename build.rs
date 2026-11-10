@@ -39,7 +39,7 @@ fn unix_libs(target: &str) -> Vec<std::path::PathBuf> {
     let libs: &[&str] = if target == "macos" {
         &["opus"]
     } else {
-        &["libyuv", "opus", "libpulse-simple"]
+        &["libyuv", "opus", "libpulse-simple", "xkbcommon"]
     };
     let others: Vec<_> = libs
         .iter()
