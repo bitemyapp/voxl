@@ -59,6 +59,7 @@ pub fn memory_file(name: &std::ffi::CStr, len: usize) -> Result<File, String> {
 }
 
 pub struct Capturer {
+    remote_registration: Option<super::scene::Registration>,
     conn: Connection,
     queue: EventQueue<Heard>,
     heard: Heard,
@@ -166,6 +167,7 @@ impl Capturer {
         );
         let constraints = heard.constraints;
         let mut me = Self {
+            remote_registration: None,
             conn,
             queue,
             heard,
@@ -193,6 +195,10 @@ impl Capturer {
             super::dispatch(&me.conn, &mut me.queue, &mut me.heard, 100)?;
             me.pump()?;
         }
+        me.remote_registration = Some(super::scene::register(
+            me.session.id().protocol_id(),
+            output_name.clone(),
+        ));
         super::input::set_output(output_name.clone(), width, height);
         log::info!("native Wayland capture: {output_name}, {width}x{height}, ext-image-copy-capture + wl_shm");
         Ok(me)

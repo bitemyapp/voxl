@@ -1,5 +1,9 @@
 fn main() {
     let target = std::env::var("CARGO_CFG_TARGET_OS").unwrap_or_default();
+    #[cfg(feature = "gpu")]
+    if target == "linux" {
+        gpu_libs();
+    }
     let include_paths = if target == "windows" {
         windows_libs()
     } else {
@@ -30,6 +34,25 @@ fn main() {
     std::fs::write(out.join("x264.rs"), code).unwrap();
     bundle_web(&out);
     println!("cargo:rerun-if-changed=build.rs");
+}
+
+#[cfg(feature = "gpu")]
+fn gpu_libs() {
+    let mut c = cc::Build::new();
+    c.file("src/gpu/encoder.c")
+        .opt_level(2)
+        .flag_if_supported("-std=c11");
+    for name in ["ffnvcodec", "gbm", "egl", "gl", "libdrm"] {
+        let lib = pkg_config::probe_library(name).unwrap_or_else(|e| panic!("GPU {name}: {e}"));
+        c.includes(lib.include_paths);
+        for path in lib.link_paths {
+            println!("cargo:rustc-link-arg=-Wl,-rpath,{}", path.display());
+        }
+    }
+    c.compile("voxl_gpu");
+    println!("cargo:rustc-link-lib=dl");
+    println!("cargo:rustc-link-arg=-Wl,-rpath,/run/opengl-driver/lib");
+    println!("cargo:rerun-if-changed=src/gpu/encoder.c");
 }
 
 /// x264, libyuv, Opus and PulseAudio from pkg-config; returns x264's include paths.

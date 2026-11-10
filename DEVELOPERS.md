@@ -3,8 +3,10 @@
 This repository is a fork of tembo/voxl, based initially on
 `b00f3b8b8c156b14e0c75abdfcf5cae9a14a865f`. Keep the server's H.264, WebSocket,
 WebCodecs, authentication, recording and flow-control paths shared across capture
-backends. The native Remote Desks viewer is future work; no frontend latency
-advantage has been measured by this change.
+backends. The separate `native/` package implements the native Remote Desks viewer;
+`media/` provides a small FFmpeg/CUDA ownership boundary. CPU and browser paths
+remain comparison baselines and fallbacks. Measurements in the work log are
+preliminary component results, not claims about physical-display latency.
 
 The fork's release workflow is inhibited by an upstream-repository guard. Do not
 publish the upstream `voxl-server` crate from this fork.
@@ -58,7 +60,7 @@ they do not change emitted JavaScript or media behavior.
   be upright as Aizome delivers them; unsupported sizes/formats/transforms fail
   explicitly rather than being misinterpreted. Buffers are capped at 256 MiB.
 - `src/wayland/ipc.rs` implements only the small public Aizome IPC wire boundary
-  used for output geometry and input. It uses `--aizome-socket`, `AIZOME_SOCKET`,
+  used for output geometry, input, and optional retained-paint subscriptions. It uses `--aizome-socket`, `AIZOME_SOCKET`,
   or `$XDG_RUNTIME_DIR/aizome.$WAYLAND_DISPLAY.sock`. Input stays unprivileged;
   no root helper, uinput device or compositor privilege policy change is needed.
 - `src/wayland/input.rs` maps stream coordinates to the selected output's logical
@@ -71,7 +73,7 @@ they do not change emitted JavaScript or media behavior.
   transfers have a size limit and deadline and run away from Wayland dispatch.
 - Linux PulseAudio/PipeWire-Pulse audio, microphone, file transfer and recording
   retain their existing implementations. Native cursor shape capture, window
-  selection, DMA-BUF/hardware encoding, and viewer-driven output configuration
+  selection and viewer-driven output configuration
   are separate work.
 
 The web protocol's hello includes `captureBackend` (`x11` or `wayland`) for
@@ -132,3 +134,186 @@ includes the browser/native presentation path we eventually want to compare.
 
 Audio/microphone, file transfer, recording, and macOS/Windows behavior have not
 been exercised by this native integration suite. No latency comparison is claimed.
+
+## Native viewer and optional GPU build
+
+```sh
+nix-shell --arg withRust true --arg withGpu true
+cargo build --release --features gpu --locked
+cargo test --features gpu --locked
+nix-shell native/shell.nix
+cargo build --release --manifest-path native/Cargo.toml --locked
+cargo test --manifest-path native/Cargo.toml --locked
+```
+
+Use the same root-flake Nixpkgs override described above. `default.nix` accepts
+`withGpu = true`; `native/default.nix` builds the viewer and deterministic scene.
+The source filters include only these packages' own sources and the shared media
+shim. NVIDIA driver libraries are found through Nix's `addDriverRunpath` after
+RPATH shrinking. The GPU server does not depend on FFmpeg; the native viewer does.
+
+`--video-backend=cpu|auto|gpu` selects capture/encoding (default CPU). Auto falls
+back on initialization/capability failure; revocation is terminal and never creates
+a replacement share. A runtime GPU/capture failure currently terminates the server;
+restart with `cpu` if the hardware has become unavailable. Strict GPU mode reports
+unsupported hardware. GPU capture currently requires Aizome's GLES renderer,
+DMA-BUF output capture and NVIDIA NVENC API 12.1 or newer. AMD/Intel use the CPU path.
+
+`--gpu-preset=P1..P7` selects NVENC's preset (default P1).
+`--gpu-quality=1..51` sets its VBR target quality (default 24; lower is better).
+This is not x264 CRF: match image quality and bitrate when comparing encoders.
+`--paintover-crf` supplies the idle NVENC target quality too; paintover delay/burst
+and adaptive bitrate/flow control remain shared. H.264 has no B frames or lookahead.
+
+The server allocates two compositor-compatible GBM DMA-BUFs. A capture becomes
+readable only after the compositor's `ready` fence. Imported XRGB GL textures are
+not NVENC-registerable on the tested driver, so a GPU blit into persistent RGBA8
+textures precedes NVENC. Encoding finishes before that capture buffer is reused.
+Only compressed video crosses to the CPU; explicit `/screenshot` requests read back
+pixels. The GPU worker releases driver resources before process shutdown.
+
+The viewer's CPU decoder uploads I420/NV12 planes to persistent GL textures. CUDA
+decode uses CUDA/GL interop copies, keeping source AVFrames alive until their copy
+event completes; it does not download decoded frames. Textures unregister before
+decoder teardown or geometry changes. Auto decode can reset to CPU and request a
+fresh keyframe after a device/presentation error. Decoder queues, incomplete-frame
+sets and packet dimensions are bounded; stripe groups present atomically.
+Auto decode is now the default; `--decoder=cpu` remains the explicit baseline.
+
+Native playback decodes the existing stereo 48 kHz Opus stream through libopus
+into SDL. F8 toggles audio and `--no-audio` starts muted. The playback queue is
+capped at 80 ms; stale queued sound is discarded after a network burst, and
+disconnect/mute resets codec and playback state. Audio-device failure leaves
+video usable. `bench/native-faults.py` uses a private compositor and SDL dummy
+audio to test real CPU fallback with CUDA devices hidden, strict GPU refusal,
+authentication errors, invalid geometry/JSON/packets, duplicate stripes,
+incomplete-frame bounds, and an eight-second audio burst without an eight-second
+playback backlog. This is not physical audio-device validation.
+
+`bench/native-smoke.py` verifies actual pixels on a second isolated Aizome, then
+injects input through that compositor and verifies it returned to the source.
+`VOXL_EXTENDED=1` adds held printable keys, focus-loss release, resize/rotation and
+server restart. Select `VOXL_VIDEO=cpu|gpu`, `VOXL_DECODE=cpu|auto|cuda`,
+`VOXL_STRIPES=N`, `VOXL_BIN` and `VOXL_VIEWER` explicitly.
+For package closure checks, set `VOXL_PACKAGE_LIBRARY_PATH=/run/opengl-driver/lib`.
+The fixtures apply it only to the explicitly selected server/viewer executables;
+a locally built compositor can still use its development EGL library path.
+
+`bench/native-perf.py` uses the same receiving-compositor marker observer for
+native and Chrome Wayland viewers. It retains raw frame ages, original screenshots,
+server counters, process-tree CPU/RSS, binary hashes and compositor provenance.
+Use `--viewer=local|browser|cpu|cuda --encoder=cpu|gpu --size=1920x1080
+--workload=scroll|animation|drag|idle`. No fixture connects to the login compositor.
+The local control uses the same observer on the source; capture requests can affect
+compositor scheduling, so do not subtract that control as a pure observer overhead.
+No physical scanout, network-clock synchronization or ISO qualification is implied.
+See [the measurement report](docs/NATIVE-PERFORMANCE.md) for controlled comparisons
+and their limits, and [the ongoing work log](docs/REMOTE-DESKS-WORK.md) for evidence
+and remaining work.
+
+## Optional Aizome retained drawing
+
+The source owner must enable `voxl --native-widgets=true`; the default share is
+pixel-only even if a remote viewer requests replay. Drawing commands and cached
+font/image/glyph assets can include clipped or occluded data beyond the visible
+pixels, so this is a separate trusted-viewer capability. The viewer's F9 toggle
+selects it only after that source-side authorization. The check precedes any IPC
+subscription or producer activation, including for read-only viewers.
+
+The companion Sekka branch supplies `aizome_remote_paint_v1`, a data-only producer
+protocol, and the separate Sukumo package `aizome-remote-renderer`. Build them
+through Sekka's root flake and its existing development shell:
+
+```sh
+# In the Sekka checkout:
+nix build .#aizome-remote-renderer
+nix develop .#aizome -c cargo build --release \
+  --manifest-path desktop/aizome/Cargo.toml -p aizome-comp -p aizome-comp-logic
+nix develop .#aizome -c cargo build --release \
+  --manifest-path desktop/aizome/sukumo/Cargo.toml -p sidestep-ui --example remote_scene
+# In the Voxl checkout, with the matching compositor running:
+AIZOME_REMOTE_RENDERER=/path/to/renderer/lib/libaizome_remote_renderer.so \
+  voxl-viewer http://localhost:6901/ --native-widgets
+```
+
+`--renderer=PATH` also selects this **local** library; no path, executable code,
+resource URL, or event handler comes from the peer. `native/default.nix` accepts
+`aizomeRenderer` and wraps the viewer with its library path when supplied. The
+renderer builds from Sukumo's own workspace, with a narrow first-party source
+filter; it does not link the compositor or privileged helpers.
+
+Sukumo records paint batches with their individual damage clips and ordering.
+Fonts and decoded premultiplied images are cached assets. The compositor asks for
+a full repaint with a fresh dictionary when a scene becomes eligible or a viewer
+joins. A sealed memfd accompanies the ordinary surface commit; Smithay applies it
+with the same synchronized-subsurface/fence rules as the buffer. Ordinary buffers
+remain authoritative and continue to be painted for local display and fallback.
+
+An IPC connection first subscribes, then requests `remote-scene` with `capture`
+(the ext-image-copy-capture Wayland object ID), `output`, and `enabled`. Aizome
+compares Unix peer credentials with the owner of that live capture resource. It
+only exports the first visible, opaque surface covering the output, at native
+scale without a transform or crop. The share must exclude the host cursor.
+Other toolkits, extra surfaces in front, tiles, Core Animation trees, image-shaped
+clips, and incompatible state use pixels. A revoked capture immediately loses its
+retained subscription. Window selection and mixed pixel/native scene graphs are
+not implemented; this is drawing replay, not a serialized widget tree.
+
+The websocket commands are `scene,enabled,nonce,codec` and `sa,nonce,sequence`.
+Native viewers request `zlib` by default; `--scene-compression=none` keeps the raw
+transport for comparisons. Binary `0x20` messages carry a little-endian nonce and
+transport sequence (four bytes each), followed by the versioned paint frame.
+Binary `0x21` adds the expanded byte length (four bytes), then a sync-flushed zlib
+message. A small dictionary persists across messages in one viewer epoch, so
+repeated drawing attributes need not cross the network again. Declared and actual
+expansion, message boundaries and transport sequences are bounded and checked;
+errors discard that epoch and return to video. New connections/toggles reset the
+dictionary. The shared framing implementation is `src/retained.rs`. The sequence inside that paint
+frame is independent and guards the retained dictionary. A new viewer epoch
+invalidates queued messages from an earlier toggle, geometry, or connection.
+After a valid full native image the viewer sends `v,0`; pixel fallback clears the
+old image and requests a complete video keyframe. A simultaneous browser viewer
+continues to receive normal video. Video encoding can sleep when all viewers use
+native replay.
+
+The limits are 16 MiB per paint frame, 16 million pixels, 8,192 operations,
+64 paint batches, bounded group nesting, and 64 MiB of cached assets. Remote font
+registrations share a content-deduplicated process budget rather than growing on
+each reconnect. The transport allows eight unacknowledged frames and 32 MiB of
+retained websocket data across dictionary/worker restarts; dequeueing a message
+does not release its budget before the socket write completes. ACKs cannot free
+unwritten messages. One IPC worker per client coalesces rapid toggle changes;
+a full window pauses IPC consumption until delivery. A stalled replay returns to
+video after two seconds without acknowledgement. A two-second catch-up period
+after first delivery lets bootstrap traffic drain; thereafter sustained
+backpressure returns to video after half a second, preventing steadily
+acknowledged but increasingly stale animation. All queues remain bounded.
+
+Matching Sukumo producers use cached final-scale glyph coverage instead of
+transferring whole outline-font files. Cache identity includes face/variation,
+size and subpixel phase; subsequent paint sends ids, positions and colors.
+Color glyphs retain full-font replay. Expanded glyph placements count toward the
+8,192-operation budget, and masks share the asset byte budget. Older renderer
+libraries reject the new drawing operation and return to pixels. Use
+`AIZOME_REMOTE_GLYPHS=font` in the source app to keep the full-font baseline.
+
+`bench/native-scene.py` runs the real Sukumo fixture between two private Aizomes.
+Set `AIZOME_BIN`, `AIZOME_SCENE_FIXTURE`, and `AIZOME_REMOTE_RENDERER` to matching
+builds; `VOXL_SCENE_SCALE=1.25` checks fractional scaling, and `VOXL_VIDEO=cpu`
+keeps the software server baseline. It checks exact whole-window and damaged
+pixels, input, F9, independent mixed clients, popup fallback/recovery, stalled
+clients, rapid toggles, capture ownership and revocation. `bench/native-faults.py`
+adds malformed/stale/gapped retained states when the renderer variable is set.
+`bench/native-perf.py --source=sukumo --native-widgets --viewer=cuda --encoder=gpu`
+uses the same independent marker observer as the video/browser measurements.
+Omit `--native-widgets` for the same application over ordinary video.
+`--glyph-transfer=font` selects the source's full-font baseline; the default is
+`mask`. Retained startup time includes viewer process/window/network/renderer
+readiness, polled at 50 ms, separately from warmed-up scene-age samples.
+
+`--link-mbps=5 --link-delay-ms=20` routes only the streamed connection through a
+bounded private TCP proxy (40 ms round-trip propagation). Run `bench/link.py`
+for calibration and open-client teardown checks. It models serialization and
+propagation, not loss or a real WAN congestion controller. Invalid marker pixels
+invalidate timing/frame-rate scores. `--marker-cell=16` can help diagnose codec
+damage on GL scenes; it is not a substitute for valid markers.

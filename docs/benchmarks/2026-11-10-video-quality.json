@@ -1,0 +1,557 @@
+{
+	"method": "Fixed source frame 239 at nominal quality 24 and 30 Mbps cap; x264 CRF and NVENC CQ are not equivalent quality targets. Lossless source reference compared separately to the last moving and idle-refined video frame. These are image-quality runs, not timing or CPU measurements.",
+	"results": [
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "1920x1080",
+				"workload": "animation",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 35.232315097663175,
+					"rgb_mean_absolute_error": 3.371265411376953,
+					"rgb_p95_absolute_error": 9.0,
+					"edge_mean_absolute_error": 2.3083057403564453,
+					"ssim": 0.85948
+				},
+				"refined": {
+					"rgb_psnr_db": 38.78841646416981,
+					"rgb_mean_absolute_error": 2.2327375411987305,
+					"rgb_p95_absolute_error": 6.0,
+					"edge_mean_absolute_error": 1.1617162227630615,
+					"ssim": 0.918905
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 990631,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-e9gux363",
+			"name": "1920x1080-animation-cpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/1920x1080-animation-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "1920x1080",
+				"workload": "animation",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 41.48496357613196,
+					"rgb_mean_absolute_error": 1.6472182273864746,
+					"rgb_p95_absolute_error": 4.0,
+					"edge_mean_absolute_error": 0.8646616339683533,
+					"ssim": 0.94526
+				},
+				"refined": {
+					"rgb_psnr_db": 41.97676991736684,
+					"rgb_mean_absolute_error": 1.5604890584945679,
+					"rgb_p95_absolute_error": 4.0,
+					"edge_mean_absolute_error": 0.825118362903595,
+					"ssim": 0.949479
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 991735,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-cpbeppk5",
+			"name": "1920x1080-animation-gpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/1920x1080-animation-gpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 42.7534629414215,
+					"rgb_mean_absolute_error": 0.9504179358482361,
+					"rgb_p95_absolute_error": 4.0,
+					"edge_mean_absolute_error": 2.3576714992523193,
+					"ssim": 0.993172
+				},
+				"refined": {
+					"rgb_psnr_db": 44.02246746987777,
+					"rgb_mean_absolute_error": 0.7883323431015015,
+					"rgb_p95_absolute_error": 4.0,
+					"edge_mean_absolute_error": 1.9549338817596436,
+					"ssim": 0.994861
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 991982,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-y9knsn94",
+			"name": "3840x2160-scroll-cpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/3840x2160-scroll-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 46.63402493088327,
+					"rgb_mean_absolute_error": 1.0535136461257935,
+					"rgb_p95_absolute_error": 2.0,
+					"edge_mean_absolute_error": 0.9572764039039612,
+					"ssim": 0.998678
+				},
+				"refined": {
+					"rgb_psnr_db": 46.634922923685394,
+					"rgb_mean_absolute_error": 1.0534471273422241,
+					"rgb_p95_absolute_error": 2.0,
+					"edge_mean_absolute_error": 0.957118809223175,
+					"ssim": 0.998679
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 992941,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-qdsrd4y3",
+			"name": "3840x2160-scroll-gpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/3840x2160-scroll-gpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "animation",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 35.70429727180691,
+					"rgb_mean_absolute_error": 3.1978249549865723,
+					"rgb_p95_absolute_error": 8.0,
+					"edge_mean_absolute_error": 1.9726651906967163,
+					"ssim": 0.872456
+				},
+				"refined": {
+					"rgb_psnr_db": 36.997735208959604,
+					"rgb_mean_absolute_error": 2.7465126514434814,
+					"rgb_p95_absolute_error": 7.0,
+					"edge_mean_absolute_error": 1.7076689004898071,
+					"ssim": 0.89093
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 993194,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-mjijzpw5",
+			"name": "3840x2160-animation-cpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/3840x2160-animation-cpu"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "animation",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 5,
+				"warmup": 3,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": true
+			},
+			"quality": {
+				"source_frame": 239,
+				"moving": {
+					"rgb_psnr_db": 36.55759543121355,
+					"rgb_mean_absolute_error": 2.8778343200683594,
+					"rgb_p95_absolute_error": 8.0,
+					"edge_mean_absolute_error": 3.781921863555908,
+					"ssim": 0.898873
+				},
+				"refined": {
+					"rgb_psnr_db": 37.214771809199824,
+					"rgb_mean_absolute_error": 2.664642810821533,
+					"rgb_p95_absolute_error": 7.0,
+					"edge_mean_absolute_error": 3.626262664794922,
+					"ssim": 0.904461
+				},
+				"method": "Exact fixed-frame RGB snapshot versus the last moving frame and idle-refined frame; separate from performance runs"
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "fe89cef99b994045b76b753507f572847958b7c886f3684602a7b923553b6975"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "bee09b8a2bdd62765163fba8c04275df32bba64317a278a3462a39c78b4ce31e"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "edbaa164ef04590623ed63d42206a5da4e9bfd1c0d1d7cb17987f3d968f36720"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 994168,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "08ba91b22eba58eab36039e76dd6f1d35e53b9f8f18add035cb918c103faca92",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=c8ad4b637b6e toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=34e4133f9415 aizome-theme=90fed2c20b45 sidestep-engine=78ab5d404b86 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-4z_egvdt",
+			"name": "3840x2160-animation-gpu",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/quality-expanded/evidence/3840x2160-animation-gpu"
+		}
+	]
+}

@@ -4,10 +4,12 @@
 {
   pkgs ? import <nixpkgs> {},
   withRust ? false,
+  withGpu ? false,
 }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs;
     [pkg-config clang rustPlatform.bindgenHook esbuild typescript]
     ++ lib.optionals withRust [rustc cargo clippy rustfmt];
-  buildInputs = with pkgs; [x264 libyuv libopus libpulseaudio libxkbcommon xorg.libX11 xorg.libXext xorg.libxcb];
+  buildInputs = with pkgs; [x264 libyuv libopus libpulseaudio libxkbcommon xorg.libX11 xorg.libXext xorg.libxcb]
+    ++ lib.optionals withGpu [libGL libgbm libdrm nv-codec-headers-12];
 }

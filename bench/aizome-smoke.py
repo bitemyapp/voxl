@@ -89,6 +89,7 @@ async def main():
         port = s.getsockname()[1]
     server = start("voxl", [os.environ.get("VOXL_BIN", str(ROOT / "target/debug/voxl")),
                     "--capture-backend=wayland", "--wayland-output=SECOND",
+                    "--video-backend=" + os.environ.get("VOXL_VIDEO", "cpu"),
                     f"--port={port}", "--audio-enabled=false", "--file-transfers=none"])
     base = f"http://127.0.0.1:{port}"
 
@@ -222,6 +223,7 @@ async def main():
         readonly_port = s.getsockname()[1]
     readonly = start("readonly", [os.environ.get("VOXL_BIN", str(ROOT / "target/debug/voxl")),
         "--capture-backend=wayland", "--wayland-output=SECOND", "--read-only", "--aizome-socket=/no/such/socket",
+        "--video-backend=" + os.environ.get("VOXL_VIDEO", "cpu"),
         f"--port={readonly_port}", "--audio-enabled=false", "--file-transfers=none"])
     await until(lambda: b"listening on" in (EVIDENCE / "readonly.log").read_bytes(), "read-only server required input access")
     rw = await websockets.connect(f"ws://127.0.0.1:{readonly_port}/ws?token=isolated-native-test")

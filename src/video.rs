@@ -70,6 +70,23 @@ pub fn spawn(
     hub: Arc<Hub>,
     mut screen: Option<crate::screen::Screen>,
 ) -> Result<(), String> {
+    #[cfg(target_os = "linux")]
+    if crate::wayland::enabled() && crate::wayland::settings().video_backend != "cpu" {
+        #[cfg(feature = "gpu")]
+        match crate::gpu::spawn(cfg.clone(), hub.clone()) {
+            Ok(()) => return Ok(()),
+            Err(crate::gpu::InitError::Unavailable(e))
+                if crate::wayland::settings().video_backend == "auto" =>
+            {
+                log::warn!("GPU initialization failed, using CPU capture/encoding: {e}");
+            }
+            Err(e) => return Err(e.to_string()),
+        }
+        #[cfg(not(feature = "gpu"))]
+        if crate::wayland::settings().video_backend == "gpu" {
+            return Err("this build has no GPU support; build with --features=gpu".into());
+        }
+    }
     if let Some(s) = &screen {
         *hub.resize_max.lock() = Some(s.max());
     }
@@ -126,6 +143,14 @@ fn build(cfg: &VideoConfig, hub: &Arc<Hub>) -> Result<Pipeline, String> {
     let (w, h) = (cap.width, cap.height);
     hub.width.store(w, Ordering::Relaxed);
     hub.height.store(h, Ordering::Relaxed);
+    {
+        let mut extra = hub.hello_extra.lock();
+        extra.insert("encoderBackend".into(), "x264".into());
+        #[cfg(target_os = "linux")]
+        if crate::wayland::enabled() {
+            extra.insert("captureBuffer".into(), "shm".into());
+        }
+    }
     hub.activity.reset(w, h);
     log::info!(
         "capturing {}x{} @ {} fps, preset {} threads {}",
@@ -187,7 +212,7 @@ fn build(cfg: &VideoConfig, hub: &Arc<Hub>) -> Result<Pipeline, String> {
     })
 }
 
-fn flow_ok(hub: &Hub, interval_ms: f64) -> bool {
+pub(crate) fn flow_ok(hub: &Hub, interval_ms: f64) -> bool {
     for c in hub.video_clients() {
         let (n, age) = c.backlog();
         if n == 0 {
@@ -222,7 +247,7 @@ fn flow_ok(hub: &Hub, interval_ms: f64) -> bool {
 
 /// Delay-based bitrate adaptation: back off toward the measured delivery rate when
 /// acks show queueing, probe upward slowly when the path is clear.
-struct RateCtl {
+pub(crate) struct RateCtl {
     target: f64,
     max: f64,
     min: f64,
@@ -241,12 +266,14 @@ struct RateCtl {
 const START_KBPS: f64 = 8000.0;
 
 impl RateCtl {
-    fn new(max: f64, min: f64) -> Self {
+    pub(crate) fn new(max: f64, min: f64) -> Self {
         let past = Instant::now() - Duration::from_secs(10);
         RateCtl {
             target: START_KBPS.min(max),
             max,
-            min,
+            // A low explicit ceiling must also cap the default minimum. Under
+            // congestion, max(min) otherwise raises a 900 kbps session to 2 Mbps.
+            min: min.min(max),
             last_eval: past,
             last_dec: past,
             last_inc: past,
@@ -256,7 +283,7 @@ impl RateCtl {
         }
     }
 
-    fn update(&mut self, hub: &Hub, clients: &[Arc<crate::hub::Client>]) {
+    pub(crate) fn update(&mut self, hub: &Hub, clients: &[Arc<crate::hub::Client>]) {
         if self.last_eval.elapsed() < Duration::from_millis(100) {
             return;
         }
@@ -1339,6 +1366,21 @@ fn marker_age(ms: i64) -> i64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn congestion_never_raises_a_ceiling_below_the_default_floor() {
+        let hub = Hub::new();
+        let (tx, _rx) = tokio::sync::mpsc::unbounded_channel();
+        let client = hub.add_client(tx);
+        client.started.store(true, Ordering::Relaxed);
+        client.delay.lock().queue_ms = 60.0;
+        client.delivered.lock().rate_bps = 800_000.0;
+        let mut rc = RateCtl::new(900.0, 2000.0);
+        rc.update(&hub, &[client]);
+        assert_eq!(hub.target_kbps.load(Ordering::Relaxed), 900);
+        assert!(rc.target <= rc.max);
+        assert!(!rc.slow_start);
+    }
 
     const W: usize = 1280;
     const H: usize = 768;

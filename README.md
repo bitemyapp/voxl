@@ -3,8 +3,8 @@
 This fork adds native Wayland support for **Aizome** to
 [Tembo's Voxl](https://github.com/tembo/voxl). Share an Aizome display, control its
 native applications, and exchange clipboard text and images from the existing web
-viewer. It uses the same H.264 encoder and browser transport as the X11 backend,
-providing a starting point for Aizome's future Remote Desks and a native viewer.
+viewer. A standalone native Wayland viewer and optional GPU streaming provide the
+foundation for Aizome's Remote Desks. The browser and CPU paths remain available.
 
 Run it inside the Aizome session:
 
@@ -23,9 +23,38 @@ Pointer input follows the selected display's scale and position. Capture follows
 display size changes, and Aizome's Stop Sharing ends the server rather than
 silently starting another share. `--read-only` allows watching without input.
 
-This first backend shares one whole display using CPU-accessible buffers and
-software H.264. It does not yet provide window selection, GPU encoding, remote
-display creation, or viewer-controlled display resizing. The browser uses a
+The server shares one whole display. The default CPU backend uses software H.264;
+GPU-enabled builds can use Aizome's DMA-BUF capture and NVIDIA NVENC:
+
+```sh
+voxl --capture-backend=wayland --video-backend=auto
+voxl-viewer http://localhost:6901/ --decoder=auto
+# Set VOXL_TOKEN to the server password, or use its sign-in URL.
+```
+
+The native viewer renders through OpenGL, supports striped video, reconnects,
+follows display size/rotation, and forwards keyboard, pointer and text clipboard
+input. F11 toggles fullscreen. `--decoder=cpu` preserves software decoding;
+`--decoder=cuda` requires NVIDIA decoding and device-memory presentation.
+Auto mode is the default and falls back to CPU if the GPU path is unavailable.
+Desktop audio plays natively; F8 mutes it and `--no-audio` starts muted. Native
+microphone, image clipboard and file-transfer controls are still being developed;
+the browser continues to provide those features.
+
+With the optional Aizome renderer installed and `--native-widgets=true` enabled
+on the server, F9 switches supported fullscreen
+Sukumo windows to native drawing replay. Text and paths retain their original
+pixels, and the viewer updates only damaged areas. Popups, other toolkits, and
+unsupported scenes automatically use video. Replay starts off; `--native-widgets`
+enables it when connecting. The title bar shows whether it is active or using
+video. This currently requires the matching Aizome/Sukumo changes in this fork's
+companion Sekka branch and a cursor-free share.
+Replay shares drawing commands and cached assets, which can include clipped or
+occluded data beyond the final visible pixels. The server option is off by
+default; enable it for trusted Remote Desks viewers.
+
+Window selection, remote display creation, and viewer-controlled display resizing
+are not yet available on Wayland. The browser uses a
 local default pointer; `--show-cursor` includes the actual host pointer in the
 video instead (the default for read-only viewing). Input requires Aizome's local
 IPC socket. This is not a general GNOME/KDE portal backend.
@@ -383,9 +412,12 @@ Phones and tablets get touch input and an on-screen keyboard.
 Xvfb remain available. Other compositors need the same capture protocols for
 viewing; interactive input currently requires Aizome.
 
-**Does it use the GPU?** Not yet. voxl encodes H.264 on the CPU with x264: 1.3–1.7 cores
-for a busy 2560x1600 desktop, X server included (see the CPU table above). Hardware
-encoding on macOS is in progress.
+**Does it use the GPU?** This fork optionally captures Aizome DMA-BUFs and encodes
+with NVIDIA NVENC. The native viewer can decode with CUDA and present directly
+from device memory through OpenGL. Software encoding and decoding remain
+available for comparisons and fallback. The upstream CPU figures above describe
+its original X11 implementation; current fork measurements are in
+[DEVELOPERS.md](DEVELOPERS.md).
 
 **What's the license?** voxl's code is MIT. It links x264, which is GPL-2.0, so a voxl
 binary, and anything that bundles one, is distributed under the GPL.

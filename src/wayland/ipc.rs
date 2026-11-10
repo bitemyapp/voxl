@@ -75,6 +75,11 @@ impl Client {
         Ok(response)
     }
 
+    pub fn into_stream(self) -> (UnixStream, Vec<u8>) {
+        let pending = self.0.buffer().to_vec();
+        (self.0.into_inner(), pending)
+    }
+
     pub fn output(&mut self, name: &str) -> Result<Output, String> {
         let response = self.request(json!({"request": "outputs"}))?;
         let outputs: Vec<Output> =

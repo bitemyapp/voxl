@@ -3,7 +3,7 @@
 use bytes::Bytes;
 use parking_lot::Mutex;
 use std::collections::VecDeque;
-use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicU32, AtomicU64, AtomicUsize, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
 use tokio::sync::mpsc;
@@ -11,6 +11,26 @@ use tokio::sync::mpsc;
 pub enum Out {
     Bin(Bytes),
     Text(String),
+    // Only the Linux/Aizome producer constructs these; queue tests run everywhere.
+    #[cfg_attr(not(any(target_os = "linux", test)), allow(dead_code))]
+    Scene {
+        data: Bytes,
+        nonce: u32,
+        serial: u32,
+        reservation: QueueReservation,
+    },
+}
+
+/// The retained queue budget survives worker restarts and is released only
+/// after writing (or dropping) its actual websocket message.
+pub struct QueueReservation {
+    bytes: usize,
+    total: Arc<AtomicUsize>,
+}
+impl Drop for QueueReservation {
+    fn drop(&mut self) {
+        self.total.fetch_sub(self.bytes, Ordering::AcqRel);
+    }
 }
 
 pub struct Inflight {
@@ -24,6 +44,19 @@ pub struct Client {
     pub tx: mpsc::UnboundedSender<Out>,
     pub video: AtomicBool,
     pub audio: AtomicBool,
+    pub scene_generation: AtomicU64,
+    pub scene_enabled: AtomicBool,
+    #[cfg(target_os = "linux")]
+    pub scene_compressed: AtomicBool,
+    #[cfg(target_os = "linux")]
+    pub scene_progress: Mutex<()>,
+    #[cfg(target_os = "linux")]
+    pub scene_changed: parking_lot::Condvar,
+    pub scene_notify: Mutex<Option<std::sync::mpsc::SyncSender<()>>>,
+    pub scene_nonce: AtomicU32,
+    pub scene_ack: AtomicU32,
+    pub scene_written: AtomicU64,
+    pub scene_bytes: Arc<AtomicUsize>,
     pub inflight: Mutex<VecDeque<Inflight>>,
     /// Smoothed min RTT (ms), from pings.
     pub min_rtt_ms: AtomicU32,
@@ -50,6 +83,38 @@ pub struct RateEst {
 }
 
 impl Client {
+    #[cfg_attr(not(any(target_os = "linux", test)), allow(dead_code))]
+    pub fn send_scene(&self, data: Bytes, nonce: u32, serial: u32) -> Result<(), String> {
+        let bytes = data.len();
+        let mut current = self.scene_bytes.load(Ordering::Acquire);
+        loop {
+            let next = current
+                .checked_add(bytes)
+                .filter(|n| *n <= 32 * 1024 * 1024)
+                .ok_or("retained websocket backlog exceeded")?;
+            match self.scene_bytes.compare_exchange_weak(
+                current,
+                next,
+                Ordering::AcqRel,
+                Ordering::Acquire,
+            ) {
+                Ok(_) => break,
+                Err(now) => current = now,
+            }
+        }
+        let reservation = QueueReservation {
+            bytes,
+            total: self.scene_bytes.clone(),
+        };
+        self.tx
+            .send(Out::Scene {
+                data,
+                nonce,
+                serial,
+                reservation,
+            })
+            .map_err(|_| "retained viewer disconnected".into())
+    }
     pub fn send(&self, m: Out) {
         let _ = self.tx.send(m);
     }
@@ -220,6 +285,9 @@ fn wrapping_le(a: u32, b: u32) -> bool {
 
 #[derive(Default)]
 pub struct Stats {
+    pub retained_frames: AtomicU64,
+    pub retained_bytes: AtomicU64,
+    pub retained_raw_bytes: AtomicU64,
     pub captured: AtomicU64,
     pub encoded: AtomicU64,
     pub bytes: AtomicU64,
@@ -260,6 +328,9 @@ pub struct Hub {
     pub snapshots: Mutex<Vec<tokio::sync::oneshot::Sender<Arc<crate::record::Snapshot>>>>,
     /// When each part of the screen last changed (`/wait`).
     pub activity: crate::wait::Activity,
+    /// Cooperatively release GPU/driver resources before process shutdown.
+    pub stopping: AtomicBool,
+    pub video_worker: Mutex<Option<std::thread::JoinHandle<()>>>,
 }
 
 impl Hub {
@@ -281,6 +352,8 @@ impl Hub {
             hello_extra: Mutex::new(serde_json::Map::new()),
             snapshots: Mutex::new(Vec::new()),
             activity: Default::default(),
+            stopping: AtomicBool::new(false),
+            video_worker: Mutex::new(None),
         })
     }
 
@@ -298,6 +371,19 @@ impl Hub {
             tx,
             video: AtomicBool::new(false),
             audio: AtomicBool::new(false),
+            scene_generation: AtomicU64::new(0),
+            scene_enabled: AtomicBool::new(false),
+            #[cfg(target_os = "linux")]
+            scene_compressed: AtomicBool::new(false),
+            #[cfg(target_os = "linux")]
+            scene_progress: Mutex::new(()),
+            #[cfg(target_os = "linux")]
+            scene_changed: parking_lot::Condvar::new(),
+            scene_notify: Mutex::new(None),
+            scene_nonce: AtomicU32::new(0),
+            scene_ack: AtomicU32::new(0),
+            scene_written: AtomicU64::new(0),
+            scene_bytes: Arc::new(AtomicUsize::new(0)),
             inflight: Mutex::new(VecDeque::new()),
             min_rtt_ms: AtomicU32::new(0),
             delivered: Mutex::new(RateEst {
@@ -318,7 +404,16 @@ impl Hub {
     }
 
     pub fn remove_client(&self, id: u64) {
-        self.clients.lock().retain(|c| c.id != id);
+        self.clients.lock().retain(|c| {
+            if c.id == id {
+                c.scene_enabled.store(false, Ordering::Release);
+                c.scene_generation.fetch_add(1, Ordering::AcqRel);
+                c.scene_notify.lock().take();
+                false
+            } else {
+                true
+            }
+        });
         self.wake();
     }
 
@@ -357,5 +452,28 @@ impl Hub {
         for c in self.clients.lock().iter() {
             c.send(m());
         }
+    }
+}
+
+#[cfg(test)]
+mod retained_queue_tests {
+    use super::*;
+    #[test]
+    fn retained_queue_budget_survives_dictionary_restarts_and_releases_on_drop() {
+        let hub = Hub::new();
+        let (tx, mut rx) = mpsc::unbounded_channel();
+        let c = hub.add_client(tx);
+        let data = Bytes::from(vec![0; 16 * 1024 * 1024]);
+        c.send_scene(data.clone(), 1, 1).unwrap();
+        c.send_scene(data.clone(), 2, 1).unwrap();
+        assert!(c.send_scene(data.clone(), 3, 1).is_err());
+        assert_eq!(c.scene_bytes.load(Ordering::Acquire), 32 * 1024 * 1024);
+        // A dequeue alone is not a write: the blocked writer still owns it.
+        let writing = rx.try_recv().unwrap();
+        assert!(c.send_scene(data.clone(), 4, 1).is_err());
+        drop(writing);
+        c.send_scene(data, 5, 1).unwrap();
+        drop(rx);
+        assert_eq!(c.scene_bytes.load(Ordering::Acquire), 0);
     }
 }
