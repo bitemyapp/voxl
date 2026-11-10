@@ -26,6 +26,11 @@ mod linux {
             .nth(1)
             .and_then(|s| s.parse::<u64>().ok())
             .unwrap_or(10);
+        let cell = std::env::args()
+            .nth(2)
+            .map(|s| s.parse::<u32>().unwrap())
+            .unwrap_or(8);
+        assert!((8..=32).contains(&cell));
         let conn = Connection::connect_to_env().unwrap();
         let (globals, mut queue) = registry_queue_init::<App>(&conn).unwrap();
         let qh = queue.handle();
@@ -44,7 +49,16 @@ mod linux {
             app.failed = false;
             app.info = None;
             app.inverted = false;
-            let frame = manager.capture_output_region(0, &output, 16, 16, 448, 16, &qh, ());
+            let frame = manager.capture_output_region(
+                0,
+                &output,
+                16,
+                16,
+                (56 * cell) as i32,
+                (2 * cell) as i32,
+                &qh,
+                (),
+            );
             while app.info.is_none() && !app.failed {
                 queue.blocking_dispatch(&mut app).unwrap();
             }
@@ -59,7 +73,7 @@ mod linux {
             ));
             assert_eq!(
                 (info.1, info.2),
-                (448, 16),
+                (56 * cell, 2 * cell),
                 "benchmark requires an unscaled, fullscreen viewer"
             );
             if storage.is_none() {
@@ -100,9 +114,9 @@ mod linux {
             );
             let now = time.tv_sec as u64 * 1000 + time.tv_nsec as u64 / 1_000_000;
             let mut word = 0u64;
-            let y = if app.inverted { 7 } else { 8 };
+            let y = if app.inverted { cell - 1 } else { cell } as usize;
             for bit in 0..56 {
-                let p = y * info.3 as usize + (bit * 8 + 4) * 4;
+                let p = y * info.3 as usize + (bit * cell as usize + cell as usize / 2) * 4;
                 if u32::from(map[p]) + u32::from(map[p + 1]) + u32::from(map[p + 2]) > 382 {
                     word |= 1 << bit;
                 }

@@ -52,6 +52,8 @@ Desktop (Linux: Wayland when WAYLAND_DISPLAY is set, otherwise X11):
                                 explicitly selects X11 in auto mode)
   --display                     X11 display (overrides DISPLAY)
   --wayland-output              output name to stream (default first advertised)
+  --native-widgets              allow Aizome drawing-asset replay (default false;
+                                source-owner opt-in, viewer toggles with F9)
   --video-backend               cpu, auto or gpu (default cpu; GPU-enabled builds)
   --gpu-preset                  NVENC preset P1 through P7 (default P1)
   --gpu-quality                 NVENC target quality 1..51 (default 24; lower is

@@ -48,6 +48,10 @@ pub struct Client {
     pub scene_enabled: AtomicBool,
     #[cfg(target_os = "linux")]
     pub scene_compressed: AtomicBool,
+    #[cfg(target_os = "linux")]
+    pub scene_progress: Mutex<()>,
+    #[cfg(target_os = "linux")]
+    pub scene_changed: parking_lot::Condvar,
     pub scene_notify: Mutex<Option<std::sync::mpsc::SyncSender<()>>>,
     pub scene_nonce: AtomicU32,
     pub scene_ack: AtomicU32,
@@ -371,6 +375,10 @@ impl Hub {
             scene_enabled: AtomicBool::new(false),
             #[cfg(target_os = "linux")]
             scene_compressed: AtomicBool::new(false),
+            #[cfg(target_os = "linux")]
+            scene_progress: Mutex::new(()),
+            #[cfg(target_os = "linux")]
+            scene_changed: parking_lot::Condvar::new(),
             scene_notify: Mutex::new(None),
             scene_nonce: AtomicU32::new(0),
             scene_ack: AtomicU32::new(0),

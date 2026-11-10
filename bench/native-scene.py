@@ -39,7 +39,7 @@ async def main():
     f.ipc(source,{"request":"focus","id":window["id"]})
     with socket.socket() as sock:sock.bind(("127.0.0.1",0));port=sock.getsockname()[1]
     server=f.start("server",[os.environ.get("VOXL_BIN",str(f.ROOT/"target/release/voxl")),"--capture-backend=wayland",
-        "--video-backend="+os.environ.get("VOXL_VIDEO","gpu"),f"--port={port}","--audio-enabled=false","--file-transfers=none","--show-cursor=false"],source)
+        "--video-backend="+os.environ.get("VOXL_VIDEO","gpu"),f"--port={port}","--audio-enabled=false","--file-transfers=none","--show-cursor=false","--native-widgets=true"],source)
     await f.until(lambda:b"listening on" in (f.EVIDENCE/"server.log").read_bytes(),"Voxl absent")
     viewer=f.start("viewer",[os.environ.get("VOXL_VIEWER",str(f.ROOT/"native/target/release/voxl-viewer")),
         f"http://127.0.0.1:{port}/?token=isolated-native-viewer","--fullscreen","--native-widgets","--no-audio","--seconds=55"],receiver)
@@ -58,6 +58,32 @@ async def main():
     first=exact("full")
     assert first["exact"],first
     checks.append("pixel-exact full Sukumo frame including real font glyphs")
+    # A second, ordinary read-only share must stay pixel-only even when an
+    # authenticated peer requests richer drawing assets. The source owner did
+    # not grant --native-widgets on this server.
+    with socket.socket() as sock:sock.bind(("127.0.0.1",0));pixel_port=sock.getsockname()[1]
+    pixel_server=f.start("pixel-only-server",[os.environ.get("VOXL_BIN",str(f.ROOT/"target/release/voxl")),
+        "--capture-backend=wayland","--video-backend=cpu",f"--port={pixel_port}","--audio-enabled=false",
+        "--file-transfers=none","--read-only=true","--show-cursor=false"],source)
+    try:
+        await f.until(lambda:b"listening on" in (f.EVIDENCE/"pixel-only-server.log").read_bytes(),"pixel-only server absent")
+        async with connect(f"ws://127.0.0.1:{pixel_port}/ws?token=isolated-native-viewer",max_size=32*1024*1024) as ws:
+            await ws.send("scene,1,17,zlib");await ws.send("v,1")
+            denied=False;video=False
+            async with asyncio.timeout(8):
+                while not (denied and video):
+                    packet=await ws.recv()
+                    if isinstance(packet,bytes):
+                        assert packet[0] not in (0x20,0x21),"pixel-only share leaked drawing assets"
+                        if packet[0]==1:
+                            video=True;await ws.send("a,"+str(int.from_bytes(packet[2:6],"big")))
+                    else:
+                        message=json.loads(packet)
+                        denied |= message.get("t")=="scene" and message.get("nonce")==17 and message.get("reason")=="server-native-widgets-disabled"
+        assert "retained capture object=" not in (f.EVIDENCE/"pixel-only-server.log").read_text()
+    finally:
+        pixel_server.terminate();pixel_server.wait(timeout=5)
+    checks.append("source-side default denies drawing assets while read-only video remains available")
     # The incoming input still reaches the original app; only its damaged button
     # is replayed, with all untouched text and paths remaining exactly unchanged.
     f.ipc(receiver,{"request":"synthesize","events":[{"type":"pointer-motion","x":180,"y":200},
@@ -121,6 +147,26 @@ async def main():
     await asyncio.sleep(.3)
     assert exact("after-stalled-client")["exact"]
     checks.append("rapid toggles use one worker and stalled replay falls back with bounded queues")
+    # A peer can acknowledge steadily while still consuming slower than the
+    # producer. This must not turn into an ever older retained animation.
+    async with connect(f"ws://127.0.0.1:{port}/ws?token=isolated-native-viewer",max_size=32*1024*1024) as ws:
+        await ws.send("scene,1,301,zlib")
+        async def slow_ack():
+            async for packet in ws:
+                if isinstance(packet,bytes) and packet[0] in (0x20,0x21):
+                    await asyncio.sleep(.15)
+                    await ws.send(f"sa,{int.from_bytes(packet[1:5],'little')},{int.from_bytes(packet[5:9],'little')}")
+        reader=asyncio.create_task(slow_ack())
+        key(receiver,30)
+        try:
+            await f.until(lambda:"retained producer outran link" in (f.EVIDENCE/"server.log").read_text(),"slow acknowledging peer accumulated stale replay",8)
+        finally:
+            key(receiver,30)
+            reader.cancel()
+            await asyncio.gather(reader,return_exceptions=True)
+    await asyncio.sleep(.3)
+    assert exact("after-slow-client")["exact"]
+    checks.append("sustained backpressure resumes video even when the slow peer keeps acknowledging")
     # Another Unix process cannot claim the server's capture object.
     denied=None
     with socket.socket(socket.AF_UNIX) as s:

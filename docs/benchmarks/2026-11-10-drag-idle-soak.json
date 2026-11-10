@@ -1,0 +1,1608 @@
+{
+	"method": "Two 12-second 4K drag repeats per CPU/browser and GPU/native cell; one idle sample each and one 90-second retained replay soak at 1 Mbit/s/100 ms. Serial runs without concurrent builds/tests. Same independent scene observer; not physical scanout. Idle timestamps expire by design, so only CPU/traffic is reported. Process-tree RSS can count shared mappings more than once.",
+	"results": [
+		{
+			"configuration": {
+				"viewer": "browser",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "drag",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 59.24555142927983,
+			"valid_marker_fps": 59.24555142927983,
+			"age_ms": {
+				"p50": 55,
+				"p95": 63,
+				"p99": 64
+			},
+			"observation": {
+				"captures": 5357,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 17.76747412617984,
+					"rss_bytes": 382226432,
+					"rss_start_bytes": 382226432,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 8.136506842830022,
+					"rss_bytes": 283947008,
+					"rss_start_bytes": 279228416,
+					"rss_growth_bytes": 4718592
+				},
+				"scene": {
+					"core_percent": 1.4944604405197999,
+					"rss_bytes": 163921920,
+					"rss_start_bytes": 163811328,
+					"rss_growth_bytes": 110592
+				},
+				"server": {
+					"core_percent": 87.92408925058156,
+					"rss_bytes": 200847360,
+					"rss_start_bytes": 200847360,
+					"rss_growth_bytes": 0
+				},
+				"viewer": {
+					"core_percent": 75.30420108619214,
+					"rss_bytes": 1820229632,
+					"rss_start_bytes": 1925390336,
+					"rss_growth_bytes": -105160704
+				}
+			},
+			"server_delta": {
+				"bytes": 1339512,
+				"captured": 728,
+				"convert_us_total": 535341,
+				"damage_events": 728,
+				"damage_wait_us_total": 24037,
+				"encode_us_total": 2734176,
+				"encoded": 727,
+				"flow_blocked": 0,
+				"grab_us_total": 9823,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 3322831,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 4845889,
+				"captured": 1038,
+				"clients": [
+					{
+						"delivered_kbps": 1200,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 766228,
+				"damage_events": 1077,
+				"damage_wait_us_total": 683895,
+				"encode_us_total": 4166724,
+				"encoded": 1037,
+				"flow_blocked": 0,
+				"grab_us_total": 14095,
+				"keyframes": 1,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 5661995,
+				"target_kbps": 21422
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 1219.912,
+					"decodeMs": 1.4355932211471816,
+					"pipeMs": 4.4677966101694935,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 1
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"browser_system": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"system": {
+					"gpu": {
+						"devices": [
+							{
+								"vendorId": 4318,
+								"deviceId": 11141,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "NVIDIA",
+								"driverVersion": "615.78.08"
+							},
+							{
+								"vendorId": 4098,
+								"deviceId": 5056,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "",
+								"driverVersion": ""
+							}
+						],
+						"auxAttributes": {
+							"amdSwitchable": false,
+							"canSupportThreadedTextureMailbox": false,
+							"directRenderingVersion": "",
+							"displayType": "ANGLE_OPENGL",
+							"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_translated_shader_source GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers_indexed GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_multisample_compatibility GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_stencil GL_NV_robustness_video_memory_purge GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_draw_buffers_indexed GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object ",
+							"glImplementationParts": "(gl=egl-angle,angle=opengl)",
+							"glRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+							"glResetNotificationStrategy": 33362,
+							"glVendor": "Google Inc. (NVIDIA Corporation)",
+							"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"glWsExtensions": "EGL_EXT_create_context_robustness EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANDROID_native_fence_sync EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_NV_robustness_video_memory_purge EGL_KHR_reusable_sync EGL_ANGLE_external_context_and_surface EGL_EXT_buffer_age EGL_ANGLE_context_virtualization EGL_ANGLE_memory_usage_report EGL_ANGLE_create_context_passthrough_shaders ",
+							"glWsVendor": "Google Inc. (NVIDIA Corporation)",
+							"glWsVersion": "1.5 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"hardwareSupportsVulkan": true,
+							"inProcessGpu": false,
+							"initializationTime": 0.168218,
+							"isAsan": false,
+							"isClangCoverage": false,
+							"jpegDecodeAcceleratorSupported": false,
+							"maxMsaaSamples": "8",
+							"optimus": false,
+							"passthroughCmdDecoder": true,
+							"pixelShaderVersion": "3.00",
+							"processCrashCount": 0,
+							"sandboxed": false,
+							"skiaBackendType": "GaneshGL",
+							"subpixelFontRendering": true,
+							"targetCpuBits": 64,
+							"vertexShaderVersion": "3.00",
+							"visibilityCallbackCallCount": 0
+						},
+						"featureStatus": {
+							"2d_canvas": "enabled",
+							"direct_rendering_display_compositor": "disabled_off_ok",
+							"gpu_compositing": "enabled",
+							"multiple_raster_threads": "enabled_on",
+							"opengl": "enabled_on",
+							"rasterization": "enabled",
+							"skia_graphite": "disabled_off",
+							"trees_in_viz": "disabled_off",
+							"video_decode": "enabled",
+							"video_encode": "disabled_software",
+							"vulkan": "disabled_off",
+							"webgl": "enabled",
+							"webgpu": "enabled",
+							"webgpu_on_vk_via_gl_interop": "enabled",
+							"webnn": "disabled_off"
+						},
+						"driverBugWorkarounds": [
+							"disable_discard_framebuffer",
+							"disable_rgb_to_yuv_conversion",
+							"enable_webgl_timer_query_extensions",
+							"exit_on_context_lost",
+							"unpack_overlapping_rows_separately_unpack_buffer",
+							"disabled_extension_GL_KHR_blend_equation_advanced",
+							"disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+						],
+						"videoDecoding": [],
+						"videoEncoding": []
+					},
+					"modelName": "",
+					"modelVersion": "",
+					"commandLine": "/nix/store/ifcs561qwhniaghjwgvyydjcb10z99wx-google-chrome-157.0.8103.38/share/google/chrome/google-chrome --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --simulate-outdated-no-au=Tue, 31 Dec 2099 23:59:59 GMT --password-store=gnome-libsecret --ozone-platform=wayland --kiosk --app=http://127.0.0.1:48277/?token=private-performance-fixture --window-size=3840,2160 --user-data-dir=/tmp/voxl-perf-6tokq77d/chrome-profile --no-first-run --no-default-browser-check --remote-debugging-port=0 --autoplay-policy=no-user-gesture-required --flag-switches-begin --flag-switches-end --render-node-override=/dev/dri/renderD128"
+				}
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1020074,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-6tokq77d",
+			"name": "4k-drag-cpu-browser-1",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-drag-cpu-browser-1"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "drag",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 60.08237690200289,
+			"valid_marker_fps": 60.08237690200289,
+			"age_ms": {
+				"p50": 7,
+				"p95": 8,
+				"p99": 9
+			},
+			"observation": {
+				"captures": 5506,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.5807106775856903,
+					"rss_bytes": 279531520,
+					"rss_start_bytes": 279531520,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 5.990061515061563,
+					"rss_bytes": 284270592,
+					"rss_start_bytes": 279400448,
+					"rss_growth_bytes": 4870144
+				},
+				"scene": {
+					"core_percent": 0.998343585843594,
+					"rss_bytes": 163913728,
+					"rss_start_bytes": 164003840,
+					"rss_growth_bytes": -90112
+				},
+				"server": {
+					"core_percent": 2.1630777693277867,
+					"rss_bytes": 352272384,
+					"rss_start_bytes": 351207424,
+					"rss_growth_bytes": 1064960
+				},
+				"viewer": {
+					"core_percent": 3.3278119528119796,
+					"rss_bytes": 515616768,
+					"rss_start_bytes": 515674112,
+					"rss_growth_bytes": -57344
+				}
+			},
+			"server_delta": {
+				"bytes": 4515645,
+				"captured": 725,
+				"convert_us_total": 0,
+				"damage_events": 725,
+				"damage_wait_us_total": 11516,
+				"encode_us_total": 2682699,
+				"encoded": 725,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2694587,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 10074430,
+				"captured": 1030,
+				"clients": [
+					{
+						"delivered_kbps": 2999,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 1043,
+				"damage_wait_us_total": 252173,
+				"encode_us_total": 3878736,
+				"encoded": 1030,
+				"flow_blocked": 38,
+				"grab_us_total": 0,
+				"keyframes": 2,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 4131446,
+				"target_kbps": 17475
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1024104,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-_553dnq2",
+			"name": "4k-drag-gpu-cuda-1",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-drag-gpu-cuda-1"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "drag",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 59.321828882979545,
+			"valid_marker_fps": 59.321828882979545,
+			"age_ms": {
+				"p50": 55,
+				"p95": 62,
+				"p99": 64
+			},
+			"observation": {
+				"captures": 5366,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 17.602153579773443,
+					"rss_bytes": 415490048,
+					"rss_start_bytes": 415490048,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 8.053815553009548,
+					"rss_bytes": 284299264,
+					"rss_start_bytes": 279711744,
+					"rss_growth_bytes": 4587520
+				},
+				"scene": {
+					"core_percent": 1.494522473754349,
+					"rss_bytes": 163835904,
+					"rss_start_bytes": 163835904,
+					"rss_growth_bytes": 0
+				},
+				"server": {
+					"core_percent": 87.09744860935068,
+					"rss_bytes": 200814592,
+					"rss_start_bytes": 200814592,
+					"rss_growth_bytes": 0
+				},
+				"viewer": {
+					"core_percent": 72.81645608236467,
+					"rss_bytes": 1818963968,
+					"rss_start_bytes": 1922674688,
+					"rss_growth_bytes": -103710720
+				}
+			},
+			"server_delta": {
+				"bytes": 1315540,
+				"captured": 728,
+				"convert_us_total": 543645,
+				"damage_events": 728,
+				"damage_wait_us_total": 26489,
+				"encode_us_total": 2697965,
+				"encoded": 727,
+				"flow_blocked": 0,
+				"grab_us_total": 9899,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 3296917,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 4823185,
+				"captured": 1038,
+				"clients": [
+					{
+						"delivered_kbps": 1211,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 773095,
+				"damage_events": 1077,
+				"damage_wait_us_total": 687473,
+				"encode_us_total": 4139236,
+				"encoded": 1037,
+				"flow_blocked": 0,
+				"grab_us_total": 14049,
+				"keyframes": 1,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 5643665,
+				"target_kbps": 21422
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 60.006000599702304,
+					"kbps": 1221.2261226049814,
+					"decodeMs": 1.4216666656235855,
+					"pipeMs": 4.39,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"browser_system": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"system": {
+					"gpu": {
+						"devices": [
+							{
+								"vendorId": 4318,
+								"deviceId": 11141,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "NVIDIA",
+								"driverVersion": "615.78.08"
+							},
+							{
+								"vendorId": 4098,
+								"deviceId": 5056,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "",
+								"driverVersion": ""
+							}
+						],
+						"auxAttributes": {
+							"amdSwitchable": false,
+							"canSupportThreadedTextureMailbox": false,
+							"directRenderingVersion": "",
+							"displayType": "ANGLE_OPENGL",
+							"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_translated_shader_source GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers_indexed GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_multisample_compatibility GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_stencil GL_NV_robustness_video_memory_purge GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_draw_buffers_indexed GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object ",
+							"glImplementationParts": "(gl=egl-angle,angle=opengl)",
+							"glRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+							"glResetNotificationStrategy": 33362,
+							"glVendor": "Google Inc. (NVIDIA Corporation)",
+							"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"glWsExtensions": "EGL_EXT_create_context_robustness EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANDROID_native_fence_sync EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_NV_robustness_video_memory_purge EGL_KHR_reusable_sync EGL_ANGLE_external_context_and_surface EGL_EXT_buffer_age EGL_ANGLE_context_virtualization EGL_ANGLE_memory_usage_report EGL_ANGLE_create_context_passthrough_shaders ",
+							"glWsVendor": "Google Inc. (NVIDIA Corporation)",
+							"glWsVersion": "1.5 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"hardwareSupportsVulkan": true,
+							"inProcessGpu": false,
+							"initializationTime": 0.168929,
+							"isAsan": false,
+							"isClangCoverage": false,
+							"jpegDecodeAcceleratorSupported": false,
+							"maxMsaaSamples": "8",
+							"optimus": false,
+							"passthroughCmdDecoder": true,
+							"pixelShaderVersion": "3.00",
+							"processCrashCount": 0,
+							"sandboxed": false,
+							"skiaBackendType": "GaneshGL",
+							"subpixelFontRendering": true,
+							"targetCpuBits": 64,
+							"vertexShaderVersion": "3.00",
+							"visibilityCallbackCallCount": 0
+						},
+						"featureStatus": {
+							"2d_canvas": "enabled",
+							"direct_rendering_display_compositor": "disabled_off_ok",
+							"gpu_compositing": "enabled",
+							"multiple_raster_threads": "enabled_on",
+							"opengl": "enabled_on",
+							"rasterization": "enabled",
+							"skia_graphite": "disabled_off",
+							"trees_in_viz": "disabled_off",
+							"video_decode": "enabled",
+							"video_encode": "disabled_software",
+							"vulkan": "disabled_off",
+							"webgl": "enabled",
+							"webgpu": "enabled",
+							"webgpu_on_vk_via_gl_interop": "enabled",
+							"webnn": "disabled_off"
+						},
+						"driverBugWorkarounds": [
+							"disable_discard_framebuffer",
+							"disable_rgb_to_yuv_conversion",
+							"enable_webgl_timer_query_extensions",
+							"exit_on_context_lost",
+							"unpack_overlapping_rows_separately_unpack_buffer",
+							"disabled_extension_GL_KHR_blend_equation_advanced",
+							"disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+						],
+						"videoDecoding": [],
+						"videoEncoding": []
+					},
+					"modelName": "",
+					"modelVersion": "",
+					"commandLine": "/nix/store/ifcs561qwhniaghjwgvyydjcb10z99wx-google-chrome-157.0.8103.38/share/google/chrome/google-chrome --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --simulate-outdated-no-au=Tue, 31 Dec 2099 23:59:59 GMT --password-store=gnome-libsecret --ozone-platform=wayland --kiosk --app=http://127.0.0.1:60557/?token=private-performance-fixture --window-size=3840,2160 --user-data-dir=/tmp/voxl-perf-5sedfgo8/chrome-profile --no-first-run --no-default-browser-check --remote-debugging-port=0 --autoplay-policy=no-user-gesture-required --flag-switches-begin --flag-switches-end --render-node-override=/dev/dri/renderD128"
+				}
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1024183,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-5sedfgo8",
+			"name": "4k-drag-cpu-browser-2",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-drag-cpu-browser-2"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "drag",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 60.08033510932351,
+			"valid_marker_fps": 60.08033510932351,
+			"age_ms": {
+				"p50": 7,
+				"p95": 8,
+				"p99": 9
+			},
+			"observation": {
+				"captures": 5504,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.49743861390466,
+					"rss_bytes": 279601152,
+					"rss_start_bytes": 279601152,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 5.906563421512826,
+					"rss_bytes": 284073984,
+					"rss_start_bytes": 279355392,
+					"rss_growth_bytes": 4718592
+				},
+				"scene": {
+					"core_percent": 0.9982924092697734,
+					"rss_bytes": 164007936,
+					"rss_start_bytes": 164007936,
+					"rss_growth_bytes": 0
+				},
+				"server": {
+					"core_percent": 2.1629668867511755,
+					"rss_bytes": 352145408,
+					"rss_start_bytes": 351227904,
+					"rss_growth_bytes": 917504
+				},
+				"viewer": {
+					"core_percent": 3.327641364232578,
+					"rss_bytes": 515862528,
+					"rss_start_bytes": 515862528,
+					"rss_growth_bytes": 0
+				}
+			},
+			"server_delta": {
+				"bytes": 4278398,
+				"captured": 725,
+				"convert_us_total": 0,
+				"damage_events": 725,
+				"damage_wait_us_total": 11067,
+				"encode_us_total": 2680135,
+				"encoded": 724,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2691508,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 9873112,
+				"captured": 1031,
+				"clients": [
+					{
+						"delivered_kbps": 3177,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 1044,
+				"damage_wait_us_total": 298636,
+				"encode_us_total": 3873113,
+				"encoded": 1030,
+				"flow_blocked": 39,
+				"grab_us_total": 0,
+				"keyframes": 2,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 4172195,
+				"target_kbps": 24276
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1028194,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-vgz93qlm",
+			"name": "4k-drag-gpu-cuda-2",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-drag-gpu-cuda-2"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "idle",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": false,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": null,
+			"valid_marker_fps": 0.08331880687987792,
+			"age_ms": {
+				"p50": null,
+				"p95": null,
+				"p99": null
+			},
+			"observation": {
+				"captures": 5556,
+				"invalid": 3607,
+				"marker_valid_fraction": 0.35079193664506836
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 0.0,
+					"rss_bytes": 341303296,
+					"rss_start_bytes": 341303296,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 4.409117413311349,
+					"rss_bytes": 279748608,
+					"rss_start_bytes": 270934016,
+					"rss_growth_bytes": 8814592
+				},
+				"scene": {
+					"core_percent": 0.0,
+					"rss_bytes": 161902592,
+					"rss_start_bytes": 161902592,
+					"rss_growth_bytes": 0
+				},
+				"server": {
+					"core_percent": 0.08319089459078016,
+					"rss_bytes": 200982528,
+					"rss_start_bytes": 200982528,
+					"rss_growth_bytes": 0
+				},
+				"viewer": {
+					"core_percent": 5.989744410536172,
+					"rss_bytes": 1802874880,
+					"rss_start_bytes": 1912197120,
+					"rss_growth_bytes": -109322240
+				}
+			},
+			"server_delta": {
+				"bytes": 0,
+				"captured": 0,
+				"convert_us_total": 0,
+				"damage_events": 0,
+				"damage_wait_us_total": 0,
+				"encode_us_total": 0,
+				"encoded": 0,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 0,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 164111,
+				"captured": 4,
+				"clients": [
+					{
+						"delivered_kbps": 0,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 3025,
+				"damage_events": 1,
+				"damage_wait_us_total": 617102,
+				"encode_us_total": 39194,
+				"encoded": 4,
+				"flow_blocked": 0,
+				"grab_us_total": 77,
+				"keyframes": 1,
+				"paintovers": 3,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 659764,
+				"target_kbps": 8000
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 0,
+					"kbps": 0,
+					"decodeMs": 0,
+					"pipeMs": 0,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"browser_system": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"system": {
+					"gpu": {
+						"devices": [
+							{
+								"vendorId": 4318,
+								"deviceId": 11141,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "NVIDIA",
+								"driverVersion": "615.78.08"
+							},
+							{
+								"vendorId": 4098,
+								"deviceId": 5056,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "",
+								"driverVersion": ""
+							}
+						],
+						"auxAttributes": {
+							"amdSwitchable": false,
+							"canSupportThreadedTextureMailbox": false,
+							"directRenderingVersion": "",
+							"displayType": "ANGLE_OPENGL",
+							"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_translated_shader_source GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers_indexed GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_multisample_compatibility GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_stencil GL_NV_robustness_video_memory_purge GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_draw_buffers_indexed GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object ",
+							"glImplementationParts": "(gl=egl-angle,angle=opengl)",
+							"glRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+							"glResetNotificationStrategy": 33362,
+							"glVendor": "Google Inc. (NVIDIA Corporation)",
+							"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"glWsExtensions": "EGL_EXT_create_context_robustness EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANDROID_native_fence_sync EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_NV_robustness_video_memory_purge EGL_KHR_reusable_sync EGL_ANGLE_external_context_and_surface EGL_EXT_buffer_age EGL_ANGLE_context_virtualization EGL_ANGLE_memory_usage_report EGL_ANGLE_create_context_passthrough_shaders ",
+							"glWsVendor": "Google Inc. (NVIDIA Corporation)",
+							"glWsVersion": "1.5 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"hardwareSupportsVulkan": true,
+							"inProcessGpu": false,
+							"initializationTime": 0.15838,
+							"isAsan": false,
+							"isClangCoverage": false,
+							"jpegDecodeAcceleratorSupported": false,
+							"maxMsaaSamples": "8",
+							"optimus": false,
+							"passthroughCmdDecoder": true,
+							"pixelShaderVersion": "3.00",
+							"processCrashCount": 0,
+							"sandboxed": false,
+							"skiaBackendType": "GaneshGL",
+							"subpixelFontRendering": true,
+							"targetCpuBits": 64,
+							"vertexShaderVersion": "3.00",
+							"visibilityCallbackCallCount": 0
+						},
+						"featureStatus": {
+							"2d_canvas": "enabled",
+							"direct_rendering_display_compositor": "disabled_off_ok",
+							"gpu_compositing": "enabled",
+							"multiple_raster_threads": "enabled_on",
+							"opengl": "enabled_on",
+							"rasterization": "enabled",
+							"skia_graphite": "disabled_off",
+							"trees_in_viz": "disabled_off",
+							"video_decode": "enabled",
+							"video_encode": "disabled_software",
+							"vulkan": "disabled_off",
+							"webgl": "enabled",
+							"webgpu": "enabled",
+							"webgpu_on_vk_via_gl_interop": "enabled",
+							"webnn": "disabled_off"
+						},
+						"driverBugWorkarounds": [
+							"disable_discard_framebuffer",
+							"disable_rgb_to_yuv_conversion",
+							"enable_webgl_timer_query_extensions",
+							"exit_on_context_lost",
+							"unpack_overlapping_rows_separately_unpack_buffer",
+							"disabled_extension_GL_KHR_blend_equation_advanced",
+							"disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+						],
+						"videoDecoding": [],
+						"videoEncoding": []
+					},
+					"modelName": "",
+					"modelVersion": "",
+					"commandLine": "/nix/store/ifcs561qwhniaghjwgvyydjcb10z99wx-google-chrome-157.0.8103.38/share/google/chrome/google-chrome --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --simulate-outdated-no-au=Tue, 31 Dec 2099 23:59:59 GMT --password-store=gnome-libsecret --ozone-platform=wayland --kiosk --app=http://127.0.0.1:43447/?token=private-performance-fixture --window-size=3840,2160 --user-data-dir=/tmp/voxl-perf-6wzxri7m/chrome-profile --no-first-run --no-default-browser-check --remote-debugging-port=0 --autoplay-policy=no-user-gesture-required --flag-switches-begin --flag-switches-end --render-node-override=/dev/dri/renderD128"
+				}
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1028301,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-6wzxri7m",
+			"rejected_age_ms": {
+				"p50": 5813,
+				"p95": 5813,
+				"p99": 5813
+			},
+			"measurement_rejection": "Static source markers exceed the observer age limit; no latency or frame-rate score is claimed. Idle CPU/traffic counters remain useful under the common observer load.",
+			"measurement_note": "Static source: the old timestamp is not a latency sample. Inspect idle CPU and encoding/byte counters; no scene-age or frame-rate score is reported.",
+			"name": "4k-idle-cpu-browser",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-idle-cpu-browser"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"source": "gl",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 0,
+				"link_delay_ms": 0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "idle",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 30000,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": false,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": null,
+			"valid_marker_fps": 0.08332068481594468,
+			"age_ms": {
+				"p50": null,
+				"p95": null,
+				"p99": null
+			},
+			"observation": {
+				"captures": 5588,
+				"invalid": 3522,
+				"marker_valid_fraction": 0.36972083035075165
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 0.08318018607142182,
+					"rss_bytes": 271040512,
+					"rss_start_bytes": 271040512,
+					"rss_growth_bytes": 0
+				},
+				"receiver": {
+					"core_percent": 3.743108373213982,
+					"rss_bytes": 279240704,
+					"rss_start_bytes": 270721024,
+					"rss_growth_bytes": 8519680
+				},
+				"scene": {
+					"core_percent": 0.0,
+					"rss_bytes": 161820672,
+					"rss_start_bytes": 161820672,
+					"rss_growth_bytes": 0
+				},
+				"server": {
+					"core_percent": 0.24954055821426546,
+					"rss_bytes": 350752768,
+					"rss_start_bytes": 350752768,
+					"rss_growth_bytes": 0
+				},
+				"viewer": {
+					"core_percent": 0.24954055821426546,
+					"rss_bytes": 513794048,
+					"rss_start_bytes": 513794048,
+					"rss_growth_bytes": 0
+				}
+			},
+			"server_delta": {
+				"bytes": 0,
+				"captured": 0,
+				"convert_us_total": 0,
+				"damage_events": 0,
+				"damage_wait_us_total": 0,
+				"encode_us_total": 0,
+				"encoded": 0,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 0,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 343009,
+				"captured": 1,
+				"clients": [
+					{
+						"delivered_kbps": 0,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 1,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 1,
+				"damage_wait_us_total": 105178,
+				"encode_us_total": 29584,
+				"encoded": 5,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 2,
+				"paintovers": 3,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 134762,
+				"target_kbps": 8000
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-scene",
+					"sha256": "58cea21f716c3a44605cda339697ac6714eca0dc418eb7e9cb7a56c6f402b36d"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1028963,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-ob7u04_p",
+			"rejected_age_ms": {
+				"p50": 5561,
+				"p95": 5561,
+				"p99": 5561
+			},
+			"measurement_rejection": "Static source markers exceed the observer age limit; no latency or frame-rate score is claimed. Idle CPU/traffic counters remain useful under the common observer load.",
+			"measurement_note": "Static source: the old timestamp is not a latency sample. Inspect idle CPU and encoding/byte counters; no scene-age or frame-rate score is reported.",
+			"name": "4k-idle-gpu-cuda",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-idle-gpu-cuda"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": true,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 1.0,
+				"link_delay_ms": 50.0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 90,
+				"warmup": 5,
+				"kbps": 900,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": 556,
+			"retained_startup_stats": {
+				"bytes": 33162,
+				"captured": 20,
+				"clients": [
+					{
+						"delivered_kbps": 0,
+						"id": 1,
+						"inflight": 8,
+						"min_rtt_ms": 103,
+						"oldest_ms": 110,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 37,
+				"damage_wait_us_total": 353429,
+				"encode_us_total": 97181,
+				"encoded": 22,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 3,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 14991,
+				"retained_frames": 8,
+				"retained_raw_bytes": 66749,
+				"send_lat_us_total": 450620,
+				"target_kbps": 900
+			},
+			"visible_fps": 59.032231529527515,
+			"valid_marker_fps": 59.032231529527515,
+			"age_ms": {
+				"p50": 56,
+				"p95": 60,
+				"p99": 63
+			},
+			"observation": {
+				"captures": 40786,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.810530559719378,
+					"rss_bytes": 355201024,
+					"rss_start_bytes": 350613504,
+					"rss_growth_bytes": 4587520
+				},
+				"receiver": {
+					"core_percent": 7.042186348847151,
+					"rss_bytes": 286273536,
+					"rss_start_bytes": 279064576,
+					"rss_growth_bytes": 7208960
+				},
+				"scene": {
+					"core_percent": 0.8663888567982299,
+					"rss_bytes": 51208192,
+					"rss_start_bytes": 51208192,
+					"rss_growth_bytes": 0
+				},
+				"server": {
+					"core_percent": 0.6997756151062626,
+					"rss_bytes": 351772672,
+					"rss_start_bytes": 351772672,
+					"rss_growth_bytes": 0
+				},
+				"viewer": {
+					"core_percent": 4.465234877344724,
+					"rss_bytes": 574918656,
+					"rss_start_bytes": 574525440,
+					"rss_growth_bytes": 393216
+				}
+			},
+			"server_delta": {
+				"bytes": 0,
+				"captured": 0,
+				"convert_us_total": 0,
+				"damage_events": 5319,
+				"damage_wait_us_total": 0,
+				"encode_us_total": 0,
+				"encoded": 0,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 2457968,
+				"retained_frames": 5319,
+				"retained_raw_bytes": 32098982,
+				"send_lat_us_total": 0,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 34606,
+				"captured": 22,
+				"clients": [
+					{
+						"delivered_kbps": 0,
+						"id": 1,
+						"inflight": 0,
+						"min_rtt_ms": 101,
+						"oldest_ms": 0,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": false
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 5652,
+				"damage_wait_us_total": 353438,
+				"encode_us_total": 104830,
+				"encoded": 24,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 3,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 2612640,
+				"retained_frames": 5629,
+				"retained_raw_bytes": 33987886,
+				"send_lat_us_total": 458279,
+				"target_kbps": 900
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "fe9b6ba958ca10822826332c50a97002d1669d9ddaf1f86bc7059b8533821dc8"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"retained_renderer": {
+					"path": "/nix/store/8lrjhy21djz5gbnf44359icxjyq34pc6-aizome-remote-renderer-0.1.0/lib/libaizome_remote_renderer.so",
+					"sha256": "64412a52a2c9a9dfc0a230d96ad4f6267a94a72226105586395c1d448905c929"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1029060,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-6u28ps5l",
+			"link": {
+				"method": "Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation",
+				"totals_including_warmup": {
+					"up": {
+						"bytes": 86918,
+						"peak_queued_bytes": 190
+					},
+					"down": {
+						"bytes": 2672306,
+						"peak_queued_bytes": 22709
+					}
+				}
+			},
+			"name": "4k-native-soak-1mbps-100ms",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/final-workloads/evidence/4k-native-soak-1mbps-100ms"
+		}
+	]
+}

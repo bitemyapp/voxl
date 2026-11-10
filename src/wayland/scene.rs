@@ -38,15 +38,22 @@ impl Drop for Registration {
     }
 }
 pub fn command(hub: &Arc<Hub>, client: &Arc<Client>, enabled: bool, nonce: u32, compressed: bool) {
+    if enabled && !super::settings().native_widgets {
+        status(client, nonce, "server-native-widgets-disabled");
+        return;
+    }
     // At most one worker per connection, even if a peer toggles rapidly. Its
     // one-slot notification coalesces changes; the atomics hold the latest one.
     let mut notify = client.scene_notify.lock();
+    let progress = client.scene_progress.lock();
     client.scene_nonce.store(nonce, Ordering::Release);
     client.scene_compressed.store(compressed, Ordering::Release);
     client.scene_ack.store(0, Ordering::Release);
     client.scene_written.store(0, Ordering::Release);
     client.scene_enabled.store(enabled, Ordering::Release);
     client.scene_generation.fetch_add(1, Ordering::AcqRel);
+    client.scene_changed.notify_one();
+    drop(progress);
     if notify.is_none() && enabled {
         let (tx, rx) = std::sync::mpsc::sync_channel(1);
         let owner = client.clone();
@@ -121,6 +128,8 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
     let (mut stream, mut pending) = ipc.into_stream();
     stream.set_nonblocking(true).map_err(|e| e.to_string())?;
     let mut outstanding: VecDeque<(u32, usize, Instant)> = VecDeque::new();
+    let mut acknowledged_at: Option<Instant> = None;
+    let mut backpressure_since: Option<Instant> = None;
     let mut active = false;
     let mut serial = 0u32;
     let mut codec = crate::retained::Encoder::new(compressed);
@@ -138,6 +147,7 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
         if written >> 32 == u64::from(nonce) && (written as u32).wrapping_sub(ack) as i32 >= 0 {
             if let Some(index) = outstanding.iter().position(|(s, _, _)| *s == ack) {
                 outstanding.drain(..=index);
+                acknowledged_at.get_or_insert_with(Instant::now);
             }
         }
         if outstanding
@@ -145,6 +155,39 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
             .is_some_and(|(_, _, at)| at.elapsed() > Duration::from_secs(2))
         {
             return Err("retained viewer acknowledgement timed out".into());
+        }
+        // A slow initial font/image transfer can legitimately fill the window.
+        // Stop consuming IPC until an actual socket delivery is acknowledged;
+        // never drop a delta or reset its dictionary merely because the link is
+        // slower than the producer. The IPC and socket queues remain bounded.
+        let full = |q: &VecDeque<(u32, usize, Instant)>| {
+            q.len() >= 8 || q.iter().map(|(_, n, _)| n).sum::<usize>() > 16 * 1024 * 1024
+        };
+        if full(&outstanding) {
+            // Permit bootstrap assets to fill the window, but do not replay an
+            // ever older stream if sustained production exceeds link capacity.
+            // A first video keyframe and bootstrap assets can leave a temporary
+            // backlog even when the steady stream fits the link. Allow two
+            // seconds after first delivery to catch up. Thereafter half a
+            // second of continuous pressure selects the skippable video path.
+            // The independent two-second unacknowledged-frame timeout remains.
+            if acknowledged_at.is_some_and(|at| at.elapsed() > Duration::from_secs(2))
+                && backpressure_since
+                    .get_or_insert_with(Instant::now)
+                    .elapsed()
+                    > Duration::from_millis(500)
+            {
+                return Err("retained producer outran link; video fallback".into());
+            }
+            let mut progress = c.scene_progress.lock();
+            if c.scene_ack.load(Ordering::Acquire) == ack
+                && c.scene_written.load(Ordering::Acquire) == written
+                && c.scene_generation.load(Ordering::Acquire) == generation
+            {
+                c.scene_changed
+                    .wait_for(&mut progress, Duration::from_millis(200));
+            }
+            continue;
         }
         let mut buf = [0u8; 65536];
         loop {
@@ -162,6 +205,11 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
             }
         }
         while let Some(nl) = pending.iter().position(|b| *b == b'\n') {
+            // Reserve room for the maximum next frame before removing it from
+            // pending. At most 32 MiB can be outstanding, including large assets.
+            if full(&outstanding) {
+                break;
+            }
             let line: Vec<_> = pending.drain(..=nl).collect();
             let event: serde_json::Value =
                 serde_json::from_slice(&line).map_err(|e| e.to_string())?;
@@ -181,12 +229,6 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
                 let header: Header = serde_json::from_str(payload).map_err(|e| e.to_string())?;
                 if !active && !header.full {
                     continue;
-                }
-                if outstanding.len() >= 8
-                    || outstanding.iter().map(|(_, n, _)| n).sum::<usize>() + payload.len()
-                        > 32 * 1024 * 1024
-                {
-                    return Err("retained viewer fell behind; video fallback".into());
                 }
                 serial = serial.wrapping_add(1);
                 let packet = codec.packet(nonce, serial, payload.as_bytes())?;
@@ -210,6 +252,9 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
                 }
             }
         }
+        if pending.is_empty() && !full(&outstanding) {
+            backpressure_since = None;
+        }
         let mut poll = libc::pollfd {
             fd: stream.as_raw_fd(),
             events: libc::POLLIN,
@@ -220,5 +265,28 @@ fn run(hub: &Hub, c: &Client, generation: u64, nonce: u32, compressed: bool) -> 
         unsafe {
             libc::poll(&mut poll, 1, 200);
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_pixel_share_does_not_grant_drawing_asset_access() {
+        let hub = Hub::new();
+        let (tx, mut rx) = tokio::sync::mpsc::unbounded_channel();
+        let client = hub.add_client(tx);
+        command(&hub, &client, true, 17, true);
+        let Out::Text(message) = rx.try_recv().unwrap() else {
+            panic!("expected refusal")
+        };
+        let response: serde_json::Value = serde_json::from_str(&message).unwrap();
+        assert_eq!(response["reason"], "server-native-widgets-disabled");
+        assert_eq!(response["nonce"], 17);
+        assert!(client.scene_notify.lock().is_none());
+        assert!(!client.scene_enabled.load(Ordering::Acquire));
+        assert_eq!(client.scene_generation.load(Ordering::Acquire), 0);
+        assert_eq!(client.scene_bytes.load(Ordering::Acquire), 0);
     }
 }

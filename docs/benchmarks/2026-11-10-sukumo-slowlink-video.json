@@ -1,0 +1,929 @@
+{
+	"method": "Same 4K Sukumo source and independent compositor marker observer as glyph-cache comparison; one 12-second sample per video cell, 1 Mbit/s serialized reliable private link and 50 ms propagation per direction. All markers valid. No concurrent builds/tests. Propagation dominates these cells; CPU/GPU codecs have different quality/bandwidth characteristics.",
+	"results": [
+		{
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 1.0,
+				"link_delay_ms": 50.0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 900,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 59.16005120240105,
+			"valid_marker_fps": 59.16005120240105,
+			"age_ms": {
+				"p50": 62,
+				"p95": 66,
+				"p99": 71
+			},
+			"observation": {
+				"captures": 5382,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 16.740816951793814,
+					"rss_bytes": 444657664
+				},
+				"receiver": {
+					"core_percent": 7.495888187370365,
+					"rss_bytes": 283885568
+				},
+				"scene": {
+					"core_percent": 1.082739404842386,
+					"rss_bytes": 51372032
+				},
+				"server": {
+					"core_percent": 57.38518845664646,
+					"rss_bytes": 200912896
+				},
+				"viewer": {
+					"core_percent": 66.21367898843822,
+					"rss_bytes": 1929891840
+				}
+			},
+			"server_delta": {
+				"bytes": 94594,
+				"captured": 715,
+				"convert_us_total": 165763,
+				"damage_events": 1430,
+				"damage_wait_us_total": 13985,
+				"encode_us_total": 2357762,
+				"encoded": 714,
+				"flow_blocked": 0,
+				"grab_us_total": 5589,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2556742,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 281613,
+				"captured": 937,
+				"clients": [
+					{
+						"delivered_kbps": 53,
+						"id": 1,
+						"inflight": 8,
+						"min_rtt_ms": 101,
+						"oldest_ms": 130,
+						"queue_ms": 1,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 221843,
+				"damage_events": 2113,
+				"damage_wait_us_total": 2111171,
+				"encode_us_total": 3292478,
+				"encoded": 936,
+				"flow_blocked": 205,
+				"grab_us_total": 7453,
+				"keyframes": 1,
+				"paintovers": 0,
+				"refines": 1,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 5651503,
+				"target_kbps": 900
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 58.00580058057667,
+					"kbps": 52.6372637268433,
+					"decodeMs": 1.222413793206215,
+					"pipeMs": 3.655172413793105,
+					"codec": "avc1.42c034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 1
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"browser_system": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"system": {
+					"gpu": {
+						"devices": [
+							{
+								"vendorId": 4318,
+								"deviceId": 11141,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "NVIDIA",
+								"driverVersion": "615.78.08"
+							},
+							{
+								"vendorId": 4098,
+								"deviceId": 5056,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "",
+								"driverVersion": ""
+							}
+						],
+						"auxAttributes": {
+							"amdSwitchable": false,
+							"canSupportThreadedTextureMailbox": false,
+							"directRenderingVersion": "",
+							"displayType": "ANGLE_OPENGL",
+							"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_translated_shader_source GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers_indexed GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_multisample_compatibility GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_stencil GL_NV_robustness_video_memory_purge GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_draw_buffers_indexed GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object ",
+							"glImplementationParts": "(gl=egl-angle,angle=opengl)",
+							"glRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+							"glResetNotificationStrategy": 33362,
+							"glVendor": "Google Inc. (NVIDIA Corporation)",
+							"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"glWsExtensions": "EGL_EXT_create_context_robustness EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANDROID_native_fence_sync EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_NV_robustness_video_memory_purge EGL_KHR_reusable_sync EGL_ANGLE_external_context_and_surface EGL_EXT_buffer_age EGL_ANGLE_context_virtualization EGL_ANGLE_memory_usage_report EGL_ANGLE_create_context_passthrough_shaders ",
+							"glWsVendor": "Google Inc. (NVIDIA Corporation)",
+							"glWsVersion": "1.5 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"hardwareSupportsVulkan": true,
+							"inProcessGpu": false,
+							"initializationTime": 0.182178,
+							"isAsan": false,
+							"isClangCoverage": false,
+							"jpegDecodeAcceleratorSupported": false,
+							"maxMsaaSamples": "8",
+							"optimus": false,
+							"passthroughCmdDecoder": true,
+							"pixelShaderVersion": "3.00",
+							"processCrashCount": 0,
+							"sandboxed": false,
+							"skiaBackendType": "GaneshGL",
+							"subpixelFontRendering": true,
+							"targetCpuBits": 64,
+							"vertexShaderVersion": "3.00",
+							"visibilityCallbackCallCount": 0
+						},
+						"featureStatus": {
+							"2d_canvas": "enabled",
+							"direct_rendering_display_compositor": "disabled_off_ok",
+							"gpu_compositing": "enabled",
+							"multiple_raster_threads": "enabled_on",
+							"opengl": "enabled_on",
+							"rasterization": "enabled",
+							"skia_graphite": "disabled_off",
+							"trees_in_viz": "disabled_off",
+							"video_decode": "enabled",
+							"video_encode": "disabled_software",
+							"vulkan": "disabled_off",
+							"webgl": "enabled",
+							"webgpu": "enabled",
+							"webgpu_on_vk_via_gl_interop": "enabled",
+							"webnn": "disabled_off"
+						},
+						"driverBugWorkarounds": [
+							"disable_discard_framebuffer",
+							"disable_rgb_to_yuv_conversion",
+							"enable_webgl_timer_query_extensions",
+							"exit_on_context_lost",
+							"unpack_overlapping_rows_separately_unpack_buffer",
+							"disabled_extension_GL_KHR_blend_equation_advanced",
+							"disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+						],
+						"videoDecoding": [],
+						"videoEncoding": []
+					},
+					"modelName": "",
+					"modelVersion": "",
+					"commandLine": "/nix/store/ifcs561qwhniaghjwgvyydjcb10z99wx-google-chrome-157.0.8103.38/share/google/chrome/google-chrome --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --simulate-outdated-no-au=Tue, 31 Dec 2099 23:59:59 GMT --password-store=gnome-libsecret --ozone-platform=wayland --kiosk --app=http://127.0.0.1:45223/?token=private-performance-fixture --window-size=3840,2160 --user-data-dir=/tmp/voxl-perf-jchrgomp/chrome-profile --no-first-run --no-default-browser-check --remote-debugging-port=0 --autoplay-policy=no-user-gesture-required --flag-switches-begin --flag-switches-end --render-node-override=/dev/dri/renderD128"
+				}
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "fe9b6ba958ca10822826332c50a97002d1669d9ddaf1f86bc7059b8533821dc8"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1012550,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-jchrgomp",
+			"link": {
+				"method": "Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation",
+				"totals_including_warmup": {
+					"up": {
+						"bytes": 15154,
+						"peak_queued_bytes": 697
+					},
+					"down": {
+						"bytes": 413214,
+						"peak_queued_bytes": 68042
+					}
+				}
+			},
+			"name": "4k-cpu-browser-1mbps-100ms",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/sukumo-slowlink-video/evidence/4k-cpu-browser-1mbps-100ms"
+		},
+		{
+			"configuration": {
+				"viewer": "cuda",
+				"source": "sukumo",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 1.0,
+				"link_delay_ms": 50.0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 900,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 59.41216952685752,
+			"valid_marker_fps": 59.41216952685752,
+			"age_ms": {
+				"p50": 65,
+				"p95": 67,
+				"p99": 68
+			},
+			"observation": {
+				"captures": 5523,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.412317840507542,
+					"rss_bytes": 341999616
+				},
+				"receiver": {
+					"core_percent": 5.732348882060024,
+					"rss_bytes": 283824128
+				},
+				"scene": {
+					"core_percent": 0.7476976802686988,
+					"rss_bytes": 51306496
+				},
+				"server": {
+					"core_percent": 2.0769380007463853,
+					"rss_bytes": 351219712
+				},
+				"viewer": {
+					"core_percent": 3.2400232811643614,
+					"rss_bytes": 513011712
+				}
+			},
+			"server_delta": {
+				"bytes": 667990,
+				"captured": 717,
+				"convert_us_total": 0,
+				"damage_events": 717,
+				"damage_wait_us_total": 2700,
+				"encode_us_total": 2640337,
+				"encoded": 717,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2643381,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 976794,
+				"captured": 1000,
+				"clients": [
+					{
+						"delivered_kbps": 441,
+						"id": 1,
+						"inflight": 8,
+						"min_rtt_ms": 100,
+						"oldest_ms": 134,
+						"queue_ms": 0,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 1023,
+				"damage_wait_us_total": 589596,
+				"encode_us_total": 3717727,
+				"encoded": 1000,
+				"flow_blocked": 80,
+				"grab_us_total": 0,
+				"keyframes": 2,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 4307795,
+				"target_kbps": 900
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "fe9b6ba958ca10822826332c50a97002d1669d9ddaf1f86bc7059b8533821dc8"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1016166,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-2zjbgdty",
+			"link": {
+				"method": "Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation",
+				"totals_including_warmup": {
+					"up": {
+						"bytes": 11585,
+						"peak_queued_bytes": 190
+					},
+					"down": {
+						"bytes": 993333,
+						"peak_queued_bytes": 11429
+					}
+				}
+			},
+			"name": "4k-gpu-cuda-1mbps-100ms",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/sukumo-slowlink-video/evidence/4k-gpu-cuda-1mbps-100ms"
+		},
+		{
+			"configuration": {
+				"viewer": "cpu",
+				"source": "sukumo",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 1.0,
+				"link_delay_ms": 50.0,
+				"encoder": "cpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 900,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 58.40907389592372,
+			"valid_marker_fps": 58.40907389592372,
+			"age_ms": {
+				"p50": 62,
+				"p95": 68,
+				"p99": 137
+			},
+			"observation": {
+				"captures": 5481,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 16.523731357180175,
+					"rss_bytes": 444387328
+				},
+				"receiver": {
+					"core_percent": 6.393604595491826,
+					"rss_bytes": 283844608
+				},
+				"scene": {
+					"core_percent": 0.9133720850702609,
+					"rss_bytes": 51343360
+				},
+				"server": {
+					"core_percent": 63.68694447717183,
+					"rss_bytes": 200982528
+				},
+				"viewer": {
+					"core_percent": 15.859460749856348,
+					"rss_bytes": 262791168
+				}
+			},
+			"server_delta": {
+				"bytes": 174313,
+				"captured": 716,
+				"convert_us_total": 169004,
+				"damage_events": 1434,
+				"damage_wait_us_total": 58036,
+				"encode_us_total": 2558649,
+				"encoded": 716,
+				"flow_blocked": 13,
+				"grab_us_total": 5732,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2805671,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 315653,
+				"captured": 964,
+				"clients": [
+					{
+						"delivered_kbps": 51,
+						"id": 1,
+						"inflight": 8,
+						"min_rtt_ms": 100,
+						"oldest_ms": 129,
+						"queue_ms": 1,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 230114,
+				"damage_events": 2045,
+				"damage_wait_us_total": 1096439,
+				"encode_us_total": 3763140,
+				"encoded": 964,
+				"flow_blocked": 278,
+				"grab_us_total": 7784,
+				"keyframes": 2,
+				"paintovers": 0,
+				"refines": 1,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 5117018,
+				"target_kbps": 900
+			},
+			"browser": null,
+			"browser_system": null,
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "fe9b6ba958ca10822826332c50a97002d1669d9ddaf1f86bc7059b8533821dc8"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1016250,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-uxn3u8r4",
+			"link": {
+				"method": "Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation",
+				"totals_including_warmup": {
+					"up": {
+						"bytes": 11180,
+						"peak_queued_bytes": 190
+					},
+					"down": {
+						"bytes": 318565,
+						"peak_queued_bytes": 68272
+					}
+				}
+			},
+			"name": "4k-cpu-cpu-1mbps-100ms",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/sukumo-slowlink-video/evidence/4k-cpu-cpu-1mbps-100ms"
+		},
+		{
+			"configuration": {
+				"viewer": "browser",
+				"source": "sukumo",
+				"native_widgets": false,
+				"scene_compression": "zlib",
+				"glyph_transfer": "mask",
+				"link_mbps": 1.0,
+				"link_delay_ms": 50.0,
+				"encoder": "gpu",
+				"size": "3840x2160",
+				"workload": "scroll",
+				"fps": 60,
+				"marker_cell": 8,
+				"seconds": 12,
+				"warmup": 5,
+				"kbps": 900,
+				"stripes": 1,
+				"crf": 24,
+				"gpu_preset": "P1",
+				"quality": false
+			},
+			"measurement_valid": true,
+			"retained_startup_ms": null,
+			"retained_startup_stats": null,
+			"visible_fps": 59.33217578730547,
+			"valid_marker_fps": 59.33217578730547,
+			"age_ms": {
+				"p50": 67,
+				"p95": 69,
+				"p99": 72
+			},
+			"observation": {
+				"captures": 5453,
+				"invalid": 0,
+				"marker_valid_fraction": 1.0
+			},
+			"cpu": {
+				"source": {
+					"core_percent": 1.411361598818628,
+					"rss_bytes": 342171648
+				},
+				"receiver": {
+					"core_percent": 6.558680370980683,
+					"rss_bytes": 283979776
+				},
+				"scene": {
+					"core_percent": 0.7471914346686854,
+					"rss_bytes": 51228672
+				},
+				"server": {
+					"core_percent": 2.822723197637256,
+					"rss_bytes": 352276480
+				},
+				"viewer": {
+					"core_percent": 62.598037971132094,
+					"rss_bytes": 1849929728
+				}
+			},
+			"server_delta": {
+				"bytes": 694378,
+				"captured": 718,
+				"convert_us_total": 0,
+				"damage_events": 717,
+				"damage_wait_us_total": 3473,
+				"encode_us_total": 2650487,
+				"encoded": 718,
+				"flow_blocked": 0,
+				"grab_us_total": 0,
+				"keyframes": 0,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 2654341,
+				"target_kbps": 0
+			},
+			"server_end": {
+				"bytes": 975327,
+				"captured": 965,
+				"clients": [
+					{
+						"delivered_kbps": 457,
+						"id": 1,
+						"inflight": 9,
+						"min_rtt_ms": 101,
+						"oldest_ms": 135,
+						"queue_ms": 1,
+						"retained_queued_bytes": 0,
+						"video": true
+					}
+				],
+				"convert_us_total": 0,
+				"damage_events": 1059,
+				"damage_wait_us_total": 1679350,
+				"encode_us_total": 3589852,
+				"encoded": 965,
+				"flow_blocked": 68,
+				"grab_us_total": 0,
+				"keyframes": 1,
+				"paintovers": 0,
+				"refines": 0,
+				"retained_bytes": 0,
+				"retained_frames": 0,
+				"retained_raw_bytes": 0,
+				"send_lat_us_total": 5269707,
+				"target_kbps": 900
+			},
+			"browser": {
+				"stats": {
+					"t": "stats",
+					"fps": 59,
+					"kbps": 462.672,
+					"decodeMs": 1.9915254239813756,
+					"pipeMs": 3.6322033898305057,
+					"codec": "avc1.640034",
+					"stripes": 1,
+					"dropped": 0,
+					"queue": 0
+				},
+				"width": 3840,
+				"height": 2160,
+				"dpr": 1
+			},
+			"browser_system": {
+				"version": {
+					"protocolVersion": "1.3",
+					"product": "Chrome/157.0.8103.38",
+					"revision": "@a733b5afbb3ba618844ff8876b89ad1a774b2f18",
+					"userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/157.0.0.0 Safari/537.36",
+					"jsVersion": "15.7.112.23"
+				},
+				"system": {
+					"gpu": {
+						"devices": [
+							{
+								"vendorId": 4318,
+								"deviceId": 11141,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "NVIDIA",
+								"driverVersion": "615.78.08"
+							},
+							{
+								"vendorId": 4098,
+								"deviceId": 5056,
+								"vendorString": "",
+								"deviceString": "",
+								"driverVendor": "",
+								"driverVersion": ""
+							}
+						],
+						"auxAttributes": {
+							"amdSwitchable": false,
+							"canSupportThreadedTextureMailbox": false,
+							"directRenderingVersion": "",
+							"displayType": "ANGLE_OPENGL",
+							"glExtensions": "GL_AMD_performance_monitor GL_ANGLE_blob_cache GL_ANGLE_client_arrays GL_ANGLE_clip_cull_distance GL_ANGLE_compressed_texture_etc GL_ANGLE_depth_texture GL_ANGLE_framebuffer_blit GL_ANGLE_framebuffer_multisample GL_ANGLE_get_serialized_context_string GL_ANGLE_get_tex_level_parameter GL_ANGLE_instanced_arrays GL_ANGLE_memory_size GL_ANGLE_polygon_mode GL_ANGLE_program_binary_readiness_query GL_ANGLE_program_cache_control GL_ANGLE_renderability_validation GL_ANGLE_request_extension GL_ANGLE_robust_client_memory GL_ANGLE_shader_pixel_local_storage GL_ANGLE_stencil_texturing GL_ANGLE_texture_compression_dxt3 GL_ANGLE_texture_compression_dxt5 GL_ANGLE_texture_multisample GL_ANGLE_translated_shader_source GL_ARM_rgba8 GL_CHROMIUM_bind_generates_resource GL_CHROMIUM_bind_uniform_location GL_CHROMIUM_copy_texture GL_CHROMIUM_lose_context GL_EXT_EGL_image_array GL_EXT_EGL_image_external_wrap_modes GL_EXT_blend_func_extended GL_EXT_blend_minmax GL_EXT_clear_texture GL_EXT_clip_control GL_EXT_clip_cull_distance GL_EXT_color_buffer_float GL_EXT_color_buffer_half_float GL_EXT_compressed_ETC1_RGB8_sub_texture GL_EXT_conservative_depth GL_EXT_debug_label GL_EXT_debug_marker GL_EXT_depth_clamp GL_EXT_discard_framebuffer GL_EXT_disjoint_timer_query GL_EXT_draw_buffers_indexed GL_EXT_float_blend GL_EXT_frag_depth GL_EXT_instanced_arrays GL_EXT_map_buffer_range GL_EXT_memory_object GL_EXT_memory_object_fd GL_EXT_multisample_compatibility GL_EXT_multisampled_render_to_texture GL_EXT_multisampled_render_to_texture2 GL_EXT_occlusion_query_boolean GL_EXT_polygon_offset_clamp GL_EXT_read_format_bgra GL_EXT_render_snorm GL_EXT_robustness GL_EXT_sRGB GL_EXT_sRGB_write_control GL_EXT_semaphore GL_EXT_semaphore_fd GL_EXT_shader_texture_lod GL_EXT_shadow_samplers GL_EXT_texture_border_clamp GL_EXT_texture_compression_bptc GL_EXT_texture_compression_dxt1 GL_EXT_texture_compression_rgtc GL_EXT_texture_compression_s3tc_srgb GL_EXT_texture_filter_anisotropic GL_EXT_texture_format_BGRA8888 GL_EXT_texture_mirror_clamp_to_edge GL_EXT_texture_norm16 GL_EXT_texture_rg GL_EXT_texture_sRGB_R8 GL_EXT_texture_sRGB_decode GL_EXT_texture_shadow_lod GL_EXT_texture_storage GL_EXT_unpack_subimage GL_KHR_blend_equation_advanced GL_KHR_blend_equation_advanced_coherent GL_KHR_debug GL_KHR_parallel_shader_compile GL_KHR_robustness GL_KHR_texture_compression_astc_hdr GL_KHR_texture_compression_astc_ldr GL_KHR_texture_compression_astc_sliced_3d GL_NV_fence GL_NV_framebuffer_blit GL_NV_pack_subimage GL_NV_pixel_buffer_object GL_NV_polygon_mode GL_NV_read_depth GL_NV_read_stencil GL_NV_robustness_video_memory_purge GL_NV_shader_noperspective_interpolation GL_OES_EGL_image GL_OES_EGL_image_external GL_OES_EGL_image_external_essl3 GL_OES_EGL_sync GL_OES_compressed_ETC1_RGB8_texture GL_OES_depth24 GL_OES_depth32 GL_OES_depth_texture GL_OES_draw_buffers_indexed GL_OES_element_index_uint GL_OES_fbo_render_mipmap GL_OES_get_program_binary GL_OES_mapbuffer GL_OES_packed_depth_stencil GL_OES_rgb8_rgba8 GL_OES_sample_variables GL_OES_shader_multisample_interpolation GL_OES_standard_derivatives GL_OES_surfaceless_context GL_OES_texture_3D GL_OES_texture_border_clamp GL_OES_texture_float GL_OES_texture_float_linear GL_OES_texture_half_float GL_OES_texture_half_float_linear GL_OES_texture_npot GL_OES_texture_stencil8 GL_OES_texture_storage_multisample_2d_array GL_OES_vertex_array_object ",
+							"glImplementationParts": "(gl=egl-angle,angle=opengl)",
+							"glRenderer": "ANGLE (NVIDIA Corporation, NVIDIA GeForce RTX 5090/PCIe/SSE2, OpenGL ES 3.2 NVIDIA 615.78.08)",
+							"glResetNotificationStrategy": 33362,
+							"glVendor": "Google Inc. (NVIDIA Corporation)",
+							"glVersion": "OpenGL ES 3.0 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"glWsExtensions": "EGL_EXT_create_context_robustness EGL_KHR_create_context EGL_KHR_image EGL_KHR_image_base EGL_KHR_gl_colorspace EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_renderbuffer_image EGL_KHR_get_all_proc_addresses EGL_KHR_fence_sync EGL_KHR_wait_sync EGL_ANGLE_create_context_webgl_compatibility EGL_CHROMIUM_create_context_bind_generates_resource EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_surfaceless_context EGL_ANGLE_display_texture_share_group EGL_ANGLE_display_semaphore_share_group EGL_ANGLE_create_context_client_arrays EGL_ANGLE_program_cache_control EGL_ANGLE_robust_resource_initialization EGL_ANGLE_create_context_extensions_enabled EGL_ANDROID_blob_cache EGL_ANDROID_recordable EGL_ANDROID_native_fence_sync EGL_ANGLE_create_context_backwards_compatible EGL_KHR_no_config_context EGL_KHR_create_context_no_error EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_NV_robustness_video_memory_purge EGL_KHR_reusable_sync EGL_ANGLE_external_context_and_surface EGL_EXT_buffer_age EGL_ANGLE_context_virtualization EGL_ANGLE_memory_usage_report EGL_ANGLE_create_context_passthrough_shaders ",
+							"glWsVendor": "Google Inc. (NVIDIA Corporation)",
+							"glWsVersion": "1.5 (ANGLE 2.1.29097 git hash: 751417514a52)",
+							"hardwareSupportsVulkan": true,
+							"inProcessGpu": false,
+							"initializationTime": 0.155607,
+							"isAsan": false,
+							"isClangCoverage": false,
+							"jpegDecodeAcceleratorSupported": false,
+							"maxMsaaSamples": "8",
+							"optimus": false,
+							"passthroughCmdDecoder": true,
+							"pixelShaderVersion": "3.00",
+							"processCrashCount": 0,
+							"sandboxed": false,
+							"skiaBackendType": "GaneshGL",
+							"subpixelFontRendering": true,
+							"targetCpuBits": 64,
+							"vertexShaderVersion": "3.00",
+							"visibilityCallbackCallCount": 0
+						},
+						"featureStatus": {
+							"2d_canvas": "enabled",
+							"direct_rendering_display_compositor": "disabled_off_ok",
+							"gpu_compositing": "enabled",
+							"multiple_raster_threads": "enabled_on",
+							"opengl": "enabled_on",
+							"rasterization": "enabled",
+							"skia_graphite": "disabled_off",
+							"trees_in_viz": "disabled_off",
+							"video_decode": "enabled",
+							"video_encode": "disabled_software",
+							"vulkan": "disabled_off",
+							"webgl": "enabled",
+							"webgpu": "enabled",
+							"webgpu_on_vk_via_gl_interop": "enabled",
+							"webnn": "disabled_off"
+						},
+						"driverBugWorkarounds": [
+							"disable_discard_framebuffer",
+							"disable_rgb_to_yuv_conversion",
+							"enable_webgl_timer_query_extensions",
+							"exit_on_context_lost",
+							"unpack_overlapping_rows_separately_unpack_buffer",
+							"disabled_extension_GL_KHR_blend_equation_advanced",
+							"disabled_extension_GL_KHR_blend_equation_advanced_coherent"
+						],
+						"videoDecoding": [],
+						"videoEncoding": []
+					},
+					"modelName": "",
+					"modelVersion": "",
+					"commandLine": "/nix/store/ifcs561qwhniaghjwgvyydjcb10z99wx-google-chrome-157.0.8103.38/share/google/chrome/google-chrome --ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --simulate-outdated-no-au=Tue, 31 Dec 2099 23:59:59 GMT --password-store=gnome-libsecret --ozone-platform=wayland --kiosk --app=http://127.0.0.1:32925/?token=private-performance-fixture --window-size=3840,2160 --user-data-dir=/tmp/voxl-perf-epu0dmcg/chrome-profile --no-first-run --no-default-browser-check --remote-debugging-port=0 --autoplay-policy=no-user-gesture-required --flag-switches-begin --flag-switches-end --render-node-override=/dev/dri/renderD128"
+				}
+			},
+			"binaries": {
+				"server": {
+					"path": "/home/callen/work/voxl/target/release/voxl",
+					"sha256": "3c242f1d7f5f016d9367c34d3fb3dbb375f9385e0240454b0768c42607bcd483"
+				},
+				"viewer": {
+					"path": "/home/callen/work/voxl/native/target/release/voxl-viewer",
+					"sha256": "4476d6c08f71ec15485c53ed3efe97903ff02872e6515b40ce2f579b74035bbe"
+				},
+				"scene": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/sukumo/target/release/examples/remote_scene",
+					"sha256": "fe9b6ba958ca10822826332c50a97002d1669d9ddaf1f86bc7059b8533821dc8"
+				},
+				"observer": {
+					"path": "/home/callen/work/voxl/target/release/examples/wayland-observe",
+					"sha256": "bb67b5bb5e9418af361cfadf3bb20a0c4d349d259376a33a2eb3df44979b6146"
+				},
+				"compositor_aizome": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+					"sha256": "e68afadabc4397ea235337b3b98c280b5a9f03a96f3a61c9ee24be81f7e59236"
+				},
+				"compositor_libaizome_comp_core.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_core.so",
+					"sha256": "d006fb190cdf22f1c0b130af9b0b7ffd5c1fbfc0cebf62c3cc81ed51d58c7822"
+				},
+				"compositor_libaizome_comp_logic.so": {
+					"path": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/libaizome_comp_logic.so",
+					"sha256": "908014e262ffd640a16c853fc975fc5b9428a2fdac167e130fee07d393260c15"
+				}
+			},
+			"aizome": {
+				"response": "version",
+				"version": "0.1.0",
+				"protocol": 1,
+				"pid": 1019252,
+				"exe": "/home/callen/.codex/worktrees/native-remote-desks/sekka/desktop/aizome/target/release/aizome",
+				"build": {
+					"abi": "05b6acd2c532fbc4d8c2f065e6bae94ae91ca1737419bf4c971f4ca0961cc582",
+					"abi_parts": "build=0a77aafda8a7 lock=b56393442a08 sources=08c645063a4f toolchain=599382c3ad3e",
+					"explicit_target": false,
+					"opt_level": "3",
+					"profile": "release",
+					"rustc": "rustc 1.99.0 (b940084d7 2026-09-28) (built from a source tarball)",
+					"rustflags": "",
+					"sources": "aizome-apps=9dac72e41145 aizome-comp-core=3bccdfad38d0 aizome-config=a0c390fe758d aizome-ipc=5d3f2c0bbd43 aizome-remote-protocol=1a2750e98190 aizome-theme=90fed2c20b45 sidestep-engine=c656e3c570b3 sidestep-ui=2e1046d50175 simdutf8=157e632b865f",
+					"target": "x86_64-unknown-linux-gnu",
+					"version": "0.1.0"
+				}
+			},
+			"evidence": "/tmp/voxl-perf-epu0dmcg",
+			"link": {
+				"method": "Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation",
+				"totals_including_warmup": {
+					"up": {
+						"bytes": 15410,
+						"peak_queued_bytes": 697
+					},
+					"down": {
+						"bytes": 1157820,
+						"peak_queued_bytes": 51658
+					}
+				}
+			},
+			"name": "4k-gpu-browser-1mbps-100ms",
+			"saved_evidence": "/home/callen/work/voxl/target/perf-baseline/sukumo-slowlink-video/evidence/4k-gpu-browser-1mbps-100ms"
+		}
+	]
+}

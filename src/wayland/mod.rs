@@ -20,6 +20,9 @@ pub struct Settings {
     pub output: Option<String>,
     pub socket: Option<String>,
     pub cursor: bool,
+    /// Drawing assets can contain more data than the visible pixel image.
+    /// Only the source owner can authorize that richer sharing capability.
+    pub native_widgets: bool,
     pub video_backend: String,
     // Parse and validate the same options in CPU-only builds as GPU builds.
     #[cfg_attr(not(feature = "gpu"), allow(dead_code))]
@@ -32,6 +35,7 @@ static SETTINGS: Mutex<Settings> = Mutex::new(Settings {
     output: None,
     socket: None,
     cursor: false,
+    native_widgets: false,
     video_backend: String::new(),
     gpu_preset: 1,
     gpu_quality: 24.0,
@@ -74,6 +78,7 @@ pub fn init(args: &HashMap<String, String>) -> Result<bool, String> {
         video_backend: video_backend.into(),
         gpu_preset,
         gpu_quality,
+        native_widgets: crate::truthy(args.get("native-widgets"), false),
         output: args.get("wayland-output").cloned(),
         socket: args.get("aizome-socket").cloned(),
         cursor: crate::truthy(

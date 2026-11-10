@@ -245,7 +245,11 @@ async fn handle_socket(socket: WebSocket, s: AppState) {
             }
             drop(reservation);
             if let Some(written) = scene {
+                #[cfg(target_os = "linux")]
+                let _progress = delivery.scene_progress.lock();
                 delivery.scene_written.store(written, Ordering::Release);
+                #[cfg(target_os = "linux")]
+                delivery.scene_changed.notify_one();
             }
             if dbg && big {
                 log::info!(
@@ -353,8 +357,12 @@ fn handle_text(s: &AppState, c: &Arc<Client>, t: &str, rtts: &mut std::collectio
         }
         "sa" => {
             if let (Some(nonce), Some(serial)) = (num::<u32>(&mut it), num::<u32>(&mut it)) {
+                #[cfg(target_os = "linux")]
+                let _progress = c.scene_progress.lock();
                 if c.scene_nonce.load(Ordering::Acquire) == nonce {
                     c.scene_ack.store(serial, Ordering::Release);
+                    #[cfg(target_os = "linux")]
+                    c.scene_changed.notify_one();
                 }
             }
         }

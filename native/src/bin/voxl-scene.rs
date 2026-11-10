@@ -39,6 +39,15 @@ fn main() -> Result<(), String> {
         .find_map(|s| s.strip_prefix("--freeze-after="))
         .map(|s| s.parse::<u32>().map_err(|_| "invalid freeze frame"))
         .transpose()?;
+    let marker_cell = args
+        .iter()
+        .find_map(|s| s.strip_prefix("--marker-cell="))
+        .map(|s| s.parse::<u32>().map_err(|_| "invalid marker size"))
+        .transpose()?
+        .unwrap_or(8);
+    if !(8..=32).contains(&marker_cell) || 16 + 56 * marker_cell > w {
+        return Err("marker must fit the scene, with cells 8..32 pixels wide".into());
+    }
     let sdl = sdl2::init()?;
     let video = sdl.video()?;
     video
@@ -63,7 +72,7 @@ fn main() -> Result<(), String> {
             (glow::FRAGMENT_SHADER, r#"#version 330 core
 out vec4 color;
 uniform uint stamp, frame_id, checksum;
-uniform int height, width, mode;
+uniform int height, width, mode, marker_cell;
 vec3 document(ivec2 p) {
     int row=p.y/24, dy=p.y%24;
     if(row%17==0) return vec3(.18,.44,.82);
@@ -85,8 +94,8 @@ void main(){
         if(mode==2 && p.x>bx && p.x<bx+240 && p.y>by && p.y<by+200)
             c=document(ivec2(p.x-bx+40,p.y-by));
     }
-    if(p.x>=16 && p.x<464 && p.y>=16 && p.y<32){
-        int bit=(p.x-16)/8;
+    if(p.x>=16 && p.x<16+56*marker_cell && p.y>=16 && p.y<16+2*marker_cell){
+        int bit=(p.x-16)/marker_cell;
         uint v=bit<32?((stamp>>uint(bit))&1u):bit<48?((frame_id>>uint(bit-32))&1u):((checksum>>uint(bit-48))&1u);
         c=vec3(float(v));
     }
@@ -144,6 +153,7 @@ void main(){
                 ("width", w as i32),
                 ("height", h as i32),
                 ("mode", workload),
+                ("marker_cell", marker_cell as i32),
             ] {
                 gl.uniform_1_i32(gl.get_uniform_location(program, name).as_ref(), value);
             }

@@ -4,6 +4,8 @@ The fixture server sends the real wire format and malformed variants. SDL's
 dummy audio driver consumes playback without using the login session's devices.
 """
 import asyncio
+import base64
+import copy
 import json
 import os
 from pathlib import Path
@@ -162,6 +164,22 @@ async def main():
         forged=bytearray(compressed[0]);forged[9:13]=(0xffffffff).to_bytes(4,"little")
         await run_case("scene-zlib-expansion-limit",[hello,packet(encoded),bytes(forged)],widgets=True,scene_frames=0,fallback=True)
         await run_case("scene-zlib-reconnect-epoch",[hello,packet(encoded),compressed[0],hello,packet(encoded)]+compressed_frames([frame],nonce=2),widgets=True,scene_frames=2)
+        glyph=copy.deepcopy(frame)
+        glyph["masks"]=[{"id":1,"width":2,"height":2,"alpha":base64.b64encode(bytes([0,64,128,255])).decode()}]
+        glyph["batches"][0]["ops"].append({"MaskGlyphs":{"glyphs":[[1,10,10]],"color":[1,0.2,0.1,0.7],"clip":[0,0,320,240]}})
+        delta=copy.deepcopy(glyph);delta.update(serial=2,full=False,masks=[])
+        delta["batches"][0]["ops"][-1]["MaskGlyphs"]["color"]=[0.1,0.8,0.2,1]
+        await run_case("scene-cached-glyph-delta",[hello,packet(encoded)]+compressed_frames([glyph,delta]),widgets=True,scene_frames=2)
+        await run_case("scene-missing-glyph",[hello,packet(encoded),scene_packet(dict(glyph,masks=[]))],widgets=True,scene_frames=0,fallback=True)
+        bad=copy.deepcopy(glyph);bad["masks"][0]["width"]=3
+        await run_case("scene-invalid-glyph-length",[hello,packet(encoded),scene_packet(bad)],widgets=True,scene_frames=0,fallback=True)
+        bad=copy.deepcopy(glyph);bad["masks"].append(copy.deepcopy(bad["masks"][0]))
+        await run_case("scene-duplicate-glyph",[hello,packet(encoded),scene_packet(bad)],widgets=True,scene_frames=0,fallback=True)
+        bad=copy.deepcopy(glyph);bad["batches"][0]["ops"][-1]["MaskGlyphs"]["glyphs"]=[[1,10,10]]*8192
+        await run_case("scene-expanded-glyph-limit",[hello,packet(encoded),scene_packet(bad)],widgets=True,scene_frames=0,fallback=True)
+        if os.environ.get("VOXL_OLD_RENDERER"):
+            await run_case("scene-old-renderer-pixel-fallback",[hello,packet(encoded),scene_packet(glyph)],widgets=True,scene_frames=0,fallback=True,
+                environment={"AIZOME_REMOTE_RENDERER":os.environ["VOXL_OLD_RENDERER"]})
     (EVIDENCE / "result.json").write_text(json.dumps(results, indent=2) + "\n")
 
 

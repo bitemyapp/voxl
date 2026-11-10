@@ -178,7 +178,9 @@ fn run(cap: &mut Capturer, cfg: &VideoConfig, hub: &Hub) -> Result<(), String> {
             continue;
         }
         rate.update(hub, &clients);
-        if !flow_ok(hub, interval.as_secs_f64() * 1000.0) {
+        if !flow_ok(hub, interval.as_secs_f64() * 1000.0)
+            || !byte_window_available(hub, interval.as_secs_f64() * 1000.0)
+        {
             hub.stats.flow_blocked.fetch_add(1, Ordering::Relaxed);
             wait_any(&[cap.fd(), hub.waker.waitable()], 5);
             continue;
@@ -264,5 +266,64 @@ fn run(cap: &mut Capturer, cfg: &VideoConfig, hub: &Hub) -> Result<(), String> {
         if keyframe {
             hub.stats.keyframes.fetch_add(1, Ordering::Relaxed);
         }
+    }
+}
+
+/// Rate control is a request to the hardware, not a bound on the next frame's
+/// size. In particular a complex 4K frame can exceed a one-frame VBV budget.
+/// Bound queued bytes as well as frame count: one RTT plus one frame interval
+/// lets a healthy link stay busy, without buffering many oversized frames.
+fn byte_window_available(hub: &Hub, interval_ms: f64) -> bool {
+    let target = hub.target_kbps.load(Ordering::Relaxed);
+    if target == 0 {
+        // No rate cap: retain the existing frame/age flow-control bounds.
+        return true;
+    }
+    let bytes_per_ms = f64::from(target) / 8.0;
+    hub.video_clients().iter().all(|c| {
+        let rtt = match c.min_rtt_ms.load(Ordering::Relaxed) {
+            0 => 40,
+            r => r,
+        };
+        let budget = (bytes_per_ms * (f64::from(rtt) + interval_ms)).max(1024.0) as usize;
+        let inflight = c.inflight.lock();
+        inflight.is_empty() || inflight.iter().map(|f| f.bytes).sum::<usize>() < budget
+    })
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn oversized_frames_wait_for_delivery_without_blocking_an_empty_link() {
+        let hub = Hub::new();
+        let (tx, _rx) = tokio::sync::mpsc::unbounded_channel();
+        let client = hub.add_client(tx);
+        client.video.store(true, Ordering::Relaxed);
+        client.min_rtt_ms.store(40, Ordering::Relaxed);
+        hub.target_kbps.store(2000, Ordering::Relaxed);
+        assert!(byte_window_available(&hub, 1000.0 / 60.0));
+        // A single 30 KB frame already exceeds this 14 KB link window.
+        client.inflight.lock().push_back(Inflight {
+            id: 1,
+            sent: Instant::now(),
+            bytes: 30_000,
+        });
+        assert!(!byte_window_available(&hub, 1000.0 / 60.0));
+        hub.target_kbps.store(0, Ordering::Relaxed);
+        assert!(byte_window_available(&hub, 1000.0 / 60.0));
+        hub.target_kbps.store(2000, Ordering::Relaxed);
+        client.on_ack(1);
+        assert!(byte_window_available(&hub, 1000.0 / 60.0));
+        for id in 2..=3 {
+            client.inflight.lock().push_back(Inflight {
+                id,
+                sent: Instant::now(),
+                bytes: 8000,
+            });
+        }
+        assert!(!byte_window_available(&hub, 1000.0 / 60.0));
+        client.on_ack(2);
+        assert!(byte_window_available(&hub, 1000.0 / 60.0));
     }
 }

@@ -41,13 +41,17 @@ Desktop audio plays natively; F8 mutes it and `--no-audio` starts muted. Native
 microphone, image clipboard and file-transfer controls are still being developed;
 the browser continues to provide those features.
 
-With the optional Aizome renderer installed, F9 switches supported fullscreen
+With the optional Aizome renderer installed and `--native-widgets=true` enabled
+on the server, F9 switches supported fullscreen
 Sukumo windows to native drawing replay. Text and paths retain their original
 pixels, and the viewer updates only damaged areas. Popups, other toolkits, and
 unsupported scenes automatically use video. Replay starts off; `--native-widgets`
 enables it when connecting. The title bar shows whether it is active or using
 video. This currently requires the matching Aizome/Sukumo changes in this fork's
 companion Sekka branch and a cursor-free share.
+Replay shares drawing commands and cached assets, which can include clipped or
+occluded data beyond the final visible pixels. The server option is off by
+default; enable it for trusted Remote Desks viewers.
 
 Window selection, remote display creation, and viewer-controlled display resizing
 are not yet available on Wayland. The browser uses a

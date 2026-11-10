@@ -18,10 +18,10 @@ from PIL import Image
 import websockets
 
 
-def marker(plane, stride):
+def marker(plane, stride, cell=8):
     word=0
     for bit in range(56):
-        if plane[24*stride+(16+bit*8+4)]>125:word|=1<<bit
+        if plane[(16+cell)*stride+(16+bit*cell+cell//2)]>125:word|=1<<bit
     raw=word.to_bytes(7,"little")
     check=0xa5
     for value in raw[:6]:check^=value
@@ -49,7 +49,7 @@ def score(reference,decoded,path):
         "ssim":float(match[1]) if match else None}
 
 
-async def measure(base,evidence,target_frame):
+async def measure(base,evidence,target_frame,cell=8):
     password="private-performance-fixture"
     frames=deque(maxlen=16)
     codec=av.CodecContext.create("h264","r")
@@ -68,7 +68,7 @@ async def measure(base,evidence,target_frame):
                 bitstream.write(message[16:])
                 for frame in codec.decode(av.Packet(message[16:])):
                     plane=frame.planes[0]
-                    fid=marker(memoryview(plane),plane.line_size)
+                    fid=marker(memoryview(plane),plane.line_size,cell)
                     if fid is not None:frames.append((fid,message[1],frame))
                 await ws.send("a,"+str(int.from_bytes(message[2:6],"big")))
         reader=asyncio.create_task(receive())
@@ -85,7 +85,7 @@ async def measure(base,evidence,target_frame):
             reference.save(evidence/"reference.png")
             # The marker's white/black luminance is independent of chroma format.
             gray=np.asarray(reference.convert("L")).reshape(-1)
-            fid=marker(gray,reference.width)
+            fid=marker(gray,reference.width,cell)
             assert fid==target_frame,("reference differs from the fixed comparison frame",fid,target_frame)
             deadline=asyncio.get_running_loop().time()+2
             moving=None

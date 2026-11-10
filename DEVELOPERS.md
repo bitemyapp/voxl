@@ -210,6 +210,13 @@ and remaining work.
 
 ## Optional Aizome retained drawing
 
+The source owner must enable `voxl --native-widgets=true`; the default share is
+pixel-only even if a remote viewer requests replay. Drawing commands and cached
+font/image/glyph assets can include clipped or occluded data beyond the visible
+pixels, so this is a separate trusted-viewer capability. The viewer's F9 toggle
+selects it only after that source-side authorization. The check precedes any IPC
+subscription or producer activation, including for read-only viewers.
+
 The companion Sekka branch supplies `aizome_remote_paint_v1`, a data-only producer
 protocol, and the separate Sukumo package `aizome-remote-renderer`. Build them
 through Sekka's root flake and its existing development shell:
@@ -273,7 +280,19 @@ each reconnect. The transport allows eight unacknowledged frames and 32 MiB of
 retained websocket data across dictionary/worker restarts; dequeueing a message
 does not release its budget before the socket write completes. ACKs cannot free
 unwritten messages. One IPC worker per client coalesces rapid toggle changes;
-a stalled replay returns to video.
+a full window pauses IPC consumption until delivery. A stalled replay returns to
+video after two seconds without acknowledgement. A two-second catch-up period
+after first delivery lets bootstrap traffic drain; thereafter sustained
+backpressure returns to video after half a second, preventing steadily
+acknowledged but increasingly stale animation. All queues remain bounded.
+
+Matching Sukumo producers use cached final-scale glyph coverage instead of
+transferring whole outline-font files. Cache identity includes face/variation,
+size and subpixel phase; subsequent paint sends ids, positions and colors.
+Color glyphs retain full-font replay. Expanded glyph placements count toward the
+8,192-operation budget, and masks share the asset byte budget. Older renderer
+libraries reject the new drawing operation and return to pixels. Use
+`AIZOME_REMOTE_GLYPHS=font` in the source app to keep the full-font baseline.
 
 `bench/native-scene.py` runs the real Sukumo fixture between two private Aizomes.
 Set `AIZOME_BIN`, `AIZOME_SCENE_FIXTURE`, and `AIZOME_REMOTE_RENDERER` to matching
@@ -285,3 +304,13 @@ adds malformed/stale/gapped retained states when the renderer variable is set.
 `bench/native-perf.py --source=sukumo --native-widgets --viewer=cuda --encoder=gpu`
 uses the same independent marker observer as the video/browser measurements.
 Omit `--native-widgets` for the same application over ordinary video.
+`--glyph-transfer=font` selects the source's full-font baseline; the default is
+`mask`. Retained startup time includes viewer process/window/network/renderer
+readiness, polled at 50 ms, separately from warmed-up scene-age samples.
+
+`--link-mbps=5 --link-delay-ms=20` routes only the streamed connection through a
+bounded private TCP proxy (40 ms round-trip propagation). Run `bench/link.py`
+for calibration and open-client teardown checks. It models serialization and
+propagation, not loss or a real WAN congestion controller. Invalid marker pixels
+invalidate timing/frame-rate scores. `--marker-cell=16` can help diagnose codec
+damage on GL scenes; it is not a substitute for valid markers.

@@ -271,7 +271,9 @@ impl RateCtl {
         RateCtl {
             target: START_KBPS.min(max),
             max,
-            min,
+            // A low explicit ceiling must also cap the default minimum. Under
+            // congestion, max(min) otherwise raises a 900 kbps session to 2 Mbps.
+            min: min.min(max),
             last_eval: past,
             last_dec: past,
             last_inc: past,
@@ -1364,6 +1366,21 @@ fn marker_age(ms: i64) -> i64 {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn congestion_never_raises_a_ceiling_below_the_default_floor() {
+        let hub = Hub::new();
+        let (tx, _rx) = tokio::sync::mpsc::unbounded_channel();
+        let client = hub.add_client(tx);
+        client.started.store(true, Ordering::Relaxed);
+        client.delay.lock().queue_ms = 60.0;
+        client.delivered.lock().rate_bps = 800_000.0;
+        let mut rc = RateCtl::new(900.0, 2000.0);
+        rc.update(&hub, &[client]);
+        assert_eq!(hub.target_kbps.load(Ordering::Relaxed), 900);
+        assert!(rc.target <= rc.max);
+        assert!(!rc.slow_start);
+    }
 
     const W: usize = 1280;
     const H: usize = 768;

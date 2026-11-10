@@ -212,3 +212,110 @@ at 1.25x with the rebuilt compositor: `/tmp/voxl-native-7hg3tkqd`.
 Package: `/nix/store/53hs2lqk4xvcpkyb8wnqr0zdhn1q7y0d-voxl-viewer-0.1.0`.
 The renderer library was selected by the package wrapper, without an explicit
 test override. Release compositor Clippy/build and final web checks pass.
+
+## Constrained-link evaluation in progress
+
+Retained checkpoint `9eed4ed` and Sekka `ccf4dc4a` are pushed to draft PRs #2/#382.
+Portable producer warnings were fixed in Voxl `4e17ce9`; all five CI jobs pass,
+including Windows smoke. Final package outputs at that checkpoint include
+server `/nix/store/9ayyvbczs26nwc336idbym1i9y0bacn4-voxl-0.3.4` and renderer
+`/nix/store/z1jbq45fv5ahklkrgr7ndfl25wxjyki3-aizome-remote-renderer-0.1.0`.
+
+Added a private bounded TCP link emulator, calibrated against a 1 Mbit/s echo
+with 25 ms propagation per direction: measured 1.09976 s versus expected
+1.098576 s. It models reliable ordered bytes, propagation and serialization,
+not real packet loss/congestion. No host networking is altered. Python 3.12+
+server shutdown waits for active transports, so teardown must cancel/close those
+before waiting for the listener; open-client teardown is explicitly checked.
+
+A 5 Mbit/s / 40 ms round-trip experiment exposed retained startup backpressure:
+the initial asset transfer could fill eight outstanding messages and incorrectly
+trigger pixel fallback. The worker now stops reading IPC until delivery ACKs free
+space; a stalled viewer still times out and sustained backpressure after bootstrap
+returns to fresh video instead of accumulating increasingly old paint. Socket
+writes and ACKs signal the same progress condition to avoid missed wakeups.
+The first fixed 4K Sukumo run stays native, 23/25 ms median/p95, 59.26 valid
+marker frames/s, zero video bytes and 472,051 retained bytes per 15 seconds:
+`/tmp/voxl-perf-7jlwvo3r`. Live replay regression passed again at
+`/tmp/voxl-native-1ps0klo1`. Later pressure-age/wakeup refinements still need the
+same integration regression before committing.
+
+High-motion 4K video at this link budget is more difficult. GPU P1 queued large
+encoded frames (about 242 ms median / 337 ms p95); simply changing VBR to CBR,
+raising presets P3/P5/P7 or explicitly permitting QP 51 did not fix that. These
+experimental encoder changes were removed. Evidence: `target/perf-baseline/
+link-{5mbps-40ms,rate-control,presets}/`, `/tmp/voxl-perf-26yvl91c` (NVENC trace),
+and `/tmp/voxl-perf-6i6mwsu7` (explicit QP bound). The trace requested 2 Mbit/s
+but still produced ~30 KB frames at reported average QP 47. A GPU-specific
+byte window is now being tested to prevent oversized frames from building a long
+queue while retaining the newest captured content.
+
+At the same budget CPU H.264 frequently corrupts the timestamp/checksum marker;
+its resulting apparent latency/fps cannot be compared fairly. Enlarging cells
+from 8 to 16 pixels did not repair that. The harness now rejects latency/fps
+scores whenever the marker integrity check fails, retains diagnostic observations,
+and records absolute final server state alongside deltas. Earlier reported LAN
+and Sukumo cells have no invalid markers. Broader fixed-frame quality and the
+new GPU byte-window measurements are the next checks.
+
+## Link and glyph-cache validation
+
+The controlled GPU byte-window matrix is complete: two repeats per old/new
+server and LAN/5 Mbit/s 40 ms link. Saturated 4K animation changes from
+242–243 ms median / 336–339 ms p95 to 130–133 / 140 ms, trading roughly 15.8 fps
+for 7 fps. LAN remains 8/9 ms at about 60 fps. The report preserves this tradeoff,
+not a universal network-performance claim. Six additional fixed-frame quality
+cases are complete; GPU improves overall SSIM on these samples but has worse
+4K-animation edge error than CPU. Reports are in `docs/benchmarks/`.
+
+A 1 Mbit/s startup probe found that full-font dictionaries exceeded the two-second
+ACK guard. Sekka `4e1e2eee` now exports final-scale glyph masks from the actual
+shared text cache, with face/variation/size/subpixel identity, cached placements
+and exact Alpha8 blending. Full-font transfer remains selectable and handles
+color glyphs. Byte/expanded-operation budgets remain enforced. Four replay tests
+cover six scales, synthetic/variable faces, groups/shadows, recoloring, missing
+and duplicate assets; five existing glyph raster tests pass (two performance
+benchmarks remain ignored). Protocol/ABI tests and all-target Clippy pass.
+
+Packaged renderer `/nix/store/8lrjhy21djz5gbnf44359icxjyq34pc6-aizome-remote-renderer-0.1.0`
+passes the CPU/full-font baseline integration at `/tmp/voxl-native-69_cxry2`.
+Cached-glyph GPU integration at 1.25x passes all 12 checks with zero differing RGB
+pixels at `/tmp/voxl-native-7_sxozn1`. The new pressure guard allows a bounded
+two-second catch-up after first ACK, because the initial video keyframe can leave
+a temporary backlog even when steady replay fits. Truly stalled frames still
+expire after two seconds; sustained slow acknowledgement still selects video.
+
+Ten serial glyph/link samples, two per configuration, are preserved in
+`target/perf-baseline/glyph-link/` and the committed report. At 5 Mbit/s / 40 ms,
+readiness is 1,517–1,518 ms with fonts versus 304 ms with masks; bytes sent by
+readiness fall from ~762 KB to ~14 KB. At 1 Mbit/s / 100 ms, cached replay starts
+in 510–556 ms and remains native at ~59.24 fps, 56 ms median / 59–60 ms p95.
+LAN remains 2/3 ms. Readiness is a coarse 50 ms-polled process/window/network/
+renderer observation; it is not first scanout. Same-scene slow-link video controls
+and final package/regression checks are underway.
+
+Final component checks: 33 GPU-feature and 32 CPU-only server tests pass (one
+existing benchmark ignored in each), both Clippy configurations pass with the
+three documented upstream/new-toolchain exceptions, and all seven native tests
+plus strict Clippy pass. Web format/lint/types pass in the pinned Node environment.
+The expanded viewer fault suite passes 28 cases at
+`/tmp/voxl-native-faults-y85jt00s`, including malformed/missing/duplicate glyph
+assets, expanded-operation bounds and successful video fallback with the older
+renderer library.
+
+Added source-owner authorization: `--native-widgets=true` is required on the
+server, independently of F9 in the viewer. Cached assets/drawing can include
+clipped or occluded data beyond the final visible pixels, so ordinary pixel
+sharing must not implicitly grant that capability. A unit regression checks
+refusal before worker/IPC activation; the live suite now also opens a second,
+default read-only server and verifies that it refuses state while delivering
+ordinary video. All 13 packaged replay checks pass with exact 1.25x RGB output
+at `/tmp/voxl-native-doj4ycy7`.
+
+Current rooted Nix outputs: server
+`/nix/store/976hcg2ib2d60f818qsi5d7hk1lww3cj-voxl-0.3.4`, viewer
+`/nix/store/v5g1fw5mbwl19adiq1v6wn3jwlg7qasx-voxl-viewer-0.1.0`, and its default
+renderer `/nix/store/aw568pg3q39rrq3341wiza7mpvxr5pac-aizome-remote-renderer-0.1.0`.
+The renderer comes from the local Sekka root flake. Remaining closure checks use
+only the graphics-driver library directory, without the development library path;
+final timing confirmation will use these exact packaged binaries.

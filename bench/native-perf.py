@@ -8,6 +8,7 @@ import argparse
 import asyncio
 import hashlib
 import json
+import math
 import os
 from pathlib import Path
 import socket
@@ -23,10 +24,14 @@ parser.add_argument("--viewer", choices=["local", "browser", "cpu", "cuda", "aut
 parser.add_argument("--source", choices=["gl", "sukumo"], default="gl")
 parser.add_argument("--native-widgets", action="store_true")
 parser.add_argument("--scene-compression",choices=["none","zlib"],default="zlib")
+parser.add_argument("--glyph-transfer",choices=["mask","font"],default="mask",help="Sukumo cached coverage or full-font baseline")
+parser.add_argument("--link-mbps",type=float,default=0,help="private reliable-link byte cap per direction; zero means uncapped")
+parser.add_argument("--link-delay-ms",type=float,default=0,help="private link propagation delay per direction")
 parser.add_argument("--encoder", choices=["cpu", "gpu"], default="cpu")
 parser.add_argument("--size", default="1920x1080")
 parser.add_argument("--workload", choices=["scroll", "animation", "drag", "idle"], default="scroll")
 parser.add_argument("--fps", type=int, default=60)
+parser.add_argument("--marker-cell",type=int,default=8,choices=range(8,33))
 parser.add_argument("--seconds", type=int, default=15)
 parser.add_argument("--warmup", type=int, default=5)
 parser.add_argument("--kbps", type=int, default=30000)
@@ -35,13 +40,20 @@ parser.add_argument("--crf", type=float, default=24)
 parser.add_argument("--gpu-preset", default="P1")
 parser.add_argument("--quality", action="store_true",help="separate image-quality run; does not collect timing/CPU scores")
 args = parser.parse_args()
+if not all(math.isfinite(v) and v >= 0 for v in (args.link_mbps,args.link_delay_ms)):
+    parser.error("link rate and delay must be finite and nonnegative")
 if args.native_widgets and (args.source!="sukumo" or args.viewer in ("local","browser")):
     parser.error("native widgets require the Sukumo source and a native viewer")
 if args.quality and (args.source!="gl" or args.viewer=="local" or args.stripes!=1):
     parser.error("quality runs require a streamed viewer and one stripe")
+if (args.link_mbps or args.link_delay_ms) and (args.quality or args.viewer=="local"):
+    parser.error("link emulation requires a streamed timing run")
 width, height = map(int, args.size.split("x"))
+if 16+56*args.marker_cell>width or (args.source=="sukumo" and args.marker_cell!=8):
+    parser.error("marker must fit the output; Sukumo fixture uses 8-pixel cells")
 EVIDENCE = Path(tempfile.mkdtemp(prefix="voxl-perf-"))
 children = []
+link = None
 env = os.environ.copy()
 for key in ("DISPLAY", "WAYLAND_SOCKET", "AIZOME_SOCKET", "WAYLAND_DISPLAY", "AIZOME_LOGIC"):
     env.pop(key, None)
@@ -49,7 +61,7 @@ for key in ("XDG_RUNTIME_DIR", "XDG_CONFIG_HOME", "XDG_STATE_HOME", "XDG_DATA_HO
     directory = EVIDENCE / key.lower()
     directory.mkdir(mode=0o700)
     env[key] = str(directory)
-env.update(VOXL_PASSWORD="private-performance-fixture", RUST_LOG="info", SDL_VIDEODRIVER="wayland")
+env.update(VOXL_PASSWORD="private-performance-fixture", RUST_LOG=os.environ.get("VOXL_BENCH_LOG","info"), SDL_VIDEODRIVER="wayland")
 
 
 def environment(name):
@@ -109,6 +121,7 @@ def resources(root):
 
 
 async def main():
+    global link
     binaries={}
     for name,path in {
         "server":os.environ.get("VOXL_BIN",str(ROOT/"target/release/voxl")),
@@ -132,13 +145,17 @@ async def main():
             "--headless-output", f"TEST={args.size}@1"], environment_).pid
         await until(lambda: ipc(environment_, {"request":"version"}), f"{name} unavailable")
     if args.source=="sukumo":
-        roots["scene"]=start("scene",[os.environ["AIZOME_SCENE_FIXTURE"]],dict(source,AIZOME_SCENE_BENCH="1")).pid
+        roots["scene"]=start("scene",[os.environ["AIZOME_SCENE_FIXTURE"]],dict(source,AIZOME_SCENE_BENCH="1",AIZOME_REMOTE_GLYPHS=args.glyph_transfer)).pid
     else:
         roots["scene"] = start("scene", [os.environ.get("VOXL_SCENE",str(ROOT/"native/target/release/voxl-scene")),
             str(width),str(height),str(args.fps),str(args.warmup+args.seconds+60),args.workload]
+            + [f"--marker-cell={args.marker_cell}"]
             + ([f"--freeze-after={args.fps*(args.warmup+1)}"] if args.quality else []), source).pid
     await until(lambda: ipc(source,{"request":"windows"})["windows"], "scene unavailable")
     base = None
+    viewer_started = None
+    retained_startup_ms = None
+    retained_startup_stats = None
     if args.viewer != "local":
         with socket.socket() as sock:
             sock.bind(("127.0.0.1",0));port=sock.getsockname()[1]
@@ -147,9 +164,15 @@ async def main():
             "--capture-backend=wayland",f"--video-backend={args.encoder}",f"--port={port}",
             "--audio-enabled=false","--file-transfers=none",f"--framerate={args.fps}",
             f"--max-kbps={args.kbps}",f"--crf={args.crf}",f"--gpu-quality={args.crf}",
-            f"--stripes={args.stripes}",f"--gpu-preset={args.gpu_preset}"],source).pid
+            f"--stripes={args.stripes}",f"--gpu-preset={args.gpu_preset}",f"--native-widgets={str(args.native_widgets).lower()}"],source).pid
         await until(lambda:b"listening on" in (EVIDENCE/"server.log").read_bytes(),"server unavailable")
         address=base+"/?token=private-performance-fixture"
+        if args.link_mbps or args.link_delay_ms:
+            from link import Link
+            link=Link(port,args.link_mbps,args.link_delay_ms)
+            proxy_port=await link.start()
+            address=f"http://127.0.0.1:{proxy_port}/?token=private-performance-fixture"
+        viewer_started = time.monotonic()
         if args.viewer=="browser":
             profile=EVIDENCE/"chrome-profile"
             roots["viewer"]=start("viewer",[os.environ.get("VOXL_BROWSER","google-chrome"),
@@ -167,18 +190,22 @@ async def main():
         with urllib.request.urlopen(req,timeout=5) as response:return json.load(response)
     if args.quality:
         from quality import measure
-        report={"configuration":vars(args),"quality":await measure(base,EVIDENCE,(args.fps*(args.warmup+1)-1)&0xffff),
+        report={"configuration":vars(args),"quality":await measure(base,EVIDENCE,(args.fps*(args.warmup+1)-1)&0xffff,args.marker_cell),
             "binaries":binaries,"aizome":ipc(source,{"request":"version"}),"evidence":str(EVIDENCE)}
         (EVIDENCE/"result.json").write_text(json.dumps(report,indent=2)+"\n")
         print(json.dumps(report,indent=2),flush=True)
         return
     if args.native_widgets:
         await until(lambda:"Aizome native widgets active" in (EVIDENCE/"viewer.log").read_text(),"retained replay not active")
+        # Includes process/window/network/renderer startup, polled at 50 ms.
+        # It is a coarse end-to-end readiness observation, not first scanout.
+        retained_startup_ms = round((time.monotonic()-viewer_started)*1000)
+        retained_startup_stats = stats()
     await asyncio.sleep(args.warmup)
     before_stats=stats()
     before={name:resources(pid) for name,pid in roots.items()}
     start_time=time.monotonic()
-    observer=start("observer",[str(ROOT/"target/release/examples/wayland-observe"),str(args.seconds)],
+    observer=start("observer",[str(ROOT/"target/release/examples/wayland-observe"),str(args.seconds),str(args.marker_cell)],
                    source if args.viewer=="local" else receiver)
     await until(lambda:observer.poll() is not None,"observer stalled",args.seconds+15)
     assert observer.returncode==0,(EVIDENCE/"observer.log").read_text()
@@ -190,9 +217,12 @@ async def main():
     assert len(age)>0 or args.workload=="idle","no valid displayed frame markers"
     quantile=lambda p:age[min(len(age)-1,int(len(age)*p))] if age else None
     cpu={name:{"core_percent":100*(after[name]["ticks"]-before[name]["ticks"])/os.sysconf("SC_CLK_TCK")/elapsed,
-               "rss_bytes":after[name]["rss_bytes"]} for name in roots}
+               "rss_bytes":after[name]["rss_bytes"],"rss_start_bytes":before[name]["rss_bytes"],
+               "rss_growth_bytes":after[name]["rss_bytes"]-before[name]["rss_bytes"]} for name in roots}
     delta={key:after_stats[key]-value for key,value in before_stats.items()
            if isinstance(value,(int,float)) and isinstance(after_stats.get(key),(int,float))}
+    if args.native_widgets:
+        assert delta.get("retained_frames",0)>0 and delta.get("bytes",0)==0, ("retained measurement fell back to video",delta)
     browser_stats=None
     browser_system=None
     # Preserve the viewer image before opening any diagnostic browser pages.
@@ -206,7 +236,7 @@ async def main():
             cdp=await browser.new_browser_cdp_session()
             browser_system={"version":await cdp.send("Browser.getVersion"),"system":await cdp.send("SystemInfo.getInfo")}
             for page in browser.contexts[0].pages:
-                if page.url.startswith(base):
+                if page.url.startswith(address.split("?",1)[0]):
                     browser_stats=await page.evaluate("({stats:window.voxlStats,width:innerWidth,height:innerHeight,dpr:devicePixelRatio})")
             media=await browser.contexts[0].new_page()
             await media.goto("chrome://media-internals")
@@ -218,18 +248,39 @@ async def main():
             (EVIDENCE/"browser-media.html").write_text(await media.content())
             (EVIDENCE/"browser-media.txt").write_text(await media.locator("body").inner_text())
             await browser.close()
-    report={"configuration":vars(args),"visible_fps":len(age)/observation["seconds"],
-        "age_ms":{"p50":quantile(.5),"p95":quantile(.95),"p99":quantile(.99)},
-        "observation":{"captures":observation["captures"],"invalid":observation["invalid"]},
-        "cpu":cpu,"server_delta":delta,"browser":browser_stats,"browser_system":browser_system,
+    reliable=observation["invalid"]==0
+    quantiles={"p50":quantile(.5),"p95":quantile(.95),"p99":quantile(.99)}
+    report={"configuration":vars(args),"measurement_valid":reliable,
+        "retained_startup_ms":retained_startup_ms,
+        "retained_startup_stats":retained_startup_stats,
+        "visible_fps":len(age)/observation["seconds"] if reliable and args.workload!="idle" else None,
+        "valid_marker_fps":len(age)/observation["seconds"],
+        "age_ms":quantiles if reliable and args.workload!="idle" else {k:None for k in quantiles},
+        "observation":{"captures":observation["captures"],"invalid":observation["invalid"],
+                       "marker_valid_fraction":1-observation["invalid"]/max(1,observation["captures"])},
+        "cpu":cpu,"server_delta":delta,"server_end":after_stats,"browser":browser_stats,"browser_system":browser_system,
         "binaries":binaries,"aizome":ipc(source,{"request":"version"}),"evidence":str(EVIDENCE)}
+    if not reliable and args.workload!="idle":
+        report["rejected_age_ms"]=quantiles
+        report["measurement_rejection"]="Corrupted or expired markers can bias frame counts and admit false timestamps; latency/fps scores are invalid. Raw observations are retained for diagnosis."
+    if args.workload=="idle":
+        report["measurement_note"]="Static source: the old timestamp is not a latency sample. Inspect idle CPU and encoding/byte counters; no scene-age or frame-rate score is reported."
+    if link is not None:
+        report["link"]={"method":"Bounded private TCP proxy; fixed propagation and serialized byte rate per direction, no loss or TCP congestion emulation", "totals_including_warmup":link.stats}
     (EVIDENCE/"result.json").write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2),flush=True)
 
 
+async def run():
+    try:
+        await main()
+    finally:
+        if link is not None:await link.close()
+
+
 if __name__=="__main__":
     try:
-        asyncio.run(main())
+        asyncio.run(run())
     finally:
         for process in reversed(children):
             if process.poll() is None:
