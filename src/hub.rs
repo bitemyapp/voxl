@@ -11,6 +11,8 @@ use tokio::sync::mpsc;
 pub enum Out {
     Bin(Bytes),
     Text(String),
+    // Only the Linux/Aizome producer constructs these; queue tests run everywhere.
+    #[cfg_attr(not(any(target_os = "linux", test)), allow(dead_code))]
     Scene {
         data: Bytes,
         nonce: u32,
@@ -44,6 +46,7 @@ pub struct Client {
     pub audio: AtomicBool,
     pub scene_generation: AtomicU64,
     pub scene_enabled: AtomicBool,
+    #[cfg(target_os = "linux")]
     pub scene_compressed: AtomicBool,
     pub scene_notify: Mutex<Option<std::sync::mpsc::SyncSender<()>>>,
     pub scene_nonce: AtomicU32,
@@ -76,6 +79,7 @@ pub struct RateEst {
 }
 
 impl Client {
+    #[cfg_attr(not(any(target_os = "linux", test)), allow(dead_code))]
     pub fn send_scene(&self, data: Bytes, nonce: u32, serial: u32) -> Result<(), String> {
         let bytes = data.len();
         let mut current = self.scene_bytes.load(Ordering::Acquire);
@@ -365,6 +369,7 @@ impl Hub {
             audio: AtomicBool::new(false),
             scene_generation: AtomicU64::new(0),
             scene_enabled: AtomicBool::new(false),
+            #[cfg(target_os = "linux")]
             scene_compressed: AtomicBool::new(false),
             scene_notify: Mutex::new(None),
             scene_nonce: AtomicU32::new(0),
