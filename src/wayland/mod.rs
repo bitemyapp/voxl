@@ -81,18 +81,20 @@ pub fn dispatch<S: 'static>(
         };
         // Safety: one initialized pollfd, borrowed from the live connection.
         let ready = unsafe { libc::poll(&mut p, 1, timeout) };
-        if ready < 0 {
-            let e = std::io::Error::last_os_error();
-            if e.kind() != std::io::ErrorKind::Interrupted {
-                return Err(e.to_string());
+        match ready.cmp(&0) {
+            std::cmp::Ordering::Less => {
+                let e = std::io::Error::last_os_error();
+                if e.kind() != std::io::ErrorKind::Interrupted {
+                    return Err(e.to_string());
+                }
             }
-        } else if ready > 0 {
-            match guard.read() {
+            std::cmp::Ordering::Greater => match guard.read() {
                 Ok(_) => {}
                 Err(wayland_client::backend::WaylandError::Io(e))
                     if e.kind() == std::io::ErrorKind::WouldBlock => {}
                 Err(e) => return Err(e.to_string()),
-            }
+            },
+            std::cmp::Ordering::Equal => {}
         }
     }
     queue.dispatch_pending(state).map_err(|e| e.to_string())?;

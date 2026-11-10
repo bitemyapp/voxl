@@ -14,8 +14,8 @@ pub struct Band {
 }
 
 enum Backend {
-    X11(crate::x11_capture::Capturer),
-    Wayland(crate::wayland::capture::Capturer),
+    X11(Box<crate::x11_capture::Capturer>),
+    Wayland(Box<crate::wayland::capture::Capturer>),
 }
 
 pub struct Capturer {
@@ -39,9 +39,9 @@ macro_rules! backend {
 impl Capturer {
     pub fn new(display: Option<&str>) -> Result<Self, String> {
         let backend = if crate::wayland::enabled() {
-            Backend::Wayland(crate::wayland::capture::Capturer::new()?)
+            Backend::Wayland(Box::new(crate::wayland::capture::Capturer::new()?))
         } else {
-            Backend::X11(crate::x11_capture::Capturer::new(display)?)
+            Backend::X11(Box::new(crate::x11_capture::Capturer::new(display)?))
         };
         let mut me = Self {
             backend,
